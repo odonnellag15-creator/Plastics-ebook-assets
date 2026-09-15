@@ -520,17 +520,17 @@
             </g>
 
             <!-- FLAT EQUAL EARTH PROJECTION IMAGE OVERLAY:
-                 Direct Wikimedia master file with no-referrer policy to bypass 403 blocks -->
+                 Direct same-folder relative image loading for GitHub Pages -->
             <image 
               id="map-bg-image"
-              href="https://upload.wikimedia.org/wikipedia/commons/c/cd/Equal_Earth_projection_SW.jpg"
-              xlink:href="https://upload.wikimedia.org/wikipedia/commons/c/cd/Equal_Earth_projection_SW.jpg" 
+              href="WorldMap_EqualEarth.png"
+              xlink:href="WorldMap_EqualEarth.png" 
               x="0" 
               y="0" 
               width="1050" 
               height="540" 
               preserveAspectRatio="xMidYMid meet"
-              referrerpolicy="no-referrer"
+              style="opacity: 1;"
             />
 
             <!-- Shipping Vector Paths -->
@@ -752,6 +752,35 @@
       // Static image setup (No timers, no auto-erasing)
       let isVectorOnly = false;
 
+      // Robust image source chain for GitHub Pages
+      const candidateSources = [
+        'WorldMap_EqualEarth.png',
+        './WorldMap_EqualEarth.png',
+        'https://odonnellag15-creator.github.io/Plastics-ebook-assets/WorldMap_EqualEarth.png',
+        'https://raw.githubusercontent.com/odonnellag15-creator/Plastics-ebook-assets/main/WorldMap_EqualEarth.png'
+      ];
+
+      function tryLoadImageSources(index) {
+        if (index >= candidateSources.length) {
+          mapLayerText.textContent = 'Using Cartographic Vector Mode';
+          mapLayerIndicator.style.background = '#06b6d4';
+          return;
+        }
+
+        const testImg = new Image();
+        testImg.onload = function() {
+          mapBgImage.setAttribute('href', candidateSources[index]);
+          mapBgImage.setAttribute('xlink:href', candidateSources[index]);
+          mapBgImage.style.opacity = '1';
+          mapLayerText.textContent = 'High-Res Equal Earth Active';
+          mapLayerIndicator.style.background = '#10b981';
+        };
+        testImg.onerror = function() {
+          tryLoadImageSources(index + 1);
+        };
+        testImg.src = candidateSources[index];
+      }
+
       // Check if user previously loaded an image in this browser session
       try {
         const cachedMap = localStorage.getItem('cached_equal_earth_map');
@@ -761,9 +790,11 @@
           mapBgImage.style.opacity = '1';
           mapLayerText.textContent = 'Restored: Local Equal Earth Map';
           mapLayerIndicator.style.background = '#10b981';
+        } else {
+          tryLoadImageSources(0);
         }
       } catch (err) {
-        console.warn('Storage unavailable:', err);
+        tryLoadImageSources(0);
       }
 
       // Local file picker: connects and remembers your WorldMap_EqualEarth.png permanently
