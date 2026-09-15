@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#060911" />
+  <title>Equal Earth Waste Corridors</title>
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg-main: #060911;
+      --bg-card: #0d1322;
+      --bg-card-sub: #131b2e;
+      --bg-card-hover: #1c2742;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(16, 185, 129, 0.45);
+      --accent-emerald: #10b981;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.35);
+      --accent-cyan: #06b6d4;
+      --accent-cyan-glow: rgba(6, 182, 212, 0.35);
+      --accent-blue: #3b82f6;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 1rem 0.5rem;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .saas-card {
+      background: linear-gradient(180deg, rgba(19, 27, 46, 0.92) 0%, rgba(13, 19, 34, 0.98) 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.75rem;
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.65);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.25rem 0.625rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 9999px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .badge-emerald {
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    .badge-cyan {
+      background: rgba(6, 182, 212, 0.12);
+      color: #22d3ee;
+      border: 1px solid rgba(6, 182, 212, 0.35);
+    }
+
+    .badge-blue {
+      background: rgba(59, 130, 246, 0.12);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+    }
+
+    .badge-amber {
+      background: rgba(245, 158, 11, 0.12);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .badge-rose {
+      background: rgba(244, 63, 94, 0.12);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.35);
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .action-btn.active {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--accent-emerald);
+      color: #34d399;
+    }
+
+    .map-viewport {
+      position: relative;
+      width: 100%;
+      height: 540px;
+      background: #080d1a;
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      border-bottom: 1px solid var(--border-subtle);
+      touch-action: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .map-viewport:active {
+      cursor: grabbing;
+    }
+
+    .map-toolbar {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      z-index: 20;
+    }
+
+    .map-tool-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 0.5rem;
+      background: rgba(13, 20, 36, 0.92);
+      border: 1px solid var(--border-subtle);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .map-legend {
+      position: absolute;
+      bottom: 0.75rem;
+      left: 0.75rem;
+      background: rgba(10, 16, 30, 0.92);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.5rem;
+      padding: 0.6rem 0.85rem;
+      backdrop-filter: blur(12px);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.72rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--text-muted);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    #world-svg-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 0 0;
+      transition: transform 0.08s linear;
+    }
+
+    .map-land-vector {
+      fill: #131c31;
+      stroke: #25334d;
+      stroke-width: 0.8;
+      transition: fill 0.3s ease;
+    }
+
+    .map-graticule {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.05);
+      stroke-width: 0.5;
+    }
+
+    .map-boundary-line {
+      fill: none;
+      stroke: #10b981;
+      stroke-width: 0.6;
+      stroke-dasharray: 2, 4;
+      opacity: 0.5;
+    }
+
+    #map-bg-image {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: high-quality;
+      transition: opacity 0.4s ease;
+    }
+
+    .image-fallback-badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background: rgba(13, 20, 36, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.5rem;
+      padding: 0.35rem 0.65rem;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .flow-line {
+      fill: none;
+      stroke-width: 2.6;
+      stroke-linecap: round;
+      stroke-dasharray: 6, 6;
+      animation: dashFlow 1.8s linear infinite;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 6px var(--accent-emerald-glow));
+      transition: opacity 0.3s ease;
+    }
+
+    @keyframes dashFlow {
+      to {
+        stroke-dashoffset: -24;
+      }
+    }
+
+    .flow-line.dimmed {
+      opacity: 0.1;
+      animation: none;
+    }
+
+    .hotspot-pin {
+      cursor: pointer;
+      outline: none;
+      transform-box: fill-box;
+      transform-origin: center;
+      transition: all 0.25s ease;
+    }
+
+    .pin-pulse {
+      animation: pulseRings 2.2s infinite ease-out;
+      transform-box: fill-box;
+      transform-origin: center;
+      pointer-events: none;
+    }
+
+    @keyframes pulseRings {
+      0% { transform: scale(0.8); opacity: 0.9; }
+      50% { transform: scale(1.6); opacity: 0.25; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+
+    .pin-core {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+    }
+
+    .hotspot-pin:hover .pin-core {
+      transform: scale(1.3);
+    }
+
+    .pin-label-box {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-anchor: middle;
+      fill: #ffffff;
+      pointer-events: none;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.95);
+    }
+
+    .corridor-deck {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.85rem;
+      padding: 1.25rem;
+    }
+
+    .corridor-card {
+      background: var(--bg-card-sub);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.6rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .corridor-card:hover {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 15, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .case-modal {
+      background: #0d1527;
+      border: 1px solid var(--border-focus);
+      border-radius: 0.85rem;
+      max-width: 650px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.85);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <header style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="badge badge-emerald">Equal Earth Flow Engine</span>
+        <span style="font-size: 0.8rem; color: var(--text-dim);">UN HS 3915 Bilateral Shipping Audits</span>
+      </div>
+
+      <div style="display: flex; gap: 0.4rem;">
+        <button id="btn-reset-map" class="action-btn">Reset View</button>
+      </div>
+    </header>
+
+    <main class="saas-card">
+      <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <h1 style="font-size: 1.15rem; font-weight: 700; color: #ffffff;">
+            Transboundary Plastic Waste Corridors (G20 to Southeast Asia)
+          </h1>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">
+            Click any pin to inspect tonnages and regulatory audit notes.
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;" id="filter-cluster">
+          <button class="action-btn active" data-filter="all">All</button>
+          <button class="action-btn" data-filter="us">USA</button>
+          <button class="action-btn" data-filter="eu">Germany/EU</button>
+          <button class="action-btn" data-filter="jp">Japan</button>
+          <button class="action-btn" data-filter="au">Australia</button>
+        </div>
+      </div>
+
+      <!-- Map Viewport -->
+      <div id="map-viewport" class="map-viewport">
+        <div class="image-fallback-badge">
+          <span id="map-layer-indicator" style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+          <span id="map-layer-text" style="color: var(--text-muted);">Equal Earth Map Loading...</span>
+          <label style="cursor: pointer; color: var(--accent-cyan); font-weight: 700; text-decoration: underline; margin-left: 6px;" title="Click to immediately load your local WorldMap_EqualEarth.png">
+            📁 Load My Local PNG
+            <input type="file" id="local-map-picker" accept="image/*" style="display: none;" />
+          </label>
+        </div>
+
+        <div class="map-toolbar">
+          <button id="btn-zoom-in" class="map-tool-btn" title="Zoom In">+</button>
+          <button id="btn-zoom-out" class="map-tool-btn" title="Zoom Out">&minus;</button>
+          <button id="btn-fit-map" class="map-tool-btn" title="Reset View">&#x21bb;</button>
+          <button id="btn-toggle-vector" class="map-tool-btn" title="Toggle Satellite / Vector Mode" style="font-size: 0.7rem; font-weight: bold;">SVG</button>
+        </div>
+
+        <div class="map-legend">
+          <div style="font-weight: 700; color: #ffffff;">Legend</div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--accent-cyan);"></span>
+            <span>Origin Exporter</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--accent-rose);"></span>
+            <span>Global South Receptor</span>
+          </div>
+        </div>
+
+        <div id="world-svg-container">
+          <svg id="world-svg" viewBox="0 0 1050 540" width="1050" height="540" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            
+            <defs>
+              <linearGradient id="grad-us-my" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#06b6d4" />
+                <stop offset="100%" stop-color="#f43f5e" />
+              </linearGradient>
+              <linearGradient id="grad-de-vn" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#3b82f6" />
+                <stop offset="100%" stop-color="#f43f5e" />
+              </linearGradient>
+              <linearGradient id="grad-jp-id" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#10b981" />
+                <stop offset="100%" stop-color="#f43f5e" />
+              </linearGradient>
+              <linearGradient id="grad-au-th" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8" />
+                <stop offset="100%" stop-color="#f43f5e" />
+              </linearGradient>
+            </defs>
+
+            <!-- VECTOR CARTOGRAPHY BASE LAYER (Always visible even if external images fail or are blocked) -->
+            <g id="vector-base-layer">
+              <!-- Ocean Background -->
+              <rect x="0" y="0" width="1050" height="540" fill="#080e1d" />
+
+              <!-- Equal Earth Graticules / Grid -->
+              <g class="map-graticule">
+                <line x1="0" y1="90" x2="1050" y2="90" />
+                <line x1="0" y1="180" x2="1050" y2="180" />
+                <line x1="0" y1="270" x2="1050" y2="270" stroke="rgba(16, 185, 129, 0.25)" stroke-width="0.8" />
+                <line x1="0" y1="360" x2="1050" y2="360" />
+                <line x1="0" y1="450" x2="1050" y2="450" />
+                <line x1="175" y1="0" x2="175" y2="540" />
+                <line x1="350" y1="0" x2="350" y2="540" />
+                <line x1="525" y1="0" x2="525" y2="540" />
+                <line x1="700" y1="0" x2="700" y2="540" />
+                <line x1="875" y1="0" x2="875" y2="540" />
+              </g>
+
+              <!-- Equal Earth Continents Geometry Outline -->
+              <!-- North America -->
+              <path class="map-land-vector" d="M 120,65 Q 160,50 240,60 Q 310,75 315,120 Q 285,150 250,195 Q 230,225 255,270 L 235,278 Q 200,220 180,180 Q 140,150 115,120 Z" />
+              <path class="map-land-vector" d="M 140,75 Q 85,90 70,120 Q 110,135 135,100 Z" /> <!-- Alaska -->
+              <path class="map-land-vector" d="M 330,35 Q 380,30 395,65 Q 360,95 330,80 Z" /> <!-- Greenland -->
+              
+              <!-- South America -->
+              <path class="map-land-vector" d="M 260,285 Q 310,290 355,335 Q 385,380 345,445 Q 320,495 295,490 Q 275,440 280,370 Q 260,320 260,285 Z" />
+
+              <!-- Europe -->
+              <path class="map-land-vector" d="M 480,85 Q 530,60 570,80 Q 565,120 535,145 Q 495,145 470,120 Z" />
+              <path class="map-land-vector" d="M 465,95 Q 480,80 475,115 Z" /> <!-- UK -->
+              <path class="map-land-vector" d="M 520,50 Q 545,40 550,75 Z" /> <!-- Scandinavia -->
+
+              <!-- Africa -->
+              <path class="map-land-vector" d="M 470,165 Q 565,160 590,220 Q 615,265 570,350 Q 535,420 510,410 Q 480,340 455,260 Q 450,210 470,165 Z" />
+              <path class="map-land-vector" d="M 605,340 Q 615,330 618,375 Q 600,385 605,340 Z" /> <!-- Madagascar -->
+
+              <!-- Asia -->
+              <path class="map-land-vector" d="M 575,80 Q 720,45 870,75 Q 945,110 930,165 Q 890,195 860,240 Q 820,295 780,265 Q 735,270 700,230 Q 650,230 605,175 Q 580,130 575,80 Z" />
+              <path class="map-land-vector" d="M 680,215 Q 730,225 735,290 Q 695,290 680,240 Z" /> <!-- India -->
+              <path class="map-land-vector" d="M 885,130 Q 905,135 895,185 Q 880,180 885,130 Z" /> <!-- Japan -->
+              <path class="map-land-vector" d="M 765,245 Q 810,240 815,290 Q 775,305 765,245 Z" /> <!-- Southeast Asia -->
+              <path class="map-land-vector" d="M 790,320 Q 855,325 870,350 Q 820,360 780,335 Z" /> <!-- Indonesia -->
+              <path class="map-land-vector" d="M 830,245 Q 850,250 840,290 Z" /> <!-- Philippines -->
+
+              <!-- Australia & Oceania -->
+              <path class="map-land-vector" d="M 840,365 Q 925,355 940,405 Q 930,465 875,470 Q 830,440 840,365 Z" />
+              <path class="map-land-vector" d="M 955,445 Q 970,440 965,480 Z" /> <!-- New Zealand -->
+            </g>
+
+            <!-- FLAT EQUAL EARTH PROJECTION IMAGE OVERLAY:
+                 Direct Wikimedia master file with no-referrer policy to bypass 403 blocks -->
+            <image 
+              id="map-bg-image"
+              href="https://upload.wikimedia.org/wikipedia/commons/c/cd/Equal_Earth_projection_SW.jpg"
+              xlink:href="https://upload.wikimedia.org/wikipedia/commons/c/cd/Equal_Earth_projection_SW.jpg" 
+              x="0" 
+              y="0" 
+              width="1050" 
+              height="540" 
+              preserveAspectRatio="xMidYMid meet"
+              referrerpolicy="no-referrer"
+            />
+
+            <!-- Shipping Vector Paths -->
+            <g id="flow-paths-group">
+              <path id="path-us-my" class="flow-line" data-corridor="us" stroke="url(#grad-us-my)" d="M 238,158 Q 500,380 784,294" />
+              <path id="path-de-vn" class="flow-line" data-corridor="eu" stroke="url(#grad-de-vn)" d="M 528,86 Q 660,110 806,222" />
+              <path id="path-jp-id" class="flow-line" data-corridor="jp" stroke="url(#grad-jp-id)" d="M 892,152 Q 880,240 826,330" />
+              <path id="path-au-th" class="flow-line" data-corridor="au" stroke="url(#grad-au-th)" d="M 888,405 Q 870,320 778,250" />
+            </g>
+
+            <!-- Interactive Hotspot Pins -->
+            <g id="hotspots-group">
+              <g class="hotspot-pin" id="pin-us" data-location="us" transform="translate(238, 158)">
+                <circle cx="0" cy="0" r="24" fill="none" stroke="#06b6d4" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="13" fill="#0b172a" stroke="#06b6d4" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="4" fill="#22d3ee" />
+                <text x="0" y="-18" class="pin-label-box">USA [EXPORTER]</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-de" data-location="de" transform="translate(528, 86)">
+                <circle cx="0" cy="0" r="24" fill="none" stroke="#3b82f6" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="13" fill="#0a152e" stroke="#3b82f6" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="4" fill="#60a5fa" />
+                <text x="0" y="-18" class="pin-label-box">GERMANY [EXPORTER]</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-jp" data-location="jp" transform="translate(892, 152)">
+                <circle cx="0" cy="0" r="24" fill="none" stroke="#10b981" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="13" fill="#081e22" stroke="#10b981" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="4" fill="#34d399" />
+                <text x="0" y="-18" class="pin-label-box">JAPAN [EXPORTER]</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-au" data-location="au" transform="translate(888, 405)">
+                <circle cx="0" cy="0" r="24" fill="none" stroke="#38bdf8" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="13" fill="#0c1d2e" stroke="#38bdf8" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="4" fill="#38bdf8" />
+                <text x="0" y="24" class="pin-label-box">AUSTRALIA [EXPORTER]</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-th" data-location="th" transform="translate(778, 250)">
+                <circle cx="0" cy="0" r="24" fill="none" stroke="#f43f5e" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="13" fill="#240c17" stroke="#f43f5e" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="4" fill="#fb7185" />
+                <text x="-44" y="4" class="pin-label-box">THAILAND</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-my" data-location="my" transform="translate(784, 294)">
+                <circle cx="0" cy="0" r="24" fill="none" stroke="#f43f5e" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="13" fill="#240c17" stroke="#f43f5e" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="4" fill="#fb7185" />
+                <text x="42" y="4" class="pin-label-box">MALAYSIA</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-vn" data-location="vn" transform="translate(806, 222)">
+                <circle cx="0" cy="0" r="24" fill="none" stroke="#f43f5e" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="13" fill="#240c17" stroke="#f43f5e" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="4" fill="#fb7185" />
+                <text x="32" y="-12" class="pin-label-box">VIETNAM</text>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Corridor Cards Deck -->
+      <div id="corridors-container" class="corridor-deck"></div>
+    </main>
+  </div>
+
+  <div id="case-modal-overlay" class="modal-backdrop">
+    <div class="case-modal">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <span id="modal-role-badge" class="badge badge-cyan">Trade Corridor</span>
+          <h2 id="modal-case-title" style="font-size: 1.25rem; font-weight: 700; color: #ffffff; margin-top: 0.25rem;">Country Data</h2>
+        </div>
+        <button id="modal-close-btn" class="action-btn">&times; Close</button>
+      </div>
+
+      <!-- Complete Information Callout Metrics -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.65rem;">
+        <div style="background: rgba(0,0,0,0.35); padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border-subtle);">
+          <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Annual Throughput</div>
+          <div id="modal-metric-tonnage" style="font-size: 1.1rem; font-weight: 800; color: var(--accent-cyan); font-family: monospace;">1,150,000 MT</div>
+        </div>
+        <div style="background: rgba(0,0,0,0.35); padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border-subtle);">
+          <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Processing Deficit</div>
+          <div id="modal-metric-deficit" style="font-size: 1.1rem; font-weight: 800; color: var(--accent-rose); font-family: monospace;">58% Unmanaged</div>
+        </div>
+        <div style="background: rgba(0,0,0,0.35); padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border-subtle);">
+          <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Primary Waste Grade</div>
+          <div id="modal-metric-contaminant" style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">Mixed Films &amp; PVC</div>
+        </div>
+      </div>
+
+      <!-- Field Audit Notes Callout -->
+      <div style="background: rgba(255,255,255,0.03); padding: 0.85rem; border-radius: 0.5rem; border-left: 3px solid var(--accent-emerald);">
+        <div style="font-size: 0.7rem; font-weight: 700; color: var(--accent-emerald); text-transform: uppercase; margin-bottom: 0.25rem;">Field Investigation Dispatch</div>
+        <p id="modal-case-notes" style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.55;"></p>
+      </div>
+
+      <!-- Field Interview Quote Callout -->
+      <div style="background: rgba(245, 158, 11, 0.08); padding: 0.75rem 0.85rem; border-radius: 0.5rem; border-left: 3px solid var(--accent-amber);">
+        <div id="modal-quote-author" style="font-size: 0.7rem; font-weight: 700; color: var(--accent-amber); text-transform: uppercase; margin-bottom: 0.2rem;">Field Quote</div>
+        <p id="modal-case-quote" style="font-size: 0.8rem; color: #f1f5f9; font-style: italic; line-height: 1.45;"></p>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end;">
+        <button id="btn-dismiss-modal" class="action-btn" style="background: rgba(16, 185, 129, 0.2); border-color: var(--accent-emerald); color: #34d399;">Return to Map</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const CASE_STUDIES = [
+        {
+          id: 'us',
+          origin: 'United States',
+          dest: 'Malaysia & Southeast Asia',
+          tonnage: '1,150,000 MT / yr',
+          deficit: '58% unmanaged or dumped in recipient zones',
+          contaminant: 'Post-consumer mixed films, unwashed agricultural wrap',
+          notes: 'High-density riverine accumulation in the Klang & Selangor basins. Heavy chemical leachate contaminates mangrove fish hatcheries.',
+          author: 'Dr. H. Rahman // Marine Ecologist (Penang)',
+          quote: 'Manifests claim "Clean Flakes," but customs inspections reveal contaminated municipal polymers. Microplastic counts in local mangrove mudflats have doubled since 2019.'
+        },
+        {
+          id: 'de',
+          origin: 'Germany & EU',
+          dest: 'Vietnam (Hai Phong Corridor)',
+          tonnage: '745,000 MT / yr',
+          deficit: '62% open burning or craft kilns',
+          contaminant: 'Rigid PVC packaging & e-waste polymers',
+          notes: 'Thermal recycling villages outside Hanoi release heavy metal particulates draining into Red River Delta aquaculture.',
+          author: 'Prof. Le Thi Mai // Environmental Toxicologist',
+          quote: 'Open-air thermal reprocessing produces carcinogenic smoke. The wash effluent drains straight into coastal rice paddies and estuarine shellfish beds.'
+        },
+        {
+          id: 'jp',
+          origin: 'Japan',
+          dest: 'Indonesia (Surabaya / Brantas)',
+          tonnage: '620,000 MT / yr',
+          deficit: '71% burned as boiler fuel or discarded',
+          contaminant: 'High-barrier composite snack pouches & multi-laminates',
+          notes: 'Baled industrial plastics burned for heat in local manufacturing clusters, contaminating municipal waterways.',
+          author: 'A. Praditya // Watershed Restoration Lead (Surabaya)',
+          quote: 'Imported paper bales contain up to 40% hidden plastic waste. Local factories burn this plastic for process heat, releasing persistent pollutants across the valley.'
+        },
+        {
+          id: 'au',
+          origin: 'Australia',
+          dest: 'Thailand & Malaysia',
+          tonnage: '185,000 MT / yr',
+          deficit: '54% low-tech informal sorting in Chonburi',
+          contaminant: 'Sorted municipal plastics, mixed polymer-lined paper',
+          notes: 'Despite export ban mandates, processed refuse-derived fuel pellets (RDF) continue to transfer polymer burdens abroad.',
+          author: 'M. Gallagher // Circular Policy Researcher',
+          quote: 'The export ban closed direct scrap shipments, but loophole reclassifications like processed engineered fuels still transfer residual polymer burdens to Southeast Asia.'
+        },
+        {
+          id: 'th',
+          origin: 'Thailand (Receptor)',
+          dest: 'Laem Chabang Hub',
+          tonnage: '530,000 MT Inbound Surge',
+          deficit: '68% unmonitored burning or warehousing',
+          contaminant: 'E-waste plastics, mixed PVC, agricultural scrap',
+          notes: 'Concentration of coastal recycling processing facilities discharging into the Gulf of Thailand littoral zone.',
+          author: 'P. Somchai // Thai Coastal Ecosystem Defense Alliance',
+          quote: 'Following the 2018 shift, import volumes through Laem Chabang increased by over 2000%. Toxic effluent from unpermitted shredders is devastating local crab nurseries.'
+        },
+        {
+          id: 'my',
+          origin: 'Malaysia (Receptor)',
+          dest: 'Port Klang Corridor',
+          tonnage: '830,000 MT Inbound',
+          deficit: 'Critical Processing Bottleneck (Overcapacity)',
+          contaminant: 'Mixed household solid waste with organic residues',
+          notes: 'Unlicensed dumpsites in rural agricultural zones subject to post-consumer municipal waste accumulation.',
+          author: 'K. Tan // Waste Policy Advocate (Selangor)',
+          quote: 'Over 140 illegal reprocessing factories were shut down, but shipments still find backdoor entry points via false tariff code classifications.'
+        },
+        {
+          id: 'vn',
+          origin: 'Vietnam (Receptor)',
+          dest: 'Hai Phong Delta',
+          tonnage: '560,000 MT Inbound',
+          deficit: 'Deficient Sorting Infrastructure',
+          contaminant: 'Low-grade agricultural film & industrial scrap',
+          notes: 'High volume re-processing craft villages with untreated wash-down effluent contaminating Tonkin coastal fisheries.',
+          author: 'N. Van Hieu // Red River Coastal Fishery Officer',
+          quote: 'Fine plastic fibers now permeate the littoral sediment layer, reducing juvenile shrimp survival rates across the delta.'
+        }
+      ];
+
+      const mapViewport = document.getElementById('map-viewport');
+      const worldSvgContainer = document.getElementById('world-svg-container');
+      const modal = document.getElementById('case-modal-overlay');
+      const modalTitle = document.getElementById('modal-case-title');
+      const modalTonnage = document.getElementById('modal-metric-tonnage');
+      const modalDeficit = document.getElementById('modal-metric-deficit');
+      const modalContaminant = document.getElementById('modal-metric-contaminant');
+      const modalNotes = document.getElementById('modal-case-notes');
+      const modalQuoteAuthor = document.getElementById('modal-quote-author');
+      const modalQuote = document.getElementById('modal-case-quote');
+      const modalClose = document.getElementById('modal-close-btn');
+      const modalDismiss = document.getElementById('btn-dismiss-modal');
+      const corridorsContainer = document.getElementById('corridors-container');
+
+      const mapBgImage = document.getElementById('map-bg-image');
+      const mapLayerText = document.getElementById('map-layer-text');
+      const mapLayerIndicator = document.getElementById('map-layer-indicator');
+      const localMapPicker = document.getElementById('local-map-picker');
+      const btnToggleVector = document.getElementById('btn-toggle-vector');
+
+      // Static image setup (No timers, no auto-erasing)
+      let isVectorOnly = false;
+
+      // Check if user previously loaded an image in this browser session
+      try {
+        const cachedMap = localStorage.getItem('cached_equal_earth_map');
+        if (cachedMap) {
+          mapBgImage.setAttribute('href', cachedMap);
+          mapBgImage.setAttribute('xlink:href', cachedMap);
+          mapBgImage.style.opacity = '1';
+          mapLayerText.textContent = 'Restored: Local Equal Earth Map';
+          mapLayerIndicator.style.background = '#10b981';
+        }
+      } catch (err) {
+        console.warn('Storage unavailable:', err);
+      }
+
+      // Local file picker: connects and remembers your WorldMap_EqualEarth.png permanently
+      if (localMapPicker) {
+        localMapPicker.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            // Read file into persistent data URL so it survives Canvas expansion & reloads
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+              const dataUrl = evt.target.result;
+              mapBgImage.setAttribute('href', dataUrl);
+              mapBgImage.setAttribute('xlink:href', dataUrl);
+              mapBgImage.style.opacity = '1';
+              mapLayerText.textContent = `Connected: ${file.name}`;
+              mapLayerIndicator.style.background = '#10b981';
+
+              try {
+                localStorage.setItem('cached_equal_earth_map', dataUrl);
+              } catch (storageErr) {
+                console.warn('Local cache full, displaying in memory:', storageErr);
+              }
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // Toggle between Photographic Satellite Overlay and Crisp Vector Mode
+      if (btnToggleVector) {
+        btnToggleVector.addEventListener('click', () => {
+          isVectorOnly = !isVectorOnly;
+          mapBgImage.style.opacity = isVectorOnly ? '0' : '1';
+          btnToggleVector.style.color = isVectorOnly ? '#34d399' : '#ffffff';
+          mapLayerText.textContent = isVectorOnly ? 'Vector Cartography Mode' : 'Map Image Active';
+          mapLayerIndicator.style.background = isVectorOnly ? '#06b6d4' : '#10b981';
+        });
+      }
+
+      let zoomLevel = 1;
+      let panX = 0, panY = 0;
+      let isPanning = false, startX = 0, startY = 0;
+
+      function updateTransform() {
+        worldSvgContainer.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
+      }
+
+      function resetView() {
+        zoomLevel = 1; panX = 0; panY = 0;
+        updateTransform();
+      }
+
+      document.getElementById('btn-reset-map').onclick = resetView;
+      document.getElementById('btn-fit-map').onclick = resetView;
+      document.getElementById('btn-zoom-in').onclick = () => { zoomLevel = Math.min(3, zoomLevel * 1.2); updateTransform(); };
+      document.getElementById('btn-zoom-out').onclick = () => { zoomLevel = Math.max(0.8, zoomLevel * 0.8); updateTransform(); };
+
+      mapViewport.addEventListener('mousedown', (e) => {
+        if (e.target.closest('.map-toolbar') || e.target.closest('.map-legend')) return;
+        isPanning = true;
+        startX = e.clientX - panX;
+        startY = e.clientY - panY;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isPanning) return;
+        panX = e.clientX - startX;
+        panY = e.clientY - startY;
+        updateTransform();
+      });
+
+      window.addEventListener('mouseup', () => { isPanning = false; });
+
+      function openModal(id) {
+        const item = CASE_STUDIES.find(c => c.id === id);
+        if (!item) return;
+        modalTitle.textContent = `${item.origin} → ${item.dest}`;
+        modalTonnage.textContent = item.tonnage;
+        modalDeficit.textContent = item.deficit;
+        modalContaminant.textContent = item.contaminant;
+        modalNotes.textContent = item.notes;
+        modalQuoteAuthor.textContent = `Field Quote // ${item.author}`;
+        modalQuote.textContent = `"${item.quote}"`;
+        modal.classList.add('open');
+      }
+
+      function closeModal() {
+        modal.classList.remove('open');
+      }
+
+      modalClose.onclick = closeModal;
+      modalDismiss.onclick = closeModal;
+      modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+
+      // Pin clicks
+      document.querySelectorAll('.hotspot-pin').forEach(pin => {
+        pin.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openModal(pin.dataset.location);
+        });
+      });
+
+      // Corridor cards
+      corridorsContainer.innerHTML = '';
+      CASE_STUDIES.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'corridor-card';
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:700; color:#fff; font-size:0.85rem;">${item.origin}</span>
+            <span style="font-size:0.75rem; color:var(--accent-cyan); font-family:monospace;">${item.tonnage}</span>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-muted);">${item.notes.substring(0, 80)}...</p>
+        `;
+        card.onclick = () => openModal(item.id);
+        corridorsContainer.appendChild(card);
+      });
+
+      // Corridor filter buttons
+      document.querySelectorAll('#filter-cluster button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#filter-cluster button').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const filter = btn.dataset.filter;
+          document.querySelectorAll('.flow-line').forEach(line => {
+            line.classList.toggle('dimmed', filter !== 'all' && line.dataset.corridor !== filter);
+          });
+        });
+      });
+
+    })();
+  </script>
+</body>
+</html>
