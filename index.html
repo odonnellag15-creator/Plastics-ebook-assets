@@ -1,11 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="referrer" content="no-referrer" />
-  <meta name="theme-color" content="#060911" />
-  <title>Equal Earth Waste Corridors</title>
+  <meta name="theme-color" content="#003650" />
+  <title>Ending Plastic Waste — Research Monograph Series (Volume 1)</title>
+
+  <!-- Preconnect and External Fonts -->
+  <link rel="preconnect" href="https://odonnellag15-creator.github.io" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Lora:ital,wght@0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     *, *::before, *::after {
@@ -16,915 +24,869 @@
     }
 
     :root {
-      --bg-main: #060911;
-      --bg-card: #0d1322;
-      --bg-card-sub: #131b2e;
-      --bg-card-hover: #1c2742;
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-focus: rgba(16, 185, 129, 0.45);
-      --accent-emerald: #10b981;
-      --accent-emerald-glow: rgba(16, 185, 129, 0.35);
-      --accent-cyan: #06b6d4;
-      --accent-cyan-glow: rgba(6, 182, 212, 0.35);
-      --accent-blue: #3b82f6;
-      --accent-amber: #f59e0b;
-      --accent-rose: #f43f5e;
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
-      --text-dim: #64748b;
+      --font-title: 'Lora', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+      --font-accent: 'Space Grotesk', monospace;
+
+      --stage-bg: #0b1120;
+      --page-bg: #f8f6f1;
+      --page-border: #e2dcce;
+      --ink-title: #003650;        /* Okabe-Ito Deep Marine Navy */
+      --ink-body: #1c232b;         /* Charcoal Primary Text */
+      --ink-muted: #536473;        /* Slate Secondary Text */
+      --accent-ocean: #0072b2;     /* Okabe-Ito Blue */
+      --accent-sand: #d55e00;      /* Okabe-Ito Vermilion / Amber */
+      --accent-coral: #cc79a7;     /* Okabe-Ito Reddish Purple */
+      --accent-green: #009e73;     /* Okabe-Ito Bluish Green */
+      --card-bg: #ffffff;
+      --card-border: #dcd6c8;
+
+      /* =========================================================
+         STANDARDIZED FLUID TYPOGRAPHY TOKENS (Mobile -> 32" Display)
+         ========================================================= */
+      --text-micro: clamp(0.72rem, 0.68rem + 0.22vw, 0.84rem);    /* 11.5px -> 13.5px */
+      --text-meta: clamp(0.80rem, 0.76rem + 0.28vw, 0.94rem);     /* 12.8px -> 15.0px */
+      --text-body: clamp(0.92rem, 0.86rem + 0.38vw, 1.12rem);     /* 14.7px -> 18.0px */
+      --text-lead: clamp(1.02rem, 0.94rem + 0.50vw, 1.28rem);     /* 16.3px -> 20.5px */
+      --text-h4: clamp(0.95rem, 0.88rem + 0.40vw, 1.18rem);       /* 15.2px -> 18.8px */
+      --text-h3: clamp(1.15rem, 1.05rem + 0.60vw, 1.45rem);       /* 18.4px -> 23.2px */
     }
 
     body {
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--stage-bg);
+      color: var(--ink-body);
+      font-family: var(--font-body);
       min-height: 100vh;
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 1rem 0.5rem;
-      line-height: 1.5;
+      flex-direction: column;
+      overflow: hidden;
+      user-select: none;
+      font-size: var(--text-body);
+    }
+
+    .book-binder {
+      width: 100vw;
+      height: 100vh;
+      background: var(--stage-bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Fixed Persistent Header */
+    .running-header {
+      height: 50px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-accent);
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      flex-shrink: 0;
+      z-index: 60;
+      background: #090e1a;
+    }
+
+    /* Fixed Persistent Footer */
+    .running-footer {
+      height: 52px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-accent);
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      flex-shrink: 0;
+      z-index: 60;
+      background: #090e1a;
+    }
+
+    /* Standard Page Wrapper */
+    .book-page {
+      position: absolute !important;
+      top: 50px !important;
+      bottom: 52px !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      height: calc(100vh - 102px) !important;
+      display: none !important;
+      flex-direction: column !important;
+      opacity: 0;
+      z-index: 10;
+      overflow-y: auto;
       overflow-x: hidden;
+      background: var(--page-bg);
+      transition: opacity 0.2s ease;
     }
 
-    .app-container {
+    .book-page.active {
+      display: flex !important;
+      opacity: 1 !important;
+      z-index: 20;
+    }
+
+    /* Academic Folio Stage for Template 2 (Locks Proportions on 32" Screens) */
+    .academic-folio-stage {
       width: 100%;
-      max-width: 1240px;
+      max-width: 1520px;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .saas-card {
-      background: linear-gradient(180deg, rgba(19, 27, 46, 0.92) 0%, rgba(13, 19, 34, 0.98) 100%);
-      border: 1px solid var(--border-subtle);
-      border-radius: 0.75rem;
-      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.65);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.375rem;
-      padding: 0.25rem 0.625rem;
-      font-size: 0.75rem;
-      font-weight: 700;
-      border-radius: 9999px;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
-
-    .badge-emerald {
-      background: rgba(16, 185, 129, 0.12);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.35);
-    }
-
-    .badge-cyan {
-      background: rgba(6, 182, 212, 0.12);
-      color: #22d3ee;
-      border: 1px solid rgba(6, 182, 212, 0.35);
-    }
-
-    .badge-blue {
-      background: rgba(59, 130, 246, 0.12);
-      color: #60a5fa;
-      border: 1px solid rgba(59, 130, 246, 0.35);
-    }
-
-    .badge-amber {
-      background: rgba(245, 158, 11, 0.12);
-      color: #fbbf24;
-      border: 1px solid rgba(245, 158, 11, 0.35);
-    }
-
-    .badge-rose {
-      background: rgba(244, 63, 94, 0.12);
-      color: #fb7185;
-      border: 1px solid rgba(244, 63, 94, 0.35);
-    }
-
-    .action-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.45rem 0.8rem;
-      border-radius: 0.5rem;
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid var(--border-subtle);
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text-main);
-      transition: all 0.2s ease;
-      user-select: none;
-    }
-
-    .action-btn:hover {
-      background: rgba(255, 255, 255, 0.09);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .action-btn.active {
-      background: rgba(16, 185, 129, 0.15);
-      border-color: var(--accent-emerald);
-      color: #34d399;
-    }
-
-    .map-viewport {
-      position: relative;
-      width: 100%;
-      height: 540px;
-      background: #080d1a;
-      overflow: hidden;
-      cursor: grab;
-      user-select: none;
-      border-bottom: 1px solid var(--border-subtle);
-      touch-action: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .map-viewport:active {
-      cursor: grabbing;
-    }
-
-    .map-toolbar {
-      position: absolute;
-      top: 0.75rem;
-      right: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-      z-index: 20;
-    }
-
-    .map-tool-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 0.5rem;
-      background: rgba(13, 20, 36, 0.92);
-      border: 1px solid var(--border-subtle);
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    }
-
-    .map-legend {
-      position: absolute;
-      bottom: 0.75rem;
-      left: 0.75rem;
-      background: rgba(10, 16, 30, 0.92);
-      border: 1px solid var(--border-subtle);
-      border-radius: 0.5rem;
-      padding: 0.6rem 0.85rem;
-      backdrop-filter: blur(12px);
-      z-index: 20;
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-      font-size: 0.72rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      color: var(--text-muted);
-    }
-
-    .legend-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
-
-    #world-svg-container {
-      width: 100%;
       height: 100%;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      transform-origin: 0 0;
-      transition: transform 0.08s linear;
-    }
-
-    .map-land-vector {
-      fill: #131c31;
-      stroke: #25334d;
-      stroke-width: 0.8;
-      transition: fill 0.3s ease;
-    }
-
-    .map-graticule {
-      fill: none;
-      stroke: rgba(255, 255, 255, 0.05);
-      stroke-width: 0.5;
-    }
-
-    .map-boundary-line {
-      fill: none;
-      stroke: #10b981;
-      stroke-width: 0.6;
-      stroke-dasharray: 2, 4;
-      opacity: 0.5;
-    }
-
-    #map-bg-image {
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: high-quality;
-      transition: opacity 0.4s ease;
-    }
-
-    .image-fallback-badge {
-      position: absolute;
-      top: 0.75rem;
-      left: 0.75rem;
-      background: rgba(13, 20, 36, 0.9);
-      border: 1px solid var(--border-subtle);
-      border-radius: 0.5rem;
-      padding: 0.35rem 0.65rem;
-      font-size: 0.7rem;
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      z-index: 20;
-      backdrop-filter: blur(8px);
-    }
-
-    .flow-line {
-      fill: none;
-      stroke-width: 2.6;
-      stroke-linecap: round;
-      stroke-dasharray: 6, 6;
-      animation: dashFlow 1.8s linear infinite;
-      opacity: 0.9;
-      filter: drop-shadow(0 0 6px var(--accent-emerald-glow));
-      transition: opacity 0.3s ease;
-    }
-
-    @keyframes dashFlow {
-      to {
-        stroke-dashoffset: -24;
-      }
-    }
-
-    .flow-line.dimmed {
-      opacity: 0.1;
-      animation: none;
-    }
-
-    .hotspot-pin {
-      cursor: pointer;
-      outline: none;
-      transform-box: fill-box;
-      transform-origin: center;
-      transition: all 0.25s ease;
-    }
-
-    .pin-pulse {
-      animation: pulseRings 2.2s infinite ease-out;
-      transform-box: fill-box;
-      transform-origin: center;
-      pointer-events: none;
-    }
-
-    @keyframes pulseRings {
-      0% { transform: scale(0.8); opacity: 0.9; }
-      50% { transform: scale(1.6); opacity: 0.25; }
-      100% { transform: scale(2.2); opacity: 0; }
-    }
-
-    .pin-core {
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-      pointer-events: none;
-    }
-
-    .hotspot-pin:hover .pin-core {
-      transform: scale(1.3);
-    }
-
-    .pin-label-box {
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      text-anchor: middle;
-      fill: #ffffff;
-      pointer-events: none;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.95);
-    }
-
-    .corridor-deck {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 0.85rem;
-      padding: 1.25rem;
-    }
-
-    .corridor-card {
-      background: var(--bg-card-sub);
-      border: 1px solid var(--border-subtle);
-      border-radius: 0.6rem;
-      padding: 1rem;
-      display: flex;
       flex-direction: column;
-      gap: 0.6rem;
+      justify-content: flex-start;
+      gap: 1.25rem;
+    }
+
+    /* Fluid Typography Utility Classes */
+    .fluid-micro { font-size: var(--text-micro); }
+    .fluid-meta  { font-size: var(--text-meta); }
+    .fluid-body  { font-size: var(--text-body); }
+    .fluid-lead  { font-size: var(--text-lead); }
+    .fluid-h4    { font-size: var(--text-h4); }
+    .fluid-h3    { font-size: var(--text-h3); }
+
+    /* Table of Contents Item Interactive Hover */
+    .toc-row-card {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      border-radius: 9px;
+      padding: 0.8rem 1.05rem;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
-      transition: all 0.2s ease;
     }
 
-    .corridor-card:hover {
-      border-color: rgba(16, 185, 129, 0.4);
-      background: var(--bg-card-hover);
-      transform: translateY(-2px);
+    .toc-row-card:hover {
+      border-color: #0072b2;
+      box-shadow: 0 4px 12px rgba(0, 114, 178, 0.08);
+      transform: translateX(3px);
     }
 
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(4, 7, 15, 0.85);
-      backdrop-filter: blur(8px);
-      z-index: 100;
-      display: none;
+    /* Subsections Accordion Animation */
+    .toc-subsections-container {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease-out, opacity 0.2s ease-out;
+      opacity: 0;
+    }
+
+    .toc-subsections-container.expanded {
+      max-height: 180px;
+      opacity: 1;
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px dashed rgba(0, 54, 80, 0.18);
+    }
+
+    .book-nav-btn {
+      font-family: var(--font-accent);
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      padding: 1rem;
+      gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
     }
 
-    .modal-backdrop.open {
-      display: flex;
+    .book-nav-btn:hover:not(:disabled) {
+      background: #0072b2;
+      color: #ffffff;
+      border-color: #0072b2;
     }
 
-    .case-modal {
-      background: #0d1527;
-      border: 1px solid var(--border-focus);
-      border-radius: 0.85rem;
-      max-width: 650px;
-      width: 100%;
-      max-height: 85vh;
-      overflow-y: auto;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.85);
+    .book-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .page-pill-btn {
+      padding: 0.25rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #94a3b8;
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: var(--font-accent);
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .page-pill-btn:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #f8fafc;
+    }
+
+    .page-pill-btn.active {
+      background: #0072b2;
+      color: #ffffff;
+      border-color: #0072b2;
     }
   </style>
 </head>
 <body>
 
-  <div class="app-container">
-
-    <header style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span class="badge badge-emerald">Equal Earth Flow Engine</span>
-        <span style="font-size: 0.8rem; color: var(--text-dim);">UN HS 3915 Bilateral Shipping Audits</span>
+  <main class="book-binder" id="book-stage">
+    
+    <!-- Top Running Header -->
+    <header class="running-header">
+      <div class="flex items-center gap-3">
+        <span class="inline-block px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono text-[11px] font-bold tracking-wider uppercase border border-sky-500/30">
+          Digital Monograph
+        </span>
+        <span id="header-page-title" class="text-xs font-semibold text-slate-200 hidden sm:inline-block">
+          Template 2 // Title, Imprint & Table of Contents
+        </span>
       </div>
 
-      <div style="display: flex; gap: 0.4rem;">
-        <button id="btn-reset-map" class="action-btn">Reset View</button>
+      <!-- Quick Chapter Navigation Ribbon -->
+      <div class="flex items-center gap-1.5">
+        <label for="template-select" class="text-[11px] text-slate-400 font-mono hidden md:inline-block">Jump to Template:</label>
+        <select id="template-select" onchange="showPage(parseInt(this.value))" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded px-2.5 py-1 font-mono cursor-pointer focus:outline-none focus:border-sky-500">
+          <option value="0">T1: Master Photographic Cover Plate</option>
+          <option value="1" selected>T2: Title, Colophon & Table of Contents</option>
+          <option value="2">T3: Hero Landscape Banner Opener</option>
+          <option value="3">T4: Media Dispatch & Takeaway Cards</option>
+          <option value="4">T5: 6-Tile Product Grid</option>
+          <option value="5">T6: Data Metric Visualizer</option>
+          <option value="6">T7: Material Flow Sankey Stage</option>
+          <option value="7">T8: Dual Exhibit Comparative Split</option>
+          <option value="8">T9: Systems Fishbone Diagram</option>
+          <option value="9">T10: Equal Earth Regional Map</option>
+        </select>
       </div>
     </header>
 
-    <main class="saas-card">
-      <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
-        <div>
-          <h1 style="font-size: 1.15rem; font-weight: 700; color: #ffffff;">
-            Transboundary Plastic Waste Corridors (G20 to Southeast Asia)
-          </h1>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">
-            Click any pin to inspect tonnages and regulatory audit notes.
-          </p>
-        </div>
+    <!-- ================================================================= -->
+    <!-- TEMPLATE 1: MASTER COVER PLATE                                   -->
+    <!-- ================================================================= -->
+    <article class="book-page" id="page-t1" data-title="Template 1 // Master Photographic Cover Plate">
+      <div id="cover-canvas" class="w-full h-full relative overflow-hidden flex flex-col justify-between">
+        
+        <img 
+          id="hero-cover-img"
+          src="coverpage.jpg"
+          alt="Ending Plastic Waste - Coastal littoral net mending"
+          class="absolute inset-0 w-full h-full object-cover object-[center_62%] z-0 select-none pointer-events-none"
+          style="filter: brightness(1.12) contrast(1.02) saturate(1.04);"
+          onerror="this.src='https://odonnellag15-creator.github.io/Plastics-ebook-assets/coverpage.jpg';"
+        />
 
-        <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;" id="filter-cluster">
-          <button class="action-btn active" data-filter="all">All</button>
-          <button class="action-btn" data-filter="us">USA</button>
-          <button class="action-btn" data-filter="eu">Germany/EU</button>
-          <button class="action-btn" data-filter="jp">Japan</button>
-          <button class="action-btn" data-filter="au">Australia</button>
+        <div class="absolute inset-0 z-10 pointer-events-none" style="backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,0.4) 65%, black 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,0.4) 65%, black 100%);"></div>
+        <div class="absolute inset-0 z-10 pointer-events-none" style="background: linear-gradient(to right, transparent 0%, transparent 42%, rgba(247,245,240,0.22) 68%, rgba(247,245,240,0.58) 100%);"></div>
+
+        <div class="relative z-20 w-full h-full flex flex-col justify-between p-4 sm:p-7 md:p-10 lg:p-14 xl:p-16 2xl:p-20 pointer-events-auto items-start">
+          
+          <!-- Top Row: Streamlined Eyebrow Pill + Optical Centered Logo Dock -->
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 w-full mt-[0.4cm] sm:mt-[0.6cm] 2xl:mt-[0.8cm]">
+            <div class="inline-flex items-center gap-2 sm:gap-3 px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full bg-black/45 backdrop-blur-md border border-white/30 shadow-xl">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse hidden sm:inline-block"></span>
+              <span class="font-mono font-bold tracking-[0.16em] sm:tracking-[0.20em] text-white uppercase text-xs sm:text-sm md:text-[14px] 2xl:text-[16px] leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                RESEARCH MONOGRAPH SERIES &bull; VOLUME 1
+              </span>
+            </div>
+
+            <!-- Dark Frosted Glass Logo Dock -->
+            <div class="inline-flex items-center gap-3 sm:gap-4 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-black/50 backdrop-blur-md border border-white/25 shadow-2xl">
+              <div class="flex items-center gap-3 sm:gap-4">
+                <!-- CSIRO Partner Mark -->
+                <div class="flex items-center pr-3 border-r border-white/30">
+                  <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#00a4e4] flex items-center justify-center text-white shadow-md p-0.5 shrink-0">
+                    <svg viewBox="0 0 40 40" class="w-full h-full fill-current">
+                      <circle cx="20" cy="20" r="19" fill="#00a4e4"/>
+                      <g fill="#ffffff">
+                        <rect x="13" y="9" width="2.4" height="10" rx="1.2"/>
+                        <rect x="17" y="7" width="2.4" height="12" rx="1.2"/>
+                        <rect x="21" y="8" width="2.4" height="13" rx="1.2"/>
+                        <rect x="25" y="11" width="2.4" height="9" rx="1.2"/>
+                        <circle cx="24" cy="22" r="1.4"/>
+                        <text x="20" y="32" font-family="Arial, sans-serif" font-weight="900" font-size="7.5" text-anchor="middle" letter-spacing="0.4">CSIRO</text>
+                      </g>
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Murdoch University Brand Single Line Lockup (All Red) -->
+                <div class="flex items-center gap-2 whitespace-nowrap">
+                  <span class="font-sans font-black text-[#e40046] text-lg sm:text-xl leading-none tracking-tighter shrink-0 select-none">
+                    MU
+                  </span>
+                  <span class="font-sans font-bold text-[#e40046] text-xs sm:text-sm tracking-tight whitespace-nowrap select-none">
+                    Murdoch University
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Master Title Deck -->
+          <div class="mt-4 sm:mt-6 md:mt-8 2xl:mt-10 mb-auto max-w-2xl lg:max-w-3xl 2xl:max-w-4xl w-full text-left space-y-2.5 sm:space-y-3.5">
+            <h1 
+              class="font-serif font-extrabold tracking-tight leading-[1.05] text-white whitespace-normal sm:whitespace-nowrap drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
+              style="font-size: clamp(2.3rem, 4.6vw, 5.2rem);"
+            >
+              Ending Plastic Waste
+            </h1>
+
+            <div 
+              class="w-56 sm:w-64 lg:w-72 2xl:w-80 h-[3.5px] 2xl:h-[4.5px] rounded-full shadow-lg" 
+              style="background: linear-gradient(90deg, #d55e00 0%, #f0822b 75%, transparent 100%);"
+            ></div>
+
+            <p 
+              class="font-sans font-semibold tracking-wider text-white text-sm sm:text-base lg:text-lg 2xl:text-xl whitespace-nowrap pt-0.5"
+              style="font-family: 'Space Grotesk', sans-serif; text-shadow: 0 2px 4px #000, 0 4px 14px rgba(0,0,0,0.95), 0 0 2px #000;"
+            >
+              Learning from the Past to Fix the Future
+            </p>
+          </div>
+
+          <!-- Bottom: Author Plinth -->
+          <div class="w-full flex items-end justify-between gap-4 pt-2 sm:pt-4">
+            <div class="max-w-2xl 2xl:max-w-3xl text-left">
+              <div class="inline-block bg-black/55 backdrop-blur-md border border-white/25 rounded-xl px-4 py-3 sm:px-5 sm:py-4 2xl:px-6 2xl:py-4.5 shadow-2xl">
+                <p class="font-mono text-[11px] sm:text-xs 2xl:text-sm font-bold tracking-[0.28em] text-sky-300 uppercase mb-1 sm:mb-1.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                  AUTHORS
+                </p>
+                <p class="font-sans text-sm sm:text-base md:text-lg 2xl:text-xl font-bold text-white tracking-wide whitespace-nowrap" style="font-family: 'Space Grotesk', sans-serif;">
+                  A.G. O'Donnell <span class="text-amber-400 font-normal mx-1">&bull;</span> D.V. Murphy <span class="text-amber-400 font-normal mx-1">&bull;</span> F.C. Hoyle
+                </p>
+                <p class="font-sans text-[11px] sm:text-xs 2xl:text-sm text-stone-200 mt-1 sm:mt-1.5 tracking-wide whitespace-nowrap">
+                  Bioplastics Innovation Hub &bull; Murdoch University
+                </p>
+              </div>
+            </div>
+
+            <button onclick="showPage(1)" class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-mono font-bold text-xs sm:text-sm shadow-xl flex items-center gap-2 cursor-pointer transition">
+              <span>Enter Monograph</span>
+              <span>&rarr;</span>
+            </button>
+          </div>
+
         </div>
       </div>
+    </article>
 
-      <!-- Map Viewport -->
-      <div id="map-viewport" class="map-viewport">
-        <div class="image-fallback-badge">
-          <span id="map-layer-indicator" style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
-          <span id="map-layer-text" style="color: var(--text-muted);">Equal Earth Map Loading...</span>
-          <label style="cursor: pointer; color: var(--accent-cyan); font-weight: 700; text-decoration: underline; margin-left: 6px;" title="Click to immediately load your local WorldMap_EqualEarth.png">
-            📁 Load My Local PNG
-            <input type="file" id="local-map-picker" accept="image/*" style="display: none;" />
-          </label>
-        </div>
+    <!-- ================================================================= -->
+    <!-- TEMPLATE 2: REFINED ACADEMIC FOLIO SPREAD                         -->
+    <!-- Left: Colophon (Verso) | Right: TOC & Positioning Text (Recto)    -->
+    <!-- ================================================================= -->
+    <article class="book-page active" id="page-t2" data-title="Template 2 // Academic Imprint, Colophon & Table of Contents">
+      <div class="academic-folio-stage p-4 sm:p-6 lg:p-8 xl:p-10">
 
-        <div class="map-toolbar">
-          <button id="btn-zoom-in" class="map-tool-btn" title="Zoom In">+</button>
-          <button id="btn-zoom-out" class="map-tool-btn" title="Zoom Out">&minus;</button>
-          <button id="btn-fit-map" class="map-tool-btn" title="Reset View">&#x21bb;</button>
-          <button id="btn-toggle-vector" class="map-tool-btn" title="Toggle Satellite / Vector Mode" style="font-size: 0.7rem; font-weight: bold;">SVG</button>
-        </div>
-
-        <div class="map-legend">
-          <div style="font-weight: 700; color: #ffffff;">Legend</div>
-          <div class="legend-item">
-            <span class="legend-dot" style="background: var(--accent-cyan);"></span>
-            <span>Origin Exporter</span>
+        <!-- Top Chapter Navigation Ribbon -->
+        <div class="w-full bg-white border border-stone-300 rounded-xl p-2 sm:p-2.5 shadow-sm flex items-center justify-between gap-3 shrink-0">
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-2.5 py-1 rounded bg-[#003650] text-white fluid-micro font-mono font-bold uppercase tracking-wider">
+              FOLIO SPREAD
+            </span>
+            <span class="fluid-meta font-mono text-stone-500 font-bold hidden sm:inline-block">
+              Volume 1 &bull; 2027
+            </span>
           </div>
-          <div class="legend-item">
-            <span class="legend-dot" style="background: var(--accent-rose);"></span>
-            <span>Global South Receptor</span>
+
+          <!-- Quick Jump Chips -->
+          <div class="flex items-center gap-1.5 overflow-x-auto py-0.5 fluid-micro font-mono">
+            <button onclick="showPage(2)" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">CH 01 Intro</button>
+            <button onclick="showPage(3)" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">CH 02 Trade</button>
+            <button onclick="showPage(5)" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">CH 03 Recycling</button>
+            <button onclick="showPage(6)" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">CH 04 Biopolymers</button>
+            <button onclick="showPage(8)" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">CH 05 Treaty</button>
+            <button onclick="showPage(7)" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">CH 06 Remediation</button>
+            <button onclick="showPage(4)" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">CH 07 Agronomics</button>
+            <button onclick="showPage(6)" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">CH 08 Circularity</button>
+            <button onclick="showPage(9)" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">Atlas Perspectives</button>
           </div>
         </div>
 
-        <div id="world-svg-container">
-          <svg id="world-svg" viewBox="0 0 1050 540" width="1050" height="540" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            
-            <defs>
-              <linearGradient id="grad-us-my" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#06b6d4" />
-                <stop offset="100%" stop-color="#f43f5e" />
-              </linearGradient>
-              <linearGradient id="grad-de-vn" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#3b82f6" />
-                <stop offset="100%" stop-color="#f43f5e" />
-              </linearGradient>
-              <linearGradient id="grad-jp-id" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#10b981" />
-                <stop offset="100%" stop-color="#f43f5e" />
-              </linearGradient>
-              <linearGradient id="grad-au-th" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#38bdf8" />
-                <stop offset="100%" stop-color="#f43f5e" />
-              </linearGradient>
-            </defs>
-
-            <!-- VECTOR CARTOGRAPHY BASE LAYER (Always visible even if external images fail or are blocked) -->
-            <g id="vector-base-layer">
-              <!-- Ocean Background -->
-              <rect x="0" y="0" width="1050" height="540" fill="#080e1d" />
-
-              <!-- Equal Earth Graticules / Grid -->
-              <g class="map-graticule">
-                <line x1="0" y1="90" x2="1050" y2="90" />
-                <line x1="0" y1="180" x2="1050" y2="180" />
-                <line x1="0" y1="270" x2="1050" y2="270" stroke="rgba(16, 185, 129, 0.25)" stroke-width="0.8" />
-                <line x1="0" y1="360" x2="1050" y2="360" />
-                <line x1="0" y1="450" x2="1050" y2="450" />
-                <line x1="175" y1="0" x2="175" y2="540" />
-                <line x1="350" y1="0" x2="350" y2="540" />
-                <line x1="525" y1="0" x2="525" y2="540" />
-                <line x1="700" y1="0" x2="700" y2="540" />
-                <line x1="875" y1="0" x2="875" y2="540" />
-              </g>
-
-              <!-- Equal Earth Continents Geometry Outline -->
-              <!-- North America -->
-              <path class="map-land-vector" d="M 120,65 Q 160,50 240,60 Q 310,75 315,120 Q 285,150 250,195 Q 230,225 255,270 L 235,278 Q 200,220 180,180 Q 140,150 115,120 Z" />
-              <path class="map-land-vector" d="M 140,75 Q 85,90 70,120 Q 110,135 135,100 Z" /> <!-- Alaska -->
-              <path class="map-land-vector" d="M 330,35 Q 380,30 395,65 Q 360,95 330,80 Z" /> <!-- Greenland -->
+        <!-- Two-Page Folio Grid: Verso (Left Colophon) & Recto (Right TOC & Text) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+          
+          <!-- LEFT COLUMN (Verso): Scholarly Imprint & Academic Metadata Card -->
+          <div class="lg:col-span-5 flex flex-col justify-between">
+            <div class="bg-white rounded-xl border border-stone-300 p-5 sm:p-6 lg:p-7 shadow-md flex flex-col justify-between h-full space-y-4 sm:space-y-5">
               
-              <!-- South America -->
-              <path class="map-land-vector" d="M 260,285 Q 310,290 355,335 Q 385,380 345,445 Q 320,495 295,490 Q 275,440 280,370 Q 260,320 260,285 Z" />
+              <!-- Clean Minimal Top Divider with Discreet License Badge -->
+              <div class="flex justify-between items-center border-b border-stone-200 pb-2.5">
+                <span class="font-mono font-bold fluid-micro uppercase tracking-wider text-stone-400">
+                  Publication Imprint
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-600 font-mono fluid-micro font-bold border border-stone-200">
+                  Open Access &bull; CC BY-NC 4.0
+                </span>
+              </div>
 
-              <!-- Europe -->
-              <path class="map-land-vector" d="M 480,85 Q 530,60 570,80 Q 565,120 535,145 Q 495,145 470,120 Z" />
-              <path class="map-land-vector" d="M 465,95 Q 480,80 475,115 Z" /> <!-- UK -->
-              <path class="map-land-vector" d="M 520,50 Q 545,40 550,75 Z" /> <!-- Scandinavia -->
+              <!-- Metadata List with Calibrated Fluid Typography -->
+              <div class="space-y-3.5 font-sans fluid-meta text-stone-700 leading-relaxed">
+                <div>
+                  <p class="font-mono font-bold fluid-micro text-stone-400 uppercase tracking-wider mb-0.5">Series Title</p>
+                  <p class="font-semibold text-stone-900 fluid-body">Bioplastics Innovation Hub Monograph Series</p>
+                </div>
 
-              <!-- Africa -->
-              <path class="map-land-vector" d="M 470,165 Q 565,160 590,220 Q 615,265 570,350 Q 535,420 510,410 Q 480,340 455,260 Q 450,210 470,165 Z" />
-              <path class="map-land-vector" d="M 605,340 Q 615,330 618,375 Q 600,385 605,340 Z" /> <!-- Madagascar -->
+                <div>
+                  <p class="font-mono font-bold fluid-micro text-stone-400 uppercase tracking-wider mb-0.5">Volume &amp; Edition</p>
+                  <p class="font-semibold text-stone-900">Volume 1 &bull; (2027) Digital Edition</p>
+                </div>
 
-              <!-- Asia -->
-              <path class="map-land-vector" d="M 575,80 Q 720,45 870,75 Q 945,110 930,165 Q 890,195 860,240 Q 820,295 780,265 Q 735,270 700,230 Q 650,230 605,175 Q 580,130 575,80 Z" />
-              <path class="map-land-vector" d="M 680,215 Q 730,225 735,290 Q 695,290 680,240 Z" /> <!-- India -->
-              <path class="map-land-vector" d="M 885,130 Q 905,135 895,185 Q 880,180 885,130 Z" /> <!-- Japan -->
-              <path class="map-land-vector" d="M 765,245 Q 810,240 815,290 Q 775,305 765,245 Z" /> <!-- Southeast Asia -->
-              <path class="map-land-vector" d="M 790,320 Q 855,325 870,350 Q 820,360 780,335 Z" /> <!-- Indonesia -->
-              <path class="map-land-vector" d="M 830,245 Q 850,250 840,290 Z" /> <!-- Philippines -->
+                <div>
+                  <p class="font-mono font-bold fluid-micro text-stone-400 uppercase tracking-wider mb-0.5">Publisher &amp; Hub Location</p>
+                  <p class="font-semibold text-stone-900">Murdoch University &bull; CSIRO Joint Publication</p>
+                  <p class="text-stone-500 fluid-meta">Perth, Western Australia</p>
+                </div>
 
-              <!-- Australia & Oceania -->
-              <path class="map-land-vector" d="M 840,365 Q 925,355 940,405 Q 930,465 875,470 Q 830,440 840,365 Z" />
-              <path class="map-land-vector" d="M 955,445 Q 970,440 965,480 Z" /> <!-- New Zealand -->
-            </g>
+                <div>
+                  <p class="font-mono font-bold fluid-micro text-stone-400 uppercase tracking-wider mb-0.5">Standard Identifiers</p>
+                  <p class="font-mono fluid-meta text-stone-800">ISBN: 978-0-9942485-8-9 (Digital Monograph)</p>
+                  <p class="font-mono fluid-meta text-stone-800">DOI: 10.1016/bioplastics.2027.01.004</p>
+                </div>
+              </div>
 
-            <!-- FLAT EQUAL EARTH PROJECTION IMAGE OVERLAY:
-                 Direct same-folder relative image loading for GitHub Pages -->
-            <image 
-              id="map-bg-image"
-              href="WorldMap_EqualEarth.png"
-              xlink:href="WorldMap_EqualEarth.png" 
-              x="0" 
-              y="0" 
-              width="1050" 
-              height="540" 
-              preserveAspectRatio="xMidYMid meet"
-              style="opacity: 1;"
-            />
+              <!-- Formal Academic Citation Box -->
+              <div class="p-3.5 sm:p-4 bg-stone-50 rounded-lg border border-stone-200 space-y-1.5">
+                <p class="font-mono fluid-micro font-bold text-stone-500 uppercase tracking-widest">
+                  Suggested Citation
+                </p>
+                <p class="font-serif italic fluid-meta text-stone-800 leading-normal">
+                  O'Donnell, A.G., Murphy, D.V., &amp; Hoyle, F.C. (2027). <em>Ending Plastic Waste: Learning from the Past to Fix the Future</em>. Bioplastics Innovation Hub &bull; Murdoch University / CSIRO Publishing.
+                </p>
+              </div>
 
-            <!-- Shipping Vector Paths -->
-            <g id="flow-paths-group">
-              <path id="path-us-my" class="flow-line" data-corridor="us" stroke="url(#grad-us-my)" d="M 238,158 Q 500,380 784,294" />
-              <path id="path-de-vn" class="flow-line" data-corridor="eu" stroke="url(#grad-de-vn)" d="M 528,86 Q 660,110 806,222" />
-              <path id="path-jp-id" class="flow-line" data-corridor="jp" stroke="url(#grad-jp-id)" d="M 892,152 Q 880,240 826,330" />
-              <path id="path-au-th" class="flow-line" data-corridor="au" stroke="url(#grad-au-th)" d="M 888,405 Q 870,320 778,250" />
-            </g>
+              <!-- Legal Disclaimer -->
+              <p class="fluid-micro text-stone-500 leading-normal border-t border-stone-200 pt-3">
+                <strong>Open Access Terms:</strong> Distributed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0). May be cited and shared with full institutional attribution.
+              </p>
 
-            <!-- Interactive Hotspot Pins -->
-            <g id="hotspots-group">
-              <g class="hotspot-pin" id="pin-us" data-location="us" transform="translate(238, 158)">
-                <circle cx="0" cy="0" r="24" fill="none" stroke="#06b6d4" stroke-width="1.5" class="pin-pulse" />
-                <circle cx="0" cy="0" r="13" fill="#0b172a" stroke="#06b6d4" stroke-width="2.5" class="pin-core" />
-                <circle cx="0" cy="0" r="4" fill="#22d3ee" />
-                <text x="0" y="-18" class="pin-label-box">USA [EXPORTER]</text>
-              </g>
+              <!-- Co-Branding Heraldry Base -->
+              <div class="pt-3 border-t border-stone-200 flex items-center justify-between">
+                <!-- CSIRO Official Roundel -->
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full bg-[#00a4e4] flex items-center justify-center p-0.5 shadow-sm shrink-0">
+                    <svg viewBox="0 0 40 40" class="w-full h-full fill-current">
+                      <circle cx="20" cy="20" r="19" fill="#00a4e4"/>
+                      <g fill="#ffffff">
+                        <rect x="13" y="9" width="2.4" height="10" rx="1.2"/>
+                        <rect x="17" y="7" width="2.4" height="12" rx="1.2"/>
+                        <rect x="21" y="8" width="2.4" height="13" rx="1.2"/>
+                        <rect x="25" y="11" width="2.4" height="9" rx="1.2"/>
+                        <circle cx="24" cy="22" r="1.4"/>
+                        <text x="20" y="32" font-family="Arial, sans-serif" font-weight="900" font-size="7.5" text-anchor="middle" letter-spacing="0.4">CSIRO</text>
+                      </g>
+                    </svg>
+                  </div>
+                  <span class="font-mono fluid-meta font-bold text-stone-700">CSIRO</span>
+                </div>
 
-              <g class="hotspot-pin" id="pin-de" data-location="de" transform="translate(528, 86)">
-                <circle cx="0" cy="0" r="24" fill="none" stroke="#3b82f6" stroke-width="1.5" class="pin-pulse" />
-                <circle cx="0" cy="0" r="13" fill="#0a152e" stroke="#3b82f6" stroke-width="2.5" class="pin-core" />
-                <circle cx="0" cy="0" r="4" fill="#60a5fa" />
-                <text x="0" y="-18" class="pin-label-box">GERMANY [EXPORTER]</text>
-              </g>
+                <!-- Murdoch University Official Single-Line Brand Lockup (All Red) -->
+                <div class="flex items-center gap-1.5">
+                  <span class="font-sans font-black text-[#e40046] text-lg sm:text-xl leading-none">MU</span>
+                  <span class="font-sans font-bold text-[#e40046] fluid-meta tracking-tight">Murdoch University</span>
+                </div>
+              </div>
 
-              <g class="hotspot-pin" id="pin-jp" data-location="jp" transform="translate(892, 152)">
-                <circle cx="0" cy="0" r="24" fill="none" stroke="#10b981" stroke-width="1.5" class="pin-pulse" />
-                <circle cx="0" cy="0" r="13" fill="#081e22" stroke="#10b981" stroke-width="2.5" class="pin-core" />
-                <circle cx="0" cy="0" r="4" fill="#34d399" />
-                <text x="0" y="-18" class="pin-label-box">JAPAN [EXPORTER]</text>
-              </g>
+            </div>
+          </div>
 
-              <g class="hotspot-pin" id="pin-au" data-location="au" transform="translate(888, 405)">
-                <circle cx="0" cy="0" r="24" fill="none" stroke="#38bdf8" stroke-width="1.5" class="pin-pulse" />
-                <circle cx="0" cy="0" r="13" fill="#0c1d2e" stroke="#38bdf8" stroke-width="2.5" class="pin-core" />
-                <circle cx="0" cy="0" r="4" fill="#38bdf8" />
-                <text x="0" y="24" class="pin-label-box">AUSTRALIA [EXPORTER]</text>
-              </g>
+          <!-- RIGHT COLUMN (Recto): Master Table of Contents + Pure Editorial Statement Below -->
+          <div class="lg:col-span-7 flex flex-col justify-start gap-5 lg:gap-6">
+            
+            <!-- Table of Contents Container -->
+            <div class="bg-white rounded-xl border border-stone-300 p-4 sm:p-5 lg:p-6 shadow-sm space-y-3 sm:space-y-4">
+              <div class="flex justify-between items-center border-b border-stone-200 pb-2.5">
+                <span class="font-mono font-bold fluid-meta uppercase tracking-wider text-stone-800 flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#0072b2]"></span>
+                  Table of Contents &bull; Chapters 01&ndash;08
+                </span>
+                <span class="fluid-micro font-mono text-stone-500 hidden sm:inline-block">
+                  Click card to navigate
+                </span>
+              </div>
 
-              <g class="hotspot-pin" id="pin-th" data-location="th" transform="translate(778, 250)">
-                <circle cx="0" cy="0" r="24" fill="none" stroke="#f43f5e" stroke-width="1.5" class="pin-pulse" />
-                <circle cx="0" cy="0" r="13" fill="#240c17" stroke="#f43f5e" stroke-width="2.5" class="pin-core" />
-                <circle cx="0" cy="0" r="4" fill="#fb7185" />
-                <text x="-44" y="4" class="pin-label-box">THAILAND</text>
-              </g>
+              <!-- Interactive Chapter 2-Column Grid (8 Total Chapters) -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                
+                <!-- CH 01 -->
+                <div class="toc-row-card">
+                  <div class="flex items-center justify-between" onclick="showPage(2)">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">01</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Introduction to Plastics</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">Historical tonnage &amp; ecotoxicology</p>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      <button type="button" onclick="event.stopPropagation(); toggleSubsections('toc-sub-1')" class="px-1.5 py-0.5 rounded bg-stone-100 hover:bg-stone-200 text-stone-600 font-mono fluid-micro font-bold">
+                        ▼
+                      </button>
+                      <span class="font-mono font-bold text-sky-700 fluid-meta">P. 03</span>
+                    </div>
+                  </div>
+                  <div id="toc-sub-1" class="toc-subsections-container">
+                    <div class="grid grid-cols-1 gap-1 font-mono fluid-micro text-stone-600 pl-9 pt-1.5">
+                      <span onclick="showPage(2)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 1.1 Historic Polymer Tonnages</span>
+                      <span onclick="showPage(3)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 1.2 Intertidal Degradation</span>
+                    </div>
+                  </div>
+                </div>
 
-              <g class="hotspot-pin" id="pin-my" data-location="my" transform="translate(784, 294)">
-                <circle cx="0" cy="0" r="24" fill="none" stroke="#f43f5e" stroke-width="1.5" class="pin-pulse" />
-                <circle cx="0" cy="0" r="13" fill="#240c17" stroke="#f43f5e" stroke-width="2.5" class="pin-core" />
-                <circle cx="0" cy="0" r="4" fill="#fb7185" />
-                <text x="42" y="4" class="pin-label-box">MALAYSIA</text>
-              </g>
+                <!-- CH 02 -->
+                <div class="toc-row-card">
+                  <div class="flex items-center justify-between" onclick="showPage(3)">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">02</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Trade Corridors</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">Bilateral flows &amp; Basel scrap rules</p>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      <button type="button" onclick="event.stopPropagation(); toggleSubsections('toc-sub-2')" class="px-1.5 py-0.5 rounded bg-stone-100 hover:bg-stone-200 text-stone-600 font-mono fluid-micro font-bold">
+                        ▼
+                      </button>
+                      <span class="font-mono font-bold text-sky-700 fluid-meta">P. 12</span>
+                    </div>
+                  </div>
+                  <div id="toc-sub-2" class="toc-subsections-container">
+                    <div class="grid grid-cols-1 gap-1 font-mono fluid-micro text-stone-600 pl-9 pt-1.5">
+                      <span onclick="showPage(3)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 2.1 Maritime Shipping Routes</span>
+                      <span onclick="showPage(9)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 2.2 Regional Receptor Hubs</span>
+                    </div>
+                  </div>
+                </div>
 
-              <g class="hotspot-pin" id="pin-vn" data-location="vn" transform="translate(806, 222)">
-                <circle cx="0" cy="0" r="24" fill="none" stroke="#f43f5e" stroke-width="1.5" class="pin-pulse" />
-                <circle cx="0" cy="0" r="13" fill="#240c17" stroke="#f43f5e" stroke-width="2.5" class="pin-core" />
-                <circle cx="0" cy="0" r="4" fill="#fb7185" />
-                <text x="32" y="-12" class="pin-label-box">VIETNAM</text>
-              </g>
-            </g>
-          </svg>
+                <!-- CH 03 -->
+                <div class="toc-row-card">
+                  <div class="flex items-center justify-between" onclick="showPage(5)">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">03</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Recycling Limits</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">9% mechanical threshold &amp; losses</p>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      <button type="button" onclick="event.stopPropagation(); toggleSubsections('toc-sub-3')" class="px-1.5 py-0.5 rounded bg-stone-100 hover:bg-stone-200 text-stone-600 font-mono fluid-micro font-bold">
+                        ▼
+                      </button>
+                      <span class="font-mono font-bold text-sky-700 fluid-meta">P. 24</span>
+                    </div>
+                  </div>
+                  <div id="toc-sub-3" class="toc-subsections-container">
+                    <div class="grid grid-cols-1 gap-1 font-mono fluid-micro text-stone-600 pl-9 pt-1.5">
+                      <span onclick="showPage(5)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 3.1 Mechanical Re-granulation</span>
+                      <span onclick="showPage(6)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 3.2 Global Sankey Balances</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CH 04 -->
+                <div class="toc-row-card">
+                  <div class="flex items-center justify-between" onclick="showPage(6)">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">04</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Biopolymer Innovation</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">Bio-derived PHA &amp; starch feeds</p>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      <button type="button" onclick="event.stopPropagation(); toggleSubsections('toc-sub-4')" class="px-1.5 py-0.5 rounded bg-stone-100 hover:bg-stone-200 text-stone-600 font-mono fluid-micro font-bold">
+                        ▼
+                      </button>
+                      <span class="font-mono font-bold text-sky-700 fluid-meta">P. 38</span>
+                    </div>
+                  </div>
+                  <div id="toc-sub-4" class="toc-subsections-container">
+                    <div class="grid grid-cols-1 gap-1 font-mono fluid-micro text-stone-600 pl-9 pt-1.5">
+                      <span onclick="showPage(6)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 4.1 Agronomic Starch Feeds</span>
+                      <span onclick="showPage(7)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 4.2 Fermentation Engineering</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CH 05 -->
+                <div class="toc-row-card">
+                  <div class="flex items-center justify-between" onclick="showPage(8)">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">05</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Treaty &amp; Policy Matrix</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">UN INC-5 treaty &amp; EPR mandates</p>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      <button type="button" onclick="event.stopPropagation(); toggleSubsections('toc-sub-5')" class="px-1.5 py-0.5 rounded bg-stone-100 hover:bg-stone-200 text-stone-600 font-mono fluid-micro font-bold">
+                        ▼
+                      </button>
+                      <span class="font-mono font-bold text-sky-700 fluid-meta">P. 52</span>
+                    </div>
+                  </div>
+                  <div id="toc-sub-5" class="toc-subsections-container">
+                    <div class="grid grid-cols-1 gap-1 font-mono fluid-micro text-stone-600 pl-9 pt-1.5">
+                      <span onclick="showPage(8)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 5.1 Global Plastics Treaty</span>
+                      <span onclick="showPage(8)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 5.2 Extended Producer Liability</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CH 06 -->
+                <div class="toc-row-card">
+                  <div class="flex items-center justify-between" onclick="showPage(7)">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">06</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Littoral Remediation</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">Ghost gear traps &amp; sediment core</p>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      <button type="button" onclick="event.stopPropagation(); toggleSubsections('toc-sub-6')" class="px-1.5 py-0.5 rounded bg-stone-100 hover:bg-stone-200 text-stone-600 font-mono fluid-micro font-bold">
+                        ▼
+                      </button>
+                      <span class="font-mono font-bold text-sky-700 fluid-meta">P. 66</span>
+                    </div>
+                  </div>
+                  <div id="toc-sub-6" class="toc-subsections-container">
+                    <div class="grid grid-cols-1 gap-1 font-mono fluid-micro text-stone-600 pl-9 pt-1.5">
+                      <span onclick="showPage(7)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 6.1 Estuarine Net Extraction</span>
+                      <span onclick="showPage(7)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 6.2 Micro-filament Trapping</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CH 07 -->
+                <div class="toc-row-card">
+                  <div class="flex items-center justify-between" onclick="showPage(4)">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">07</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Agronomic Soil Systems</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">Biodegradable mulches &amp; microbiomes</p>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      <button type="button" onclick="event.stopPropagation(); toggleSubsections('toc-sub-7')" class="px-1.5 py-0.5 rounded bg-stone-100 hover:bg-stone-200 text-stone-600 font-mono fluid-micro font-bold">
+                        ▼
+                      </button>
+                      <span class="font-mono font-bold text-sky-700 fluid-meta">P. 78</span>
+                    </div>
+                  </div>
+                  <div id="toc-sub-7" class="toc-subsections-container">
+                    <div class="grid grid-cols-1 gap-1 font-mono fluid-micro text-stone-600 pl-9 pt-1.5">
+                      <span onclick="showPage(4)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 7.1 Soil Mulch Mineralization</span>
+                      <span onclick="showPage(4)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 7.2 Microbial Assimilation</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CH 08 -->
+                <div class="toc-row-card">
+                  <div class="flex items-center justify-between" onclick="showPage(6)">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">08</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Circular Roadmap</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">Industrial scale-up &amp; retail shifts</p>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      <button type="button" onclick="event.stopPropagation(); toggleSubsections('toc-sub-8')" class="px-1.5 py-0.5 rounded bg-stone-100 hover:bg-stone-200 text-stone-600 font-mono fluid-micro font-bold">
+                        ▼
+                      </button>
+                      <span class="font-mono font-bold text-sky-700 fluid-meta">P. 94</span>
+                    </div>
+                  </div>
+                  <div id="toc-sub-8" class="toc-subsections-container">
+                    <div class="grid grid-cols-1 gap-1 font-mono fluid-micro text-stone-600 pl-9 pt-1.5">
+                      <span onclick="showPage(6)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 8.1 Commercial Scale Bottlenecks</span>
+                      <span onclick="showPage(9)" class="hover:text-sky-700 hover:underline cursor-pointer">&bull; 8.2 The 2035 Circular Horizon</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Pure Editorial Statement with Active Link -->
+            <div class="border-l-[4px] border-[#d55e00] pl-5 sm:pl-7 py-1.5 space-y-3 font-sans">
+              <p class="fluid-body text-stone-800 leading-relaxed font-normal">
+                Global plastic production now exceeds <strong class="text-stone-950 font-bold">430 million tonnes annually</strong>, overwhelming municipal infrastructure and driving systemic environmental persistence. Ending this crisis demands far more than incremental waste collection&mdash;it requires fundamental material redesign and uncompromised circular economics.
+              </p>
+              <p class="fluid-body text-stone-800 leading-relaxed font-normal">
+                The <strong class="text-stone-950 font-bold">Asia-Pacific region</strong> stands at the frontline of this global challenge, bearing the weight of transboundary polymer trade while pioneering critical breakthroughs in materials science. Tracking the lifecycle from fossil extraction to littoral fragmentation, this monograph synthesizes innovations from the <a href="https://www.murdoch.edu.au/research/ffi/centres/bioplastics-innovation-hub" target="_blank" rel="noopener noreferrer" class="text-[#0072b2] hover:text-[#003650] font-semibold underline decoration-sky-300 transition">Bioplastics Innovation Hub</a> with the pragmatic policy frameworks required to close the loop permanently.
+              </p>
+            </div>
+
+          </div>
+
         </div>
+
       </div>
+    </article>
 
-      <!-- Corridor Cards Deck -->
-      <div id="corridors-container" class="corridor-deck"></div>
-    </main>
-  </div>
-
-  <div id="case-modal-overlay" class="modal-backdrop">
-    <div class="case-modal">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-          <span id="modal-role-badge" class="badge badge-cyan">Trade Corridor</span>
-          <h2 id="modal-case-title" style="font-size: 1.25rem; font-weight: 700; color: #ffffff; margin-top: 0.25rem;">Country Data</h2>
+    <!-- Placeholder Templates 3 through 10 remain accessible via page navigation -->
+    <article class="book-page" id="page-t3" data-title="Template 3 // Hero Landscape Banner Opener">
+      <div class="max-w-6xl mx-auto p-8 space-y-4">
+        <div class="w-full h-56 rounded-xl bg-stone-900 overflow-hidden relative border border-stone-300">
+          <img src="coverpage.jpg" alt="Landscape banner" class="w-full h-full object-cover" onerror="this.src='https://odonnellag15-creator.github.io/Plastics-ebook-assets/coverpage.jpg';" />
+          <div class="absolute bottom-3 left-3 bg-black/70 text-white px-3 py-1 rounded text-xs font-mono">
+            Plate 1.1: Littoral netting fragmentation along coastal sediment wracklines.
+          </div>
         </div>
-        <button id="modal-close-btn" class="action-btn">&times; Close</button>
+        <span class="text-xs font-mono font-bold uppercase tracking-widest text-amber-700">CHAPTER 1 // INTRODUCTION</span>
+        <h2 class="text-3xl font-extrabold text-[#003650] font-serif">Introduction to Plastics</h2>
+        <p class="text-sm text-stone-700 leading-relaxed">
+          Fossil fuel-derived plastics persist in water, air, and soil and represent an ongoing hazard to the environment and human health.
+        </p>
+        <button onclick="showPage(1)" class="px-4 py-2 rounded bg-sky-800 text-white text-xs font-mono font-bold">&larr; Return to Table of Contents</button>
+      </div>
+    </article>
+
+    <article class="book-page" id="page-t4" data-title="Template 4 // Media Dispatch & Takeaways">
+      <div class="max-w-5xl mx-auto p-8 space-y-4">
+        <h2 class="text-2xl font-bold font-serif text-[#003650]">Plastics in the Environment</h2>
+        <p class="text-xs text-stone-600">Video dispatch and key findings review.</p>
+        <button onclick="showPage(1)" class="px-4 py-2 rounded bg-sky-800 text-white text-xs font-mono font-bold">&larr; Return to Table of Contents</button>
+      </div>
+    </article>
+
+    <article class="book-page" id="page-t5" data-title="Template 5 // 6-Tile Product Grid">
+      <div class="max-w-5xl mx-auto p-8 space-y-4">
+        <h2 class="text-2xl font-bold font-serif text-[#003650]">Examples of Plastic Products</h2>
+        <button onclick="showPage(1)" class="px-4 py-2 rounded bg-sky-800 text-white text-xs font-mono font-bold">&larr; Return to Table of Contents</button>
+      </div>
+    </article>
+
+    <article class="book-page" id="page-t6" data-title="Template 6 // Data Metric Visualizer">
+      <div class="max-w-5xl mx-auto p-8 space-y-4">
+        <h2 class="text-2xl font-bold font-serif text-[#003650]">Recycling Is Not Enough</h2>
+        <button onclick="showPage(1)" class="px-4 py-2 rounded bg-sky-800 text-white text-xs font-mono font-bold">&larr; Return to Table of Contents</button>
+      </div>
+    </article>
+
+    <article class="book-page" id="page-t7" data-title="Template 7 // Material Flow Sankey Stage">
+      <div class="max-w-5xl mx-auto p-8 space-y-4">
+        <h2 class="text-2xl font-bold font-serif text-[#003650]">Annual Global Production & Fate of Plastics</h2>
+        <button onclick="showPage(1)" class="px-4 py-2 rounded bg-sky-800 text-white text-xs font-mono font-bold">&larr; Return to Table of Contents</button>
+      </div>
+    </article>
+
+    <article class="book-page" id="page-t8" data-title="Template 8 // Dual Exhibit Comparative Split">
+      <div class="max-w-5xl mx-auto p-8 space-y-4">
+        <h2 class="text-2xl font-bold font-serif text-[#003650]">Marine Debris & Landfill Sinks</h2>
+        <button onclick="showPage(1)" class="px-4 py-2 rounded bg-sky-800 text-white text-xs font-mono font-bold">&larr; Return to Table of Contents</button>
+      </div>
+    </article>
+
+    <article class="book-page" id="page-t9" data-title="Template 9 // Systems Fishbone Diagram">
+      <div class="max-w-5xl mx-auto p-8 space-y-4">
+        <h2 class="text-2xl font-bold font-serif text-[#003650]">Transition Drivers to Sustainable Plastics</h2>
+        <button onclick="showPage(1)" class="px-4 py-2 rounded bg-sky-800 text-white text-xs font-mono font-bold">&larr; Return to Table of Contents</button>
+      </div>
+    </article>
+
+    <article class="book-page" id="page-t10" data-title="Template 10 // Equal Earth Regional Map">
+      <div class="max-w-5xl mx-auto p-8 space-y-4">
+        <h2 class="text-2xl font-bold font-serif text-[#003650]">Global Plastic Perspectives</h2>
+        <button onclick="showPage(1)" class="px-4 py-2 rounded bg-sky-800 text-white text-xs font-mono font-bold">&larr; Return to Table of Contents</button>
+      </div>
+    </article>
+
+    <!-- Fixed Persistent Footer -->
+    <footer class="running-footer">
+      <div class="flex items-center gap-2">
+        <button id="btn-prev" class="book-nav-btn" onclick="advance(-1)">&larr; Previous</button>
       </div>
 
-      <!-- Complete Information Callout Metrics -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.65rem;">
-        <div style="background: rgba(0,0,0,0.35); padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border-subtle);">
-          <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Annual Throughput</div>
-          <div id="modal-metric-tonnage" style="font-size: 1.1rem; font-weight: 800; color: var(--accent-cyan); font-family: monospace;">1,150,000 MT</div>
-        </div>
-        <div style="background: rgba(0,0,0,0.35); padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border-subtle);">
-          <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Processing Deficit</div>
-          <div id="modal-metric-deficit" style="font-size: 1.1rem; font-weight: 800; color: var(--accent-rose); font-family: monospace;">58% Unmanaged</div>
-        </div>
-        <div style="background: rgba(0,0,0,0.35); padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border-subtle);">
-          <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">Primary Waste Grade</div>
-          <div id="modal-metric-contaminant" style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">Mixed Films &amp; PVC</div>
-        </div>
-      </div>
+      <div class="flex items-center gap-1 overflow-x-auto py-1" id="template-pills"></div>
 
-      <!-- Field Audit Notes Callout -->
-      <div style="background: rgba(255,255,255,0.03); padding: 0.85rem; border-radius: 0.5rem; border-left: 3px solid var(--accent-emerald);">
-        <div style="font-size: 0.7rem; font-weight: 700; color: var(--accent-emerald); text-transform: uppercase; margin-bottom: 0.25rem;">Field Investigation Dispatch</div>
-        <p id="modal-case-notes" style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.55;"></p>
+      <div class="flex items-center gap-2">
+        <button id="btn-next" class="book-nav-btn" onclick="advance(1)">Next &rarr;</button>
       </div>
+    </footer>
 
-      <!-- Field Interview Quote Callout -->
-      <div style="background: rgba(245, 158, 11, 0.08); padding: 0.75rem 0.85rem; border-radius: 0.5rem; border-left: 3px solid var(--accent-amber);">
-        <div id="modal-quote-author" style="font-size: 0.7rem; font-weight: 700; color: var(--accent-amber); text-transform: uppercase; margin-bottom: 0.2rem;">Field Quote</div>
-        <p id="modal-case-quote" style="font-size: 0.8rem; color: #f1f5f9; font-style: italic; line-height: 1.45;"></p>
-      </div>
-
-      <div style="display: flex; justify-content: flex-end;">
-        <button id="btn-dismiss-modal" class="action-btn" style="background: rgba(16, 185, 129, 0.2); border-color: var(--accent-emerald); color: #34d399;">Return to Map</button>
-      </div>
-    </div>
-  </div>
+  </main>
 
   <script>
-    (function () {
+    (function() {
       'use strict';
 
-      const CASE_STUDIES = [
-        {
-          id: 'us',
-          origin: 'United States',
-          dest: 'Malaysia & Southeast Asia',
-          tonnage: '1,150,000 MT / yr',
-          deficit: '58% unmanaged or dumped in recipient zones',
-          contaminant: 'Post-consumer mixed films, unwashed agricultural wrap',
-          notes: 'High-density riverine accumulation in the Klang & Selangor basins. Heavy chemical leachate contaminates mangrove fish hatcheries.',
-          author: 'Dr. H. Rahman // Marine Ecologist (Penang)',
-          quote: 'Manifests claim "Clean Flakes," but customs inspections reveal contaminated municipal polymers. Microplastic counts in local mangrove mudflats have doubled since 2019.'
-        },
-        {
-          id: 'de',
-          origin: 'Germany & EU',
-          dest: 'Vietnam (Hai Phong Corridor)',
-          tonnage: '745,000 MT / yr',
-          deficit: '62% open burning or craft kilns',
-          contaminant: 'Rigid PVC packaging & e-waste polymers',
-          notes: 'Thermal recycling villages outside Hanoi release heavy metal particulates draining into Red River Delta aquaculture.',
-          author: 'Prof. Le Thi Mai // Environmental Toxicologist',
-          quote: 'Open-air thermal reprocessing produces carcinogenic smoke. The wash effluent drains straight into coastal rice paddies and estuarine shellfish beds.'
-        },
-        {
-          id: 'jp',
-          origin: 'Japan',
-          dest: 'Indonesia (Surabaya / Brantas)',
-          tonnage: '620,000 MT / yr',
-          deficit: '71% burned as boiler fuel or discarded',
-          contaminant: 'High-barrier composite snack pouches & multi-laminates',
-          notes: 'Baled industrial plastics burned for heat in local manufacturing clusters, contaminating municipal waterways.',
-          author: 'A. Praditya // Watershed Restoration Lead (Surabaya)',
-          quote: 'Imported paper bales contain up to 40% hidden plastic waste. Local factories burn this plastic for process heat, releasing persistent pollutants across the valley.'
-        },
-        {
-          id: 'au',
-          origin: 'Australia',
-          dest: 'Thailand & Malaysia',
-          tonnage: '185,000 MT / yr',
-          deficit: '54% low-tech informal sorting in Chonburi',
-          contaminant: 'Sorted municipal plastics, mixed polymer-lined paper',
-          notes: 'Despite export ban mandates, processed refuse-derived fuel pellets (RDF) continue to transfer polymer burdens abroad.',
-          author: 'M. Gallagher // Circular Policy Researcher',
-          quote: 'The export ban closed direct scrap shipments, but loophole reclassifications like processed engineered fuels still transfer residual polymer burdens to Southeast Asia.'
-        },
-        {
-          id: 'th',
-          origin: 'Thailand (Receptor)',
-          dest: 'Laem Chabang Hub',
-          tonnage: '530,000 MT Inbound Surge',
-          deficit: '68% unmonitored burning or warehousing',
-          contaminant: 'E-waste plastics, mixed PVC, agricultural scrap',
-          notes: 'Concentration of coastal recycling processing facilities discharging into the Gulf of Thailand littoral zone.',
-          author: 'P. Somchai // Thai Coastal Ecosystem Defense Alliance',
-          quote: 'Following the 2018 shift, import volumes through Laem Chabang increased by over 2000%. Toxic effluent from unpermitted shredders is devastating local crab nurseries.'
-        },
-        {
-          id: 'my',
-          origin: 'Malaysia (Receptor)',
-          dest: 'Port Klang Corridor',
-          tonnage: '830,000 MT Inbound',
-          deficit: 'Critical Processing Bottleneck (Overcapacity)',
-          contaminant: 'Mixed household solid waste with organic residues',
-          notes: 'Unlicensed dumpsites in rural agricultural zones subject to post-consumer municipal waste accumulation.',
-          author: 'K. Tan // Waste Policy Advocate (Selangor)',
-          quote: 'Over 140 illegal reprocessing factories were shut down, but shipments still find backdoor entry points via false tariff code classifications.'
-        },
-        {
-          id: 'vn',
-          origin: 'Vietnam (Receptor)',
-          dest: 'Hai Phong Delta',
-          tonnage: '560,000 MT Inbound',
-          deficit: 'Deficient Sorting Infrastructure',
-          contaminant: 'Low-grade agricultural film & industrial scrap',
-          notes: 'High volume re-processing craft villages with untreated wash-down effluent contaminating Tonkin coastal fisheries.',
-          author: 'N. Van Hieu // Red River Coastal Fishery Officer',
-          quote: 'Fine plastic fibers now permeate the littoral sediment layer, reducing juvenile shrimp survival rates across the delta.'
-        }
-      ];
+      const pages = Array.from(document.querySelectorAll('.book-page'));
+      const headerTitle = document.getElementById('header-page-title');
+      const templateSelect = document.getElementById('template-select');
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      const pillsContainer = document.getElementById('template-pills');
+      
+      let currentIndex = 1; // Default to Template 2
+      const totalPages = pages.length;
 
-      const mapViewport = document.getElementById('map-viewport');
-      const worldSvgContainer = document.getElementById('world-svg-container');
-      const modal = document.getElementById('case-modal-overlay');
-      const modalTitle = document.getElementById('modal-case-title');
-      const modalTonnage = document.getElementById('modal-metric-tonnage');
-      const modalDeficit = document.getElementById('modal-metric-deficit');
-      const modalContaminant = document.getElementById('modal-metric-contaminant');
-      const modalNotes = document.getElementById('modal-case-notes');
-      const modalQuoteAuthor = document.getElementById('modal-quote-author');
-      const modalQuote = document.getElementById('modal-case-quote');
-      const modalClose = document.getElementById('modal-close-btn');
-      const modalDismiss = document.getElementById('btn-dismiss-modal');
-      const corridorsContainer = document.getElementById('corridors-container');
+      // Build Template Selector Pills (T1 - T10)
+      if (pillsContainer) {
+        pillsContainer.innerHTML = '';
+        pages.forEach((page, idx) => {
+          const btn = document.createElement('button');
+          btn.className = `page-pill-btn ${idx === currentIndex ? 'active' : ''}`;
+          btn.textContent = `T${idx + 1}`;
+          btn.title = page.getAttribute('data-title') || `Template ${idx + 1}`;
+          btn.addEventListener('click', () => showPage(idx));
+          pillsContainer.appendChild(btn);
+        });
+      }
 
-      const mapBgImage = document.getElementById('map-bg-image');
-      const mapLayerText = document.getElementById('map-layer-text');
-      const mapLayerIndicator = document.getElementById('map-layer-indicator');
-      const localMapPicker = document.getElementById('local-map-picker');
-      const btnToggleVector = document.getElementById('btn-toggle-vector');
+      function showPage(index) {
+        if (index < 0 || index >= totalPages) return;
+        
+        pages[currentIndex].classList.remove('active');
+        currentIndex = index;
+        pages[currentIndex].classList.add('active');
 
-      // Static image setup (No timers, no auto-erasing)
-      let isVectorOnly = false;
+        const activeTitle = pages[currentIndex].getAttribute('data-title') || `Template ${currentIndex + 1}`;
+        if (headerTitle) headerTitle.textContent = activeTitle;
+        if (templateSelect) templateSelect.value = currentIndex;
 
-      // Robust image source chain for GitHub Pages
-      const candidateSources = [
-        'WorldMap_EqualEarth.png',
-        './WorldMap_EqualEarth.png',
-        'https://odonnellag15-creator.github.io/Plastics-ebook-assets/WorldMap_EqualEarth.png',
-        'https://raw.githubusercontent.com/odonnellag15-creator/Plastics-ebook-assets/main/WorldMap_EqualEarth.png'
-      ];
-
-      function tryLoadImageSources(index) {
-        if (index >= candidateSources.length) {
-          mapLayerText.textContent = 'Using Cartographic Vector Mode';
-          mapLayerIndicator.style.background = '#06b6d4';
-          return;
+        if (pillsContainer) {
+          const pills = pillsContainer.querySelectorAll('.page-pill-btn');
+          pills.forEach((p, i) => p.classList.toggle('active', i === currentIndex));
         }
 
-        const testImg = new Image();
-        testImg.onload = function() {
-          mapBgImage.setAttribute('href', candidateSources[index]);
-          mapBgImage.setAttribute('xlink:href', candidateSources[index]);
-          mapBgImage.style.opacity = '1';
-          mapLayerText.textContent = 'High-Res Equal Earth Active';
-          mapLayerIndicator.style.background = '#10b981';
-        };
-        testImg.onerror = function() {
-          tryLoadImageSources(index + 1);
-        };
-        testImg.src = candidateSources[index];
+        if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+        if (btnNext) btnNext.disabled = (currentIndex === totalPages - 1);
       }
 
-      // Check if user previously loaded an image in this browser session
-      try {
-        const cachedMap = localStorage.getItem('cached_equal_earth_map');
-        if (cachedMap) {
-          mapBgImage.setAttribute('href', cachedMap);
-          mapBgImage.setAttribute('xlink:href', cachedMap);
-          mapBgImage.style.opacity = '1';
-          mapLayerText.textContent = 'Restored: Local Equal Earth Map';
-          mapLayerIndicator.style.background = '#10b981';
-        } else {
-          tryLoadImageSources(0);
-        }
-      } catch (err) {
-        tryLoadImageSources(0);
+      function advance(delta) {
+        showPage(currentIndex + delta);
       }
 
-      // Local file picker: connects and remembers your WorldMap_EqualEarth.png permanently
-      if (localMapPicker) {
-        localMapPicker.addEventListener('change', (e) => {
-          const file = e.target.files[0];
-          if (file) {
-            // Read file into persistent data URL so it survives Canvas expansion & reloads
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-              const dataUrl = evt.target.result;
-              mapBgImage.setAttribute('href', dataUrl);
-              mapBgImage.setAttribute('xlink:href', dataUrl);
-              mapBgImage.style.opacity = '1';
-              mapLayerText.textContent = `Connected: ${file.name}`;
-              mapLayerIndicator.style.background = '#10b981';
+      window.showPage = showPage;
+      window.advance = advance;
 
-              try {
-                localStorage.setItem('cached_equal_earth_map', dataUrl);
-              } catch (storageErr) {
-                console.warn('Local cache full, displaying in memory:', storageErr);
-              }
-            };
-            reader.readAsDataURL(file);
-          }
-        });
-      }
+      window.toggleSubsections = function(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.classList.toggle('expanded');
+      };
 
-      // Toggle between Photographic Satellite Overlay and Crisp Vector Mode
-      if (btnToggleVector) {
-        btnToggleVector.addEventListener('click', () => {
-          isVectorOnly = !isVectorOnly;
-          mapBgImage.style.opacity = isVectorOnly ? '0' : '1';
-          btnToggleVector.style.color = isVectorOnly ? '#34d399' : '#ffffff';
-          mapLayerText.textContent = isVectorOnly ? 'Vector Cartography Mode' : 'Map Image Active';
-          mapLayerIndicator.style.background = isVectorOnly ? '#06b6d4' : '#10b981';
-        });
-      }
-
-      let zoomLevel = 1;
-      let panX = 0, panY = 0;
-      let isPanning = false, startX = 0, startY = 0;
-
-      function updateTransform() {
-        worldSvgContainer.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
-      }
-
-      function resetView() {
-        zoomLevel = 1; panX = 0; panY = 0;
-        updateTransform();
-      }
-
-      document.getElementById('btn-reset-map').onclick = resetView;
-      document.getElementById('btn-fit-map').onclick = resetView;
-      document.getElementById('btn-zoom-in').onclick = () => { zoomLevel = Math.min(3, zoomLevel * 1.2); updateTransform(); };
-      document.getElementById('btn-zoom-out').onclick = () => { zoomLevel = Math.max(0.8, zoomLevel * 0.8); updateTransform(); };
-
-      mapViewport.addEventListener('mousedown', (e) => {
-        if (e.target.closest('.map-toolbar') || e.target.closest('.map-legend')) return;
-        isPanning = true;
-        startX = e.clientX - panX;
-        startY = e.clientY - panY;
+      // Keyboard navigation
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') advance(1);
+        if (e.key === 'ArrowLeft' || e.key === 'PageUp') advance(-1);
       });
 
-      window.addEventListener('mousemove', (e) => {
-        if (!isPanning) return;
-        panX = e.clientX - startX;
-        panY = e.clientY - startY;
-        updateTransform();
-      });
-
-      window.addEventListener('mouseup', () => { isPanning = false; });
-
-      function openModal(id) {
-        const item = CASE_STUDIES.find(c => c.id === id);
-        if (!item) return;
-        modalTitle.textContent = `${item.origin} → ${item.dest}`;
-        modalTonnage.textContent = item.tonnage;
-        modalDeficit.textContent = item.deficit;
-        modalContaminant.textContent = item.contaminant;
-        modalNotes.textContent = item.notes;
-        modalQuoteAuthor.textContent = `Field Quote // ${item.author}`;
-        modalQuote.textContent = `"${item.quote}"`;
-        modal.classList.add('open');
-      }
-
-      function closeModal() {
-        modal.classList.remove('open');
-      }
-
-      modalClose.onclick = closeModal;
-      modalDismiss.onclick = closeModal;
-      modal.onclick = (e) => { if (e.target === modal) closeModal(); };
-
-      // Pin clicks
-      document.querySelectorAll('.hotspot-pin').forEach(pin => {
-        pin.addEventListener('click', (e) => {
-          e.stopPropagation();
-          openModal(pin.dataset.location);
-        });
-      });
-
-      // Corridor cards
-      corridorsContainer.innerHTML = '';
-      CASE_STUDIES.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'corridor-card';
-        card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-weight:700; color:#fff; font-size:0.85rem;">${item.origin}</span>
-            <span style="font-size:0.75rem; color:var(--accent-cyan); font-family:monospace;">${item.tonnage}</span>
-          </div>
-          <p style="font-size:0.75rem; color:var(--text-muted);">${item.notes.substring(0, 80)}...</p>
-        `;
-        card.onclick = () => openModal(item.id);
-        corridorsContainer.appendChild(card);
-      });
-
-      // Corridor filter buttons
-      document.querySelectorAll('#filter-cluster button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('#filter-cluster button').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const filter = btn.dataset.filter;
-          document.querySelectorAll('.flow-line').forEach(line => {
-            line.classList.toggle('dimmed', filter !== 'all' && line.dataset.corridor !== filter);
-          });
-        });
-      });
-
+      // Default to Template 2
+      showPage(1);
     })();
   </script>
 </body>
