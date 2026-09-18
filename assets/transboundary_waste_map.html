@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#060911" />
+  <meta name="description" content="G20 to Global South Transboundary Plastic Waste Flow Map (Equal Earth Projection)" />
+  <title>G20 to Global South // Equal Earth Waste Corridors</title>
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg-main: #060911;
+      --bg-card: #0d1322;
+      --bg-card-sub: #131b2e;
+      --bg-card-hover: #1c2742;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(16, 185, 129, 0.45);
+      --accent-emerald: #10b981;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.35);
+      --accent-cyan: #06b6d4;
+      --accent-cyan-glow: rgba(6, 182, 212, 0.35);
+      --accent-blue: #3b82f6;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --ocean-blue: #162a45;
+      --land-fill: #22372b;
+      --land-border: #3b5e48;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 1.25rem 0.75rem 3.5rem;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* SaaS Dashboard Card */
+    .saas-card {
+      background: linear-gradient(180deg, rgba(19, 27, 46, 0.92) 0%, rgba(13, 19, 34, 0.98) 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 1rem;
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.65), 0 0 1px 1px rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+      position: relative;
+    }
+
+    .saas-card:hover {
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.25rem 0.625rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 9999px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .badge-emerald {
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    .badge-cyan {
+      background: rgba(6, 182, 212, 0.12);
+      color: #22d3ee;
+      border: 1px solid rgba(6, 182, 212, 0.35);
+    }
+
+    .badge-blue {
+      background: rgba(59, 130, 246, 0.12);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+    }
+
+    .badge-amber {
+      background: rgba(245, 158, 11, 0.12);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .badge-rose {
+      background: rgba(244, 63, 94, 0.12);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.35);
+    }
+
+    /* Action Buttons */
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.875rem;
+      border-radius: 0.5rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .action-btn.active {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--accent-emerald);
+      color: #34d399;
+    }
+
+    /* Map Viewport Area */
+    .map-viewport {
+      position: relative;
+      width: 100%;
+      height: 590px;
+      background: radial-gradient(circle at 50% 50%, #0d1624 0%, #060912 100%);
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      border-bottom: 1px solid var(--border-subtle);
+      touch-action: none;
+    }
+
+    .map-viewport:active {
+      cursor: grabbing;
+    }
+
+    /* Floating Map Zoom Controls */
+    .map-toolbar {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+      z-index: 20;
+    }
+
+    .map-tool-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 0.5rem;
+      background: rgba(13, 20, 36, 0.92);
+      border: 1px solid var(--border-subtle);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .map-tool-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Legend Overlay */
+    .map-legend {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      background: rgba(10, 16, 30, 0.92);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      backdrop-filter: blur(12px);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    /* SVG Pan/Zoom Canvas */
+    #world-svg-container {
+      width: 100%;
+      height: 100%;
+      transform-origin: 0 0;
+      transition: transform 0.08s linear;
+    }
+
+    /* Equal Earth Projection Map Styling */
+    .equal-earth-ocean {
+      fill: var(--ocean-blue);
+      stroke: #25446b;
+      stroke-width: 2;
+      filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.8));
+    }
+
+    .graticule-line {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.12);
+      stroke-width: 0.75;
+      stroke-dasharray: 2 4;
+    }
+
+    .equator-line {
+      fill: none;
+      stroke: rgba(244, 63, 94, 0.45);
+      stroke-width: 1;
+    }
+
+    .landmass-equal-earth {
+      fill: var(--land-fill);
+      stroke: var(--land-border);
+      stroke-width: 1;
+      stroke-linejoin: round;
+      transition: fill 0.3s ease, filter 0.3s ease;
+    }
+
+    .landmass-equal-earth:hover {
+      fill: #2d4838;
+      filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.3));
+    }
+
+    /* Transboundary Flow Vector Path */
+    .flow-line {
+      fill: none;
+      stroke-width: 2.75;
+      stroke-linecap: round;
+      stroke-dasharray: 6, 6;
+      animation: dashFlow 1.8s linear infinite;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 6px var(--accent-emerald-glow));
+      transition: opacity 0.3s ease;
+    }
+
+    @keyframes dashFlow {
+      to {
+        stroke-dashoffset: -24;
+      }
+    }
+
+    .flow-line.dimmed {
+      opacity: 0.1;
+      animation: none;
+    }
+
+    /* Hotspot Pins */
+    .hotspot-pin {
+      cursor: pointer;
+      outline: none;
+      transform-box: fill-box;
+      transform-origin: center;
+      transition: all 0.25s ease;
+    }
+
+    .pin-pulse {
+      animation: pulseRings 2.2s infinite ease-out;
+      transform-box: fill-box;
+      transform-origin: center;
+      pointer-events: none;
+    }
+
+    @keyframes pulseRings {
+      0% { transform: scale(0.8); opacity: 0.9; }
+      50% { transform: scale(1.6); opacity: 0.25; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+
+    .pin-core {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
+      pointer-events: none;
+    }
+
+    .hotspot-pin:hover .pin-core,
+    .hotspot-pin:focus-visible .pin-core {
+      transform: scale(1.3);
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+
+    .hotspot-pin.active .pin-core {
+      transform: scale(1.4);
+      filter: drop-shadow(0 0 14px currentColor);
+    }
+
+    .pin-label-box {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-anchor: middle;
+      fill: #ffffff;
+      pointer-events: none;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 0 8px rgba(0,0,0,0.8);
+    }
+
+    /* Metrics Summary Bar */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      background: rgba(10, 15, 29, 0.5);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .metric-card {
+      background: var(--bg-card-sub);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.75rem;
+      padding: 0.875rem 1.125rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .metric-card:hover {
+      border-color: rgba(16, 185, 129, 0.3);
+      background: var(--bg-card-hover);
+    }
+
+    .metric-title {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+    }
+
+    .metric-value {
+      font-size: 1.25rem;
+      font-weight: 800;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+      color: #ffffff;
+    }
+
+    /* Target Corridor Gallery */
+    .corridor-deck {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+      padding: 1.5rem;
+    }
+
+    .corridor-card {
+      background: var(--bg-card-sub);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.75rem;
+      padding: 1.125rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .corridor-card:hover {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .corridor-card.active-corridor {
+      border-color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.1);
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+    }
+
+    /* Modal Overlay & Drawer */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 15, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .case-modal {
+      background: #0d1527;
+      border: 1px solid var(--border-focus);
+      border-radius: 1.125rem;
+      max-width: 760px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.85), 0 0 35px var(--accent-emerald-glow);
+      animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      scrollbar-width: thin;
+      scrollbar-color: var(--text-dim) transparent;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Virtual Interview Player Box inside Modal */
+    .interview-player-card {
+      background: rgba(7, 11, 22, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .audio-waveform-canvas {
+      width: 100%;
+      height: 48px;
+      background: #050811;
+      border-radius: 0.375rem;
+      display: block;
+    }
+
+    /* Expandable Data Sources Drawer */
+    .sources-drawer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+      border-top: 1px solid transparent;
+      background: #080d1a;
+    }
+
+    .sources-drawer.open {
+      max-height: 800px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .source-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.5rem;
+      padding: 0.875rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    /* Toast Notification */
+    #toast-banner {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(90px);
+      background: #0f172a;
+      border: 1px solid var(--accent-emerald);
+      color: #ffffff;
+      padding: 0.5rem 1.125rem;
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 20px var(--accent-emerald-glow);
+      z-index: 120;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    #toast-banner.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <header style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+      <div style="display: flex; align-items: center; gap: 0.625rem;">
+        <span class="badge badge-emerald">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10"></circle>
+          </svg>
+          Chapter 04 // Equal Earth Flow Model
+        </span>
+        <span style="font-size: 0.8125rem; color: var(--text-dim);">Pseudocylindrical Equal-Area Projection</span>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <button id="btn-toggle-sources" class="action-btn" aria-label="Toggle Data Sources Drawer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          <span>Data Sources &amp; Methodology</span>
+        </button>
+        <button id="btn-reset-map" class="action-btn" aria-label="Reset Map Zoom & Pan">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.19"/>
+          </svg>
+          <span>Reset View</span>
+        </button>
+      </div>
+    </header>
+
+    <section id="sources-drawer" class="sources-drawer saas-card" aria-label="Data Sources and Methodology">
+      <div style="padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+          <div>
+            <h2 style="font-size: 1.125rem; font-weight: 700; color: #ffffff;">Data Sources, Accounting Methodologies &amp; Regulatory Frameworks</h2>
+            <p style="font-size: 0.8125rem; color: var(--text-muted);">Primary trade registries, custom tariff codes (HS 3915), and baseline field studies.</p>
+          </div>
+          <button id="btn-close-sources" class="action-btn" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Close Drawer</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.875rem;">
+          <div class="source-item">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.8125rem; font-weight: 700; color: var(--accent-cyan);">1. UN Comtrade Database</span>
+              <span class="badge" style="font-size: 0.625rem; background: rgba(6,182,212,0.1); color: #22d3ee;">Trade Registry</span>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.45;">
+              Harmonized System Code <strong>HS 3915</strong> (Waste, parings, and scrap of plastics: 3915.10 PE, 3915.20 PS, 3915.30 PVC, 3915.90 Other). Quantifies bilateral mass throughput (metric tons) and customs declared freight values.
+            </p>
+          </div>
+
+          <div class="source-item">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.8125rem; font-weight: 700; color: var(--accent-emerald);">2. Basel Action Network (BAN)</span>
+              <span class="badge" style="font-size: 0.625rem; background: rgba(16,185,129,0.1); color: #34d399;">Field GPS Audit</span>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.45;">
+              GPS beacon tracking investigations and port shipping manifest cross-examinations. Monitors compliance with the 2019 <strong>Basel Plastic Waste Amendments</strong> (Entries Y48, A3250, B3011).
+            </p>
+          </div>
+
+          <div class="source-item">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.8125rem; font-weight: 700; color: var(--accent-amber);">3. China's National Sword Policy (2018)</span>
+              <span class="badge" style="font-size: 0.625rem; background: rgba(245,158,11,0.1); color: #fbbf24;">Regulatory Shift</span>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.45;">
+              Historical baseline: Prior to 2018, China processed ~45% of global plastic waste imports (~7.3M MT/yr). The 0.5% contamination limit abruptly redirected millions of tons to Southeast Asian ports.
+            </p>
+          </div>
+
+          <div class="source-item">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.8125rem; font-weight: 700; color: var(--accent-rose);">4. OECD &amp; Jambeck et al. Framework</span>
+              <span class="badge" style="font-size: 0.625rem; background: rgba(244,63,94,0.1); color: #fb7185;">Deficit Modeling</span>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.45;">
+              Models coastal leakage rates by evaluating municipal solid waste (MSW) collection efficiencies, unlined dumpsite densities, and riparian discharge factors into marine ecosystems.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="saas-card">
+      
+      <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h1 style="font-size: 1.25rem; font-weight: 700; color: #ffffff; letter-spacing: -0.01em;">
+            G20 to Global South: Transboundary Waste Corridors
+          </h1>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.2rem;">
+            Equal Earth Projection (True Relative Area). Click any exporter or recipient pin to inspect shipping routes and field investigations.
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 0.375rem; flex-wrap: wrap;" id="filter-cluster">
+          <button class="action-btn active" data-filter="all">All Corridors</button>
+          <button class="action-btn" data-filter="us">USA</button>
+          <button class="action-btn" data-filter="eu">Germany / EU</button>
+          <button class="action-btn" data-filter="jp">Japan</button>
+          <button class="action-btn" data-filter="au">Australia</button>
+          <button class="action-btn" data-filter="cn">China (Historic / Ban)</button>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card" id="mcard-volume">
+          <span class="metric-title">G20 Export Throughput</span>
+          <span class="metric-value" style="color: var(--accent-cyan);">4.85M <span style="font-size: 0.875rem; font-weight: 600; color: var(--text-dim);">MT/yr</span></span>
+        </div>
+        <div class="metric-card" id="mcard-unmanaged">
+          <span class="metric-title">Avg. Recipient Deficit</span>
+          <span class="metric-value" style="color: var(--accent-rose);">66.4% <span style="font-size: 0.875rem; font-weight: 600; color: var(--text-dim);">mislabeled</span></span>
+        </div>
+        <div class="metric-card" id="mcard-leakage">
+          <span class="metric-title">Est. Coastal Ocean Leakage</span>
+          <span class="metric-value" style="color: var(--accent-amber);">1.48M <span style="font-size: 0.875rem; font-weight: 600; color: var(--text-dim);">MT/yr</span></span>
+        </div>
+        <div class="metric-card" id="mcard-monitoring">
+          <span class="metric-title">Equal-Area Cartography</span>
+          <span class="metric-value" style="color: var(--accent-emerald); font-size: 1.0625rem;">Equal Earth 2018</span>
+        </div>
+      </div>
+
+      <div id="map-viewport" class="map-viewport" role="region" aria-label="Equal Earth Vector Map">
+
+        <div class="map-toolbar">
+          <button id="btn-zoom-in" class="map-tool-btn" title="Zoom In (+)" aria-label="Zoom In">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </button>
+          <button id="btn-zoom-out" class="map-tool-btn" title="Zoom Out (-)" aria-label="Zoom Out">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line></svg>
+          </button>
+          <button id="btn-fit-map" class="map-tool-btn" title="Fit to View" aria-label="Fit View">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+          </button>
+        </div>
+
+        <div class="map-legend">
+          <div style="font-weight: 700; color: #ffffff; margin-bottom: 0.15rem;">Corridor Legend</div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--accent-cyan); box-shadow: 0 0 8px var(--accent-cyan);"></span>
+            <span>G20 Exporter (Origin)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--accent-rose); box-shadow: 0 0 8px var(--accent-rose);"></span>
+            <span>Global South Recipient</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--accent-amber); box-shadow: 0 0 8px var(--accent-amber);"></span>
+            <span>China (Import Ban / Sword)</span>
+          </div>
+          <div class="legend-item">
+            <span style="width: 16px; height: 2px; border-top: 2px dashed #34d399;"></span>
+            <span>Transboundary Shipping Vector</span>
+          </div>
+        </div>
+
+        <div id="world-svg-container">
+          <svg id="world-svg" viewBox="0 0 1050 540" width="1050" height="540" preserveAspectRatio="xMidYMid meet">
+            
+            <defs>
+              <linearGradient id="grad-us-my" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#06b6d4" />
+                <stop offset="100%" stop-color="#f43f5e" />
+              </linearGradient>
+              <linearGradient id="grad-de-vn" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#3b82f6" />
+                <stop offset="100%" stop-color="#f43f5e" />
+              </linearGradient>
+              <linearGradient id="grad-jp-id" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#10b981" />
+                <stop offset="100%" stop-color="#f43f5e" />
+              </linearGradient>
+              <linearGradient id="grad-au-th" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8" />
+                <stop offset="100%" stop-color="#f43f5e" />
+              </linearGradient>
+              <linearGradient id="grad-cn-sword" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f59e0b" />
+                <stop offset="100%" stop-color="#f43f5e" />
+              </linearGradient>
+            </defs>
+
+            <path class="equal-earth-ocean" d="
+              M 175,20 
+              C 400,10 650,10 875,20 
+              C 990,30 1035,130 1035,270 
+              C 1035,410 990,510 875,520 
+              C 650,530 400,530 175,520 
+              C 60,510 15,410 15,270 
+              C 15,130 60,30 175,20 Z
+            " />
+
+            <g id="graticules" pointer-events="none">
+              <path class="graticule-line" d="M 68,90 C 350,95 700,95 982,90" />
+              <path class="graticule-line" d="M 32,175 C 350,180 700,180 1018,175" />
+              <path class="equator-line" d="M 15,270 L 1035,270" /> <path class="graticule-line" d="M 32,365 C 350,360 700,360 1018,365" />
+              <path class="graticule-line" d="M 68,450 C 350,445 700,445 982,450" />
+
+              <line x1="525" y1="15" x2="525" y2="525" class="graticule-line" stroke-dasharray="none" stroke="rgba(255,255,255,0.2)" /> <path class="graticule-line" d="M 230,20 C 130,160 130,380 230,520" />
+              <path class="graticule-line" d="M 380,16 C 330,160 330,380 380,524" />
+              <path class="graticule-line" d="M 670,16 C 720,160 720,380 670,524" />
+              <path class="graticule-line" d="M 820,20 C 920,160 920,380 820,520" />
+            </g>
+
+            <g id="equal-earth-continents">
+              
+              <path class="landmass-equal-earth" d="
+                M 120,510 C 350,495 700,495 930,510 C 900,520 600,528 120,510 Z
+              " />
+
+              <path class="landmass-equal-earth" d="
+                M 195,68 C 220,62 255,65 285,62 C 305,68 335,70 348,85 C 342,105 320,118 300,128 C 315,135 325,145 320,162 C 310,180 322,198 315,215 C 302,230 285,235 272,232 C 260,230 252,245 245,260 C 238,272 245,295 240,310 C 232,325 218,335 225,350 C 218,348 208,332 205,320 C 200,305 188,295 185,275 C 180,250 188,235 182,215 C 176,198 165,190 160,175 C 155,155 145,145 152,135 C 160,125 178,130 192,125 C 190,105 170,95 178,82 C 182,75 188,72 195,68 Z
+              " />
+
+              <path class="landmass-equal-earth" d="
+                M 390,32 C 405,25 425,28 435,40 C 440,55 432,75 422,90 C 410,95 398,85 392,72 C 388,58 385,42 390,32 Z
+              " />
+
+              <path class="landmass-equal-earth" d="
+                M 270,290 C 285,282 310,285 330,295 C 352,305 378,318 382,342 C 386,375 365,405 348,435 C 335,462 328,495 315,518 C 308,515 302,490 305,465 C 308,435 298,415 292,388 C 286,365 270,345 265,320 C 262,305 264,295 270,290 Z
+              " />
+
+              <path class="landmass-equal-earth" d="
+                M 480,95 C 492,85 510,88 518,102 C 522,115 512,128 505,138 C 498,145 490,140 488,130 C 485,118 475,108 480,95 Z M 525,65 C 540,58 555,62 562,75 C 565,92 550,110 542,128 C 532,135 525,128 522,118 C 520,105 515,85 525,65 Z M 502,150 C 520,142 545,145 565,140 C 585,135 605,145 615,158 C 610,175 595,190 582,205 C 565,220 545,228 535,215 C 525,205 518,212 510,200 C 502,185 495,168 502,150 Z " />
+
+              <path class="landmass-equal-earth" d="
+                M 478,215 C 505,205 550,208 588,218 C 625,228 655,245 660,280 C 665,315 642,355 628,392 C 615,425 600,465 578,495 C 565,492 558,470 555,445 C 550,415 530,390 515,360 C 498,328 470,295 465,260 C 460,235 468,222 478,215 Z
+                M 648,390 C 655,380 662,385 665,398 C 668,418 658,445 650,458 C 645,455 642,430 645,410 C 646,398 646,394 648,390 Z " />
+
+              <path class="landmass-equal-earth" d="
+                M 605,145 C 645,135 700,138 750,132 C 800,125 860,118 905,125 C 930,135 940,158 925,178 C 910,195 885,208 865,225 C 848,242 830,265 808,278 C 785,292 760,285 745,268 C 730,255 715,245 695,248 C 678,252 665,268 658,285 C 650,305 660,335 665,355 C 655,368 642,360 635,340 C 625,310 615,280 608,250 C 600,220 595,190 605,145 Z
+                M 715,285 C 730,275 750,280 762,295 C 772,315 765,342 750,365 C 738,375 725,360 718,338 C 712,320 710,300 715,285 Z " />
+
+              <path class="landmass-equal-earth" d="
+                M 885,195 C 895,188 905,192 908,205 C 905,218 895,225 888,218 C 885,212 882,202 885,195 Z
+                M 872,220 C 880,212 890,218 892,228 C 890,240 880,250 872,242 C 870,235 870,225 872,220 Z
+              " />
+
+              <path class="landmass-equal-earth" d="
+                M 770,295 C 782,288 798,295 805,308 C 810,325 798,345 792,362 C 785,372 778,368 775,355 C 778,338 780,320 770,295 Z M 775,385 C 792,378 815,385 832,395 C 822,408 800,405 782,398 C 775,392 772,388 775,385 Z M 818,348 C 832,340 848,345 855,360 C 852,375 838,385 825,380 C 818,372 815,358 818,348 Z M 845,300 C 855,295 865,302 868,315 C 865,330 852,345 845,338 C 840,330 840,312 845,300 Z " />
+
+              <path class="landmass-equal-earth" d="
+                M 825,398 C 855,385 895,390 928,405 C 940,425 930,460 910,482 C 885,502 850,505 825,490 C 808,475 802,445 808,422 C 812,410 818,402 825,398 Z M 945,465 C 952,458 962,462 965,472 C 960,482 950,488 945,480 C 942,475 942,470 945,465 Z " />
+
+            </g>
+
+            <g id="flow-paths-group">
+              <path id="path-us-my" class="flow-line" data-corridor="us" stroke="url(#grad-us-my)" d="M 230,225 Q 480,390 778,358" />
+              
+              <path id="path-de-vn" class="flow-line" data-corridor="eu" stroke="url(#grad-de-vn)" d="M 525,140 Q 640,165 795,305" />
+
+              <path id="path-jp-id" class="flow-line" data-corridor="jp" stroke="url(#grad-jp-id)" d="M 885,225 Q 875,310 805,392" />
+
+              <path id="path-au-th" class="flow-line" data-corridor="au" stroke="url(#grad-au-th)" d="M 870,455 Q 855,370 778,320" />
+
+              <path id="path-au-my" class="flow-line" data-corridor="au" stroke="url(#grad-au-th)" d="M 870,455 Q 830,415 778,358" />
+
+              <path id="path-cn-divert" class="flow-line" data-corridor="cn" stroke="url(#grad-cn-sword)" d="M 770,240 Q 795,280 778,320" />
+            </g>
+
+            <g id="hotspots-group">
+              
+              <g class="hotspot-pin" id="pin-us" data-location="us" transform="translate(230, 225)" tabindex="0" role="button" aria-label="United States: 1.15M Tons Exported">
+                <circle cx="0" cy="0" r="26" fill="none" stroke="#06b6d4" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="14" fill="#0b172a" stroke="#06b6d4" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="5" fill="#22d3ee" />
+                <text x="0" y="-18" class="pin-label-box">USA [EXPORTER]</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-de" data-location="de" transform="translate(525, 140)" tabindex="0" role="button" aria-label="Germany: 745K Tons Exported">
+                <circle cx="0" cy="0" r="26" fill="none" stroke="#3b82f6" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="14" fill="#0a152e" stroke="#3b82f6" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="5" fill="#60a5fa" />
+                <text x="0" y="-18" class="pin-label-box">GERMANY [EXPORTER]</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-jp" data-location="jp" transform="translate(885, 225)" tabindex="0" role="button" aria-label="Japan: 620K Tons Exported">
+                <circle cx="0" cy="0" r="26" fill="none" stroke="#10b981" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="14" fill="#081e22" stroke="#10b981" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="5" fill="#34d399" />
+                <text x="0" y="-18" class="pin-label-box">JAPAN [EXPORTER]</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-au" data-location="au" transform="translate(870, 455)" tabindex="0" role="button" aria-label="Australia: Waste Export Ban & Re-routing">
+                <circle cx="0" cy="0" r="26" fill="none" stroke="#38bdf8" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="14" fill="#0c1d2e" stroke="#38bdf8" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="5" fill="#38bdf8" />
+                <text x="0" y="26" class="pin-label-box">AUSTRALIA [EXPORTER]</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-cn" data-location="cn" transform="translate(770, 240)" tabindex="0" role="button" aria-label="China: National Sword 2018 Policy Shift">
+                <circle cx="0" cy="0" r="26" fill="none" stroke="#f59e0b" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="14" fill="#24190b" stroke="#f59e0b" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="5" fill="#fbbf24" />
+                <text x="0" y="-18" class="pin-label-box">CHINA [SWORD BAN]</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-th" data-location="th" transform="translate(778, 320)" tabindex="0" role="button" aria-label="Thailand: Laem Chabang Import Surge">
+                <circle cx="0" cy="0" r="26" fill="none" stroke="#f43f5e" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="14" fill="#240c17" stroke="#f43f5e" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="5" fill="#fb7185" />
+                <text x="-48" y="4" class="pin-label-box">THAILAND</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-my" data-location="my" transform="translate(778, 358)" tabindex="0" role="button" aria-label="Malaysia: Primary Recipient Port Klang">
+                <circle cx="0" cy="0" r="26" fill="none" stroke="#f43f5e" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="14" fill="#240c17" stroke="#f43f5e" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="5" fill="#fb7185" />
+                <text x="45" y="4" class="pin-label-box">MALAYSIA</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-vn" data-location="vn" transform="translate(795, 305)" tabindex="0" role="button" aria-label="Vietnam: Hai Phong / Mekong Delta Hub">
+                <circle cx="0" cy="0" r="26" fill="none" stroke="#f43f5e" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="14" fill="#240c17" stroke="#f43f5e" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="5" fill="#fb7185" />
+                <text x="35" y="-12" class="pin-label-box">VIETNAM</text>
+              </g>
+
+              <g class="hotspot-pin" id="pin-id" data-location="id" transform="translate(805, 392)" tabindex="0" role="button" aria-label="Indonesia: East Java / Brantas River Basin">
+                <circle cx="0" cy="0" r="26" fill="none" stroke="#f43f5e" stroke-width="1.5" class="pin-pulse" />
+                <circle cx="0" cy="0" r="14" fill="#240c17" stroke="#f43f5e" stroke-width="2.5" class="pin-core" />
+                <circle cx="0" cy="0" r="5" fill="#fb7185" />
+                <text x="0" y="26" class="pin-label-box">INDONESIA</text>
+              </g>
+
+            </g>
+
+          </svg>
+        </div>
+
+      </div>
+
+      <div style="background: rgba(10, 15, 29, 0.4); border-top: 1px solid var(--border-subtle);">
+        <div style="padding: 1.125rem 1.5rem 0.25rem; display: flex; justify-content: space-between; align-items: center;">
+          <h2 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
+            High-Volume Shipping Corridors &amp; Policy Hubs
+          </h2>
+          <span style="font-size: 0.75rem; color: var(--text-dim);">Select corridor to inspect case study</span>
+        </div>
+
+        <div id="corridors-container" class="corridor-deck">
+          </div>
+      </div>
+
+    </main>
+
+    <footer style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; padding: 0 0.5rem; font-size: 0.75rem; color: var(--text-dim);">
+      <div>
+        <span>Self-Contained Equal Earth Vector Engine &bull; Offline PWA Container</span>
+      </div>
+      <div>
+        <span>Data sources: UN Comtrade (HS 3915), Basel Action Network (BAN), Australian Recycling &amp; Waste Reduction Act (2020)</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <div id="case-modal-overlay" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-case-title">
+    <div class="case-modal">
+      
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+            <span id="modal-role-badge" class="badge badge-emerald">Exporter Hub</span>
+            <span id="modal-region-tag" style="font-size: 0.75rem; color: var(--text-dim); font-family: ui-monospace, monospace;">LAT: 33.7° N, LON: 118.2° W</span>
+          </div>
+          <h2 id="modal-case-title" style="font-size: 1.375rem; font-weight: 700; color: #ffffff;">United States &rarr; Southeast Asian Corridors</h2>
+        </div>
+        <button id="modal-close-btn" class="action-btn" style="padding: 0.35rem 0.6rem;" aria-label="Close Case Study">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; background: rgba(0,0,0,0.35); padding: 1rem; border-radius: 0.75rem; border: 1px solid var(--border-subtle);">
+        <div>
+          <span style="font-size: 0.6875rem; color: var(--text-dim); text-transform: uppercase;">Annual Flow Mass</span>
+          <div id="modal-metric-tonnage" style="font-size: 1.25rem; font-weight: 800; color: var(--accent-cyan); font-family: ui-monospace, monospace;">1,150,000 MT</div>
+        </div>
+        <div>
+          <span style="font-size: 0.6875rem; color: var(--text-dim); text-transform: uppercase;">Infrastructure Deficit</span>
+          <div id="modal-metric-deficit" style="font-size: 1.25rem; font-weight: 800; color: var(--accent-rose); font-family: ui-monospace, monospace;">58% Unsorted/Open Dump</div>
+        </div>
+        <div>
+          <span style="font-size: 0.6875rem; color: var(--text-dim); text-transform: uppercase;">Primary Contaminant</span>
+          <div id="modal-metric-contaminant" style="font-size: 0.9375rem; font-weight: 700; color: #ffffff;">Mixed Film Plastics &amp; PVC</div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #cbd5e1; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          Field Investigation &amp; Ecological Impact Analysis
+        </h3>
+        <p id="modal-case-notes" style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; background: rgba(255,255,255,0.02); padding: 0.875rem; border-radius: 0.5rem; border: 1px solid var(--border-subtle);">
+          Following China’s 2018 National Sword policy, waste brokerage networks rerouted high-volume shipments to Selangor and Penang. Unlicensed rural melting plants release dioxins into agricultural waterways, contaminating prawn aquaculture and coastal estuarine mangrove habitats.
+        </p>
+      </div>
+
+      <div class="interview-player-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span class="badge badge-amber">Virtual Field Audio</span>
+            <span id="interview-speaker" style="font-size: 0.8125rem; font-weight: 700; color: #ffffff;">Interview // Dr. H. Rahman, Marine Ecologist (Penang)</span>
+          </div>
+          <span id="interview-time" style="font-family: ui-monospace, monospace; font-size: 0.75rem; color: var(--accent-emerald);">00:00 / 00:24</span>
+        </div>
+
+        <canvas id="waveform-canvas" class="audio-waveform-canvas"></canvas>
+
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <button id="btn-interview-play" class="action-btn" style="background: rgba(16, 185, 129, 0.18); border-color: var(--accent-emerald); color: #34d399;">
+              <svg id="interview-play-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span id="interview-btn-text">Play Audio Note</span>
+            </button>
+            <span style="font-size: 0.75rem; color: var(--text-dim);">Synthesized Offline Dispatch</span>
+          </div>
+
+          <button id="btn-interview-transcript" class="action-btn" style="font-size: 0.75rem; padding: 0.35rem 0.6rem;">
+            Read Quote
+          </button>
+        </div>
+
+        <div id="interview-quote-box" style="display: none; font-size: 0.8125rem; color: #cbd5e1; font-style: italic; border-left: 2px solid var(--accent-amber); padding-left: 0.75rem; margin-top: 0.25rem;">
+          "The shipping manifests state 'Grade A Clean Flakes', but customs inspections reveal unwashed post-consumer municipal waste. Local rivers are carrying the resultant microplastic slurry directly into the Strait of Malacca."
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.25rem;">
+        <button id="btn-export-dossier" class="action-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Copy Case Summary</span>
+        </button>
+        <button id="btn-dismiss-modal" class="action-btn" style="background: rgba(16, 185, 129, 0.2); border-color: var(--accent-emerald); color: #34d399;">
+          <span>Close Dossier</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="toast-banner" role="status" aria-live="polite">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 6L9 17l-5-5"></path>
+    </svg>
+    <span id="toast-msg">Location selected</span>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // --- 1. TRANSBOUNDARY DATA REPOSITORY ---
+      const CASE_STUDIES = [
+        {
+          id: 'us',
+          type: 'exporter',
+          originName: 'United States',
+          destinationName: 'Malaysia & Southeast Asia',
+          coordinates: '33.7° N, 118.2° W (Port of Long Beach)',
+          annualTonnage: '1,150,000 MT / yr',
+          infrastructureDeficit: '58% unmanaged or dumped in recipient zones',
+          primaryContaminant: 'Post-consumer mixed films, unwashed agricultural wrap',
+          ecologicalImpact: 'High-density riverine accumulation in the Klang & Selangor basins. Heavy chemical leachate contaminates mangrove fish hatcheries.',
+          speaker: 'Dr. H. Rahman // Marine Ecologist (Penang)',
+          audioDuration: 24,
+          quote: 'Manifests claim "Clean Flakes," but containers carry contaminated municipal polymers. Microplastic counts in local mangrove mudflats have doubled since 2019.',
+          badgeColor: 'badge-cyan'
+        },
+        {
+          id: 'de',
+          type: 'exporter',
+          originName: 'Germany & EU Consortium',
+          destinationName: 'Vietnam (Hai Phong Corridor)',
+          coordinates: '53.5° N, 9.9° E (Port of Hamburg)',
+          annualTonnage: '745,000 MT / yr',
+          infrastructureDeficit: '62% burned in open craft kilns or unlined landfills',
+          primaryContaminant: 'Rigid PVC packaging, e-waste polymers with brominated flame retardants',
+          ecologicalImpact: 'Severe atmospheric dioxin releases in "recycling craft villages" outside Hanoi, leading to heavy metal runoff into the Red River Delta.',
+          speaker: 'Prof. Le Thi Mai // Environmental Toxicologist',
+          audioDuration: 20,
+          quote: 'Open-air thermal reprocessing produces carcinogenic smoke. The runoff drains straight into coastal rice paddies and estuarine shellfish beds.',
+          badgeColor: 'badge-blue'
+        },
+        {
+          id: 'jp',
+          type: 'exporter',
+          originName: 'Japan',
+          destinationName: 'Indonesia (East Java / Brantas)',
+          coordinates: '35.4° N, 139.6° E (Port of Yokohama)',
+          annualTonnage: '620,000 MT / yr',
+          infrastructureDeficit: '71% burned as boiler fuel in tofu factories or discarded',
+          primaryContaminant: 'High-barrier composite snack pouches and multilayer laminates',
+          ecologicalImpact: 'Microplastics and hazardous ash clog the Brantas River, entering Surabaya’s municipal drinking water intake and coastal mangrove estuaries.',
+          speaker: 'A. Praditya // Watershed Restoration Lead (Surabaya)',
+          audioDuration: 22,
+          quote: 'Imported paper bales contain up to 40% hidden plastic waste. Local factories burn this plastic for process heat, releasing persistent organic pollutants across the valley.',
+          badgeColor: 'badge-emerald'
+        },
+        {
+          id: 'au',
+          type: 'exporter',
+          originName: 'Australia',
+          destinationName: 'Thailand & Malaysia',
+          coordinates: '37.8° S, 144.9° E (Port of Melbourne)',
+          annualTonnage: '185,000 MT / yr (Pre-ban: ~410,000 MT)',
+          infrastructureDeficit: '54% diverted to informal low-tech facilities in Chonburi',
+          primaryContaminant: 'Sorted municipal plastics, mixed paper with polymer linings',
+          ecologicalImpact: 'Despite Australia’s landmark 2020 Waste Export Ban, processed fuel pellets (RDF) and paper-bale exemptions continue to export non-recyclable plastic residues into Thai coastal areas.',
+          speaker: 'M. Gallagher // Australian Circular Policy Researcher',
+          audioDuration: 21,
+          quote: 'The export ban closed direct scrap shipments, but loophole reclassifications—like processed engineered fuels and paper waste bales—still transfer residual polymer burdens to Southeast Asia.',
+          badgeColor: 'badge-cyan'
+        },
+        {
+          id: 'cn',
+          type: 'policy-hub',
+          originName: 'China (National Sword Policy)',
+          destinationName: 'Global Shock & Southeast Asian Redirection',
+          coordinates: '31.2° N, 121.5° E (Port of Shanghai)',
+          annualTonnage: 'Historical peak: 7,300,000 MT/yr (Post-2018: <150,000 MT)',
+          infrastructureDeficit: 'Shifted global processing deficits outward',
+          primaryContaminant: 'Low-grade municipal scrap and contaminated polymers',
+          ecologicalImpact: 'China’s strict 2018 0.5% purity threshold caused a 95% import drop, instantaneously redirecting millions of metric tons of untreated Western waste into Malaysia, Thailand, and Vietnam.',
+          speaker: 'Dr. W. Zhang // Tsinghua Environmental Policy Center',
+          audioDuration: 23,
+          quote: 'National Sword proved that high-income nations were utilizing the developing world as an ecological sink. It catalyzed domestic bans across recipient nations and forced the Basel convention updates.',
+          badgeColor: 'badge-amber'
+        },
+        {
+          id: 'th',
+          type: 'recipient',
+          originName: 'Thailand (Chonburi & Eastern Seaboard)',
+          destinationName: 'Inbound from USA, Australia, and EU',
+          coordinates: '13.1° N, 100.9° E (Port of Laem Chabang)',
+          annualTonnage: '530,000 MT Inbound Surge',
+          infrastructureDeficit: '68% unmonitored burning or illegal warehousing',
+          primaryContaminant: 'E-waste plastics, mixed PVC, agricultural film scrap',
+          ecologicalImpact: 'Heavy concentration of illegal recycling plants in Chonburi and Chachoengsao provinces discharging toxic wastewater into the Bangpakong River basin and the Gulf of Thailand.',
+          speaker: 'P. Somchai // Thai Coastal Ecosystem Defense Alliance',
+          audioDuration: 19,
+          quote: 'Following the 2018 shift, import volumes through Laem Chabang increased by over 2000%. Toxic effluent from unpermitted shredders is devastating local crab nurseries.',
+          badgeColor: 'badge-rose'
+        },
+        {
+          id: 'my',
+          type: 'recipient',
+          originName: 'Malaysia (Import Hub)',
+          destinationName: 'Inbound from USA, UK, & Japan',
+          coordinates: '3.0° N, 101.4° E (Port Klang)',
+          annualTonnage: '830,000 MT Inbound',
+          infrastructureDeficit: 'Critical Processing Bottleneck (Overcapacity)',
+          primaryContaminant: 'Mixed household solid waste contaminated with food residues',
+          ecologicalImpact: 'Illegal dumping in rural oil palm plantations and open burning causing acute respiratory illnesses in suburban communities.',
+          speaker: 'K. Tan // Waste Policy Advocate (Selangor)',
+          audioDuration: 25,
+          quote: 'Over 140 illegal reprocessing factories were shut down, but shipments still find backdoor entry points via false tariff code classifications.',
+          badgeColor: 'badge-rose'
+        },
+        {
+          id: 'vn',
+          type: 'recipient',
+          originName: 'Vietnam (Mekong & Hai Phong Hubs)',
+          destinationName: 'Inbound from EU & North America',
+          coordinates: '20.8° N, 106.6° E (Hai Phong)',
+          annualTonnage: '560,000 MT Inbound',
+          infrastructureDeficit: 'Deficient Sorting Infrastructure',
+          primaryContaminant: 'Low-grade agricultural film & industrial scrap',
+          ecologicalImpact: 'Unfiltered washing effluent discharges plastic particulate and surfactants directly into coastal aquaculture nurseries.',
+          speaker: 'N. Van Hieu // Red River Coastal Fishery Officer',
+          audioDuration: 18,
+          quote: 'Fine plastic fibers now permeate the littoral sediment layer, reducing juvenile shrimp survival rates across the delta.',
+          badgeColor: 'badge-rose'
+        },
+        {
+          id: 'id',
+          type: 'recipient',
+          originName: 'Indonesia (Brantas Delta Basin)',
+          destinationName: 'Inbound from East Asia & Oceania',
+          coordinates: '7.2° S, 112.7° E (Surabaya Basin)',
+          annualTonnage: '490,000 MT Inbound',
+          infrastructureDeficit: 'Zero Municipal Hazardous Gas Scrubbing',
+          primaryContaminant: 'Unrecyclable multi-material foils and plastic bags',
+          ecologicalImpact: 'Brantas River is documented as one of the top 20 plastic-polluting rivers globally, discharging over 38,000 tons of plastic debris into the Java Sea annually.',
+          speaker: 'Dr. S. Wardhani // Aquatic Ecotoxicology Lab',
+          audioDuration: 21,
+          quote: 'We have identified microplastic particles inside 80% of sampled commercial fish in the Surabaya fish market.',
+          badgeColor: 'badge-rose'
+        }
+      ];
+
+      // --- 2. DOM ELEMENT REFS ---
+      const mapViewport = document.getElementById('map-viewport');
+      const worldSvgContainer = document.getElementById('world-svg-container');
+      const btnZoomIn = document.getElementById('btn-zoom-in');
+      const btnZoomOut = document.getElementById('btn-zoom-out');
+      const btnFitMap = document.getElementById('btn-fit-map');
+      const btnResetMap = document.getElementById('btn-reset-map');
+      const filterCluster = document.getElementById('filter-cluster');
+      const corridorsContainer = document.getElementById('corridors-container');
+      const btnToggleSources = document.getElementById('btn-toggle-sources');
+      const btnCloseSources = document.getElementById('btn-close-sources');
+      const sourcesDrawer = document.getElementById('sources-drawer');
+      
+      // Modal Refs
+      const caseModalOverlay = document.getElementById('case-modal-overlay');
+      const modalCloseBtn = document.getElementById('modal-close-btn');
+      const btnDismissModal = document.getElementById('btn-dismiss-modal');
+      const modalRoleBadge = document.getElementById('modal-role-badge');
+      const modalRegionTag = document.getElementById('modal-region-tag');
+      const modalCaseTitle = document.getElementById('modal-case-title');
+      const modalMetricTonnage = document.getElementById('modal-metric-tonnage');
+      const modalMetricDeficit = document.getElementById('modal-metric-deficit');
+      const modalMetricContaminant = document.getElementById('modal-metric-contaminant');
+      const modalCaseNotes = document.getElementById('modal-case-notes');
+      const interviewSpeaker = document.getElementById('interview-speaker');
+      const interviewTime = document.getElementById('interview-time');
+      const waveformCanvas = document.getElementById('waveform-canvas');
+      const btnInterviewPlay = document.getElementById('btn-interview-play');
+      const interviewPlayIcon = document.getElementById('interview-play-icon');
+      const interviewBtnText = document.getElementById('interview-btn-text');
+      const btnInterviewTranscript = document.getElementById('btn-interview-transcript');
+      const interviewQuoteBox = document.getElementById('interview-quote-box');
+      const btnExportDossier = document.getElementById('btn-export-dossier');
+
+      // Toast Refs
+      const toastBanner = document.getElementById('toast-banner');
+      const toastMsg = document.getElementById('toast-msg');
+
+      // --- 3. MAP PAN & ZOOM STATE ---
+      let zoomLevel = 1;
+      let panX = 0;
+      let panY = 0;
+      let isPanning = false;
+      let startX = 0;
+      let startY = 0;
+      let activeCorridorId = null;
+
+      function updateMapTransform() {
+        worldSvgContainer.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
+      }
+
+      function zoom(factor, centerX = mapViewport.clientWidth / 2, centerY = mapViewport.clientHeight / 2) {
+        const newZoom = Math.min(3.5, Math.max(0.85, zoomLevel * factor));
+        if (newZoom === zoomLevel) return;
+
+        panX -= (centerX - panX) * (newZoom / zoomLevel - 1);
+        panY -= (centerY - panY) * (newZoom / zoomLevel - 1);
+        zoomLevel = newZoom;
+        updateMapTransform();
+      }
+
+      function resetMapView() {
+        zoomLevel = 1;
+        panX = 0;
+        panY = 0;
+        updateMapTransform();
+        showToast("Map view reset");
+      }
+
+      // Mouse & Touch Pan Handling
+      mapViewport.addEventListener('mousedown', (e) => {
+        if (e.target.closest('.map-toolbar') || e.target.closest('.map-legend')) return;
+        isPanning = true;
+        startX = e.clientX - panX;
+        startY = e.clientY - panY;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isPanning) return;
+        panX = e.clientX - startX;
+        panY = e.clientY - startY;
+        updateMapTransform();
+      });
+
+      window.addEventListener('mouseup', () => {
+        isPanning = false;
+      });
+
+      // Mouse Wheel Zoom
+      mapViewport.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const rect = mapViewport.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        const factor = e.deltaY < 0 ? 1.15 : 0.85;
+        zoom(factor, mouseX, mouseY);
+      }, { passive: false });
+
+      // Mobile Pinch-to-Zoom & Touch Pan
+      let initialPinchDist = 0;
+      mapViewport.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isPanning = true;
+          startX = e.touches[0].clientX - panX;
+          startY = e.touches[0].clientY - panY;
+        } else if (e.touches.length === 2) {
+          isPanning = false;
+          initialPinchDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+        }
+      }, { passive: true });
+
+      mapViewport.addEventListener('touchmove', (e) => {
+        if (isPanning && e.touches.length === 1) {
+          panX = e.touches[0].clientX - startX;
+          panY = e.touches[0].clientY - startY;
+          updateMapTransform();
+        } else if (e.touches.length === 2 && initialPinchDist > 0) {
+          const currentDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          const factor = currentDist / initialPinchDist;
+          zoom(factor > 1 ? 1.03 : 0.97);
+          initialPinchDist = currentDist;
+        }
+      }, { passive: true });
+
+      mapViewport.addEventListener('touchend', () => {
+        isPanning = false;
+        initialPinchDist = 0;
+      });
+
+      // Toolbar Buttons
+      btnZoomIn.addEventListener('click', () => zoom(1.25));
+      btnZoomOut.addEventListener('click', () => zoom(0.8));
+      btnFitMap.addEventListener('click', resetMapView);
+      btnResetMap.addEventListener('click', resetMapView);
+
+      // --- 4. TOAST NOTIFICATION ---
+      let toastTimer;
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toastBanner.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toastBanner.classList.remove('show');
+        }, 2400);
+      }
+
+      // --- 5. SYNTHESIZED WEB AUDIO & WAVEFORM ENGINE ---
+      let audioCtx = null;
+      let isPlayingAudio = false;
+      let audioProgress = 0;
+      let audioDuration = 24;
+      let animFrameWave;
+      let soundOsc = null;
+
+      function initWebAudio() {
+        if (!audioCtx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          audioCtx = new AudioContext();
+        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+      }
+
+      function startSynthesizedVoice() {
+        initWebAudio();
+        isPlayingAudio = true;
+        interviewBtnText.textContent = "Pause Audio";
+        interviewPlayIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+
+        try {
+          soundOsc = audioCtx.createOscillator();
+          const gainNode = audioCtx.createGain();
+          soundOsc.type = 'triangle';
+          soundOsc.frequency.setValueAtTime(140, audioCtx.currentTime);
+          gainNode.gain.setValueAtTime(0.03, audioCtx.currentTime);
+          soundOsc.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+          soundOsc.start();
+        } catch(e) {}
+
+        renderWaveform();
+      }
+
+      function stopSynthesizedVoice() {
+        isPlayingAudio = false;
+        interviewBtnText.textContent = "Play Audio Note";
+        interviewPlayIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+        if (soundOsc) {
+          try {
+            soundOsc.stop();
+            soundOsc.disconnect();
+          } catch(e) {}
+          soundOsc = null;
+        }
+      }
+
+      function renderWaveform() {
+        const ctx = waveformCanvas.getContext('2d');
+        const width = waveformCanvas.width = waveformCanvas.offsetWidth;
+        const height = waveformCanvas.height = waveformCanvas.offsetHeight;
+
+        ctx.clearRect(0, 0, width, height);
+
+        const bars = 48;
+        const barWidth = 4;
+        const gap = (width - bars * barWidth) / (bars - 1);
+        const timeOffset = Date.now() * 0.006;
+
+        for (let i = 0; i < bars; i++) {
+          let barHeight = 4;
+          if (isPlayingAudio) {
+            barHeight = Math.sin(timeOffset + i * 0.4) * 16 + Math.cos(timeOffset * 0.7 + i) * 8 + 18;
+          }
+          const x = i * (barWidth + gap);
+          const y = (height - barHeight) / 2;
+
+          ctx.fillStyle = i / bars < (audioProgress / audioDuration) ? '#10b981' : '#1e293b';
+          ctx.fillRect(x, y, barWidth, barHeight);
+        }
+
+        if (isPlayingAudio) {
+          audioProgress += 0.05;
+          const currentSec = Math.floor(audioProgress);
+          interviewTime.textContent = `00:${String(currentSec).padStart(2, '0')} / 00:${audioDuration}`;
+
+          if (audioProgress >= audioDuration) {
+            audioProgress = 0;
+            stopSynthesizedVoice();
+          }
+          animFrameWave = requestAnimationFrame(renderWaveform);
+        }
+      }
+
+      btnInterviewPlay.addEventListener('click', () => {
+        if (isPlayingAudio) {
+          stopSynthesizedVoice();
+        } else {
+          startSynthesizedVoice();
+        }
+      });
+
+      btnInterviewTranscript.addEventListener('click', () => {
+        const isShown = interviewQuoteBox.style.display === 'block';
+        interviewQuoteBox.style.display = isShown ? 'none' : 'block';
+        btnInterviewTranscript.textContent = isShown ? "Read Quote" : "Hide Quote";
+      });
+
+      // --- 6. CASE STUDY MODAL DISPLAY ---
+      function openCaseStudy(locationId) {
+        const data = CASE_STUDIES.find(c => c.id === locationId);
+        if (!data) return;
+
+        stopSynthesizedVoice();
+        audioProgress = 0;
+        audioDuration = data.audioDuration;
+        interviewTime.textContent = `00:00 / 00:${data.audioDuration}`;
+        interviewQuoteBox.style.display = 'none';
+        btnInterviewTranscript.textContent = "Read Quote";
+
+        modalRoleBadge.textContent = data.type === 'exporter' ? "G20 Exporter Hub" : data.type === 'policy-hub' ? "Policy Shockwave Epicenter" : "Global South Recipient";
+        modalRoleBadge.className = `badge ${data.type === 'exporter' ? 'badge-cyan' : data.type === 'policy-hub' ? 'badge-amber' : 'badge-rose'}`;
+        modalRegionTag.textContent = data.coordinates;
+        modalCaseTitle.textContent = `${data.originName} ${data.type === 'exporter' ? '→ ' + data.destinationName : data.type === 'policy-hub' ? '(Export Ban Epicenter)' : '(Inbound Receptor)'}`;
+        modalMetricTonnage.textContent = data.annualTonnage;
+        modalMetricDeficit.textContent = data.infrastructureDeficit;
+        modalMetricContaminant.textContent = data.primaryContaminant;
+        modalCaseNotes.textContent = data.ecologicalImpact;
+        interviewSpeaker.textContent = `Interview // ${data.speaker}`;
+        interviewQuoteBox.textContent = `"${data.quote}"`;
+
+        caseModalOverlay.classList.add('open');
+        showToast(`Dossier opened: ${data.originName}`);
+
+        setTimeout(renderWaveform, 50);
+      }
+
+      function closeModal() {
+        stopSynthesizedVoice();
+        caseModalOverlay.classList.remove('open');
+      }
+
+      modalCloseBtn.addEventListener('click', closeModal);
+      btnDismissModal.addEventListener('click', closeModal);
+      caseModalOverlay.addEventListener('click', (e) => {
+        if (e.target === caseModalOverlay) closeModal();
+      });
+
+      // Copy Dossier Summary
+      btnExportDossier.addEventListener('click', () => {
+        const text = `${modalCaseTitle.textContent}\nTonnage: ${modalMetricTonnage.textContent}\nInfrastructure Deficit: ${modalMetricDeficit.textContent}\nEcological Notes: ${modalCaseNotes.textContent}`;
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = text;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        try {
+          document.execCommand('copy');
+          showToast("Case summary copied to clipboard");
+        } catch(e) {
+          showToast("Unable to copy summary");
+        }
+        document.body.removeChild(tempTextArea);
+      });
+
+      // --- 7. FILTER & CORRIDOR SELECTION ---
+      function filterCorridors(filterKey) {
+        activeCorridorId = filterKey;
+
+        // Flow Line Visibility
+        document.querySelectorAll('.flow-line').forEach(line => {
+          const corridor = line.dataset.corridor;
+          if (filterKey === 'all' || corridor === filterKey) {
+            line.classList.remove('dimmed');
+          } else {
+            line.classList.add('dimmed');
+          }
+        });
+
+        // Filter Button Active State
+        filterCluster.querySelectorAll('button').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.filter === filterKey);
+        });
+
+        // Corridors Deck Highlight
+        document.querySelectorAll('.corridor-card').forEach(card => {
+          const cardId = card.dataset.id;
+          card.classList.toggle('active-corridor', filterKey !== 'all' && cardId === filterKey);
+        });
+
+        showToast(`Filter applied: ${filterKey.toUpperCase()}`);
+      }
+
+      filterCluster.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterCorridors(btn.dataset.filter);
+        });
+      });
+
+      // --- 8. RENDER CORRIDOR DECK ---
+      function renderCorridors() {
+        corridorsContainer.innerHTML = '';
+        CASE_STUDIES.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'corridor-card';
+          card.dataset.id = item.id;
+          card.setAttribute('role', 'button');
+          card.setAttribute('tabindex', '0');
+
+          card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <span class="badge ${item.badgeColor}">${item.type === 'exporter' ? 'Outbound Flow' : item.type === 'policy-hub' ? 'Policy Shift Hub' : 'Inbound Receptor'}</span>
+              <span style="font-family: ui-monospace, monospace; font-size: 0.75rem; color: var(--accent-cyan);">${item.annualTonnage}</span>
+            </div>
+
+            <div>
+              <h3 style="font-size: 0.9375rem; font-weight: 700; color: #ffffff;">${item.originName}</h3>
+              <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.125rem;">${item.destinationName}</p>
+            </div>
+
+            <p style="font-size: 0.8125rem; color: var(--text-muted); line-height: 1.45;">
+              ${item.ecologicalImpact.substring(0, 105)}...
+            </p>
+
+            <div style="margin-top: auto; padding-top: 0.5rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;">
+              <span style="color: var(--accent-rose); font-family: ui-monospace, monospace;">${item.infrastructureDeficit}</span>
+              <span style="color: var(--accent-emerald); font-weight: 600;">Inspect Case &rarr;</span>
+            </div>
+          `;
+
+          card.addEventListener('click', () => openCaseStudy(item.id));
+          card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openCaseStudy(item.id);
+            }
+          });
+
+          corridorsContainer.appendChild(card);
+        });
+      }
+
+      // --- 9. DATA SOURCES DRAWER TOGGLE ---
+      btnToggleSources.addEventListener('click', () => {
+        const isOpen = sourcesDrawer.classList.toggle('open');
+        btnToggleSources.classList.toggle('active', isOpen);
+      });
+
+      btnCloseSources.addEventListener('click', () => {
+        sourcesDrawer.classList.remove('open');
+        btnToggleSources.classList.remove('active');
+      });
+
+      // --- 10. MAP HOTSPOT PIN BINDINGS ---
+      document.querySelectorAll('.hotspot-pin').forEach(pin => {
+        const locationId = pin.dataset.location;
+        pin.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openCaseStudy(locationId);
+        });
+
+        pin.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openCaseStudy(locationId);
+          }
+        });
+      });
+
+      // Keyboard Esc to close modal
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+      });
+
+      // --- 11. INITIALIZATION ---
+      renderCorridors();
+
+    })();
+  </script>
+</body>
+</html>
