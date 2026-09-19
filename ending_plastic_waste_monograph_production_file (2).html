@@ -1,0 +1,2317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#003650" />
+  <title>Ending Plastic Waste — Research Monograph Series (Volume 1)</title>
+
+  <!-- Typography Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Lora:ital,wght@0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --font-title: 'Lora', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+      --font-accent: 'Space Grotesk', monospace;
+
+      --stage-bg: #0b1120;
+      --page-bg: #f8f6f1;
+      --page-border: #e2dcce;
+      --ink-title: #003650;        /* Okabe-Ito Marine Navy */
+      --ink-body: #1c232b;         /* Charcoal Narrative */
+      --ink-muted: #536473;        /* Slate Secondary Text */
+      --accent-ocean: #0072b2;     /* Okabe-Ito Blue */
+      --accent-sand: #d55e00;      /* Okabe-Ito Vermilion / Amber */
+      --accent-coral: #cc79a7;     /* Okabe-Ito Reddish Purple */
+      --accent-green: #009e73;     /* Okabe-Ito Bluish Green */
+      --card-bg: #ffffff;
+      --card-border: #dcd6c8;
+
+      /* Okabe-Ito Palette for Map Visualizations */
+      --oi-blue: #0072b2;       /* G20 Exporters */
+      --oi-sky: #56b4e9;        /* Trade Flow Vectors */
+      --oi-vermilion: #d55e00;  /* Global South Recipients */
+      --oi-amber: #e69f00;      /* China Sword / Policy Shift */
+      --oi-green: #009e73;      /* Basel Monitoring & Audits */
+
+      /* Fluid Typography Scaling */
+      --text-micro: clamp(0.72rem, 0.68rem + 0.22vw, 0.84rem);
+      --text-meta: clamp(0.80rem, 0.76rem + 0.28vw, 0.94rem);
+      --text-body: clamp(0.88rem, 0.82rem + 0.30vw, 1.02rem);
+      --text-lead: clamp(0.98rem, 0.90rem + 0.38vw, 1.18rem);
+      --text-h4: clamp(0.95rem, 0.88rem + 0.40vw, 1.18rem);
+      --text-h3: clamp(1.15rem, 1.05rem + 0.60vw, 1.45rem);
+    }
+
+    body {
+      background-color: var(--stage-bg);
+      color: var(--ink-body);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      user-select: none;
+      font-size: var(--text-body);
+    }
+
+    .book-binder {
+      width: 100vw;
+      height: 100vh;
+      background: var(--stage-bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .running-header {
+      height: 50px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-accent);
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      flex-shrink: 0;
+      z-index: 60;
+      background: #090e1a;
+    }
+
+    .running-footer {
+      height: 52px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-accent);
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      flex-shrink: 0;
+      z-index: 60;
+      background: #090e1a;
+    }
+
+    .book-page {
+      position: absolute !important;
+      top: 50px !important;
+      bottom: 52px !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      height: calc(100vh - 102px) !important;
+      display: none !important;
+      flex-direction: column !important;
+      opacity: 0;
+      z-index: 10;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: var(--page-bg);
+      transition: opacity 0.2s ease;
+    }
+
+    .book-page.active {
+      display: flex !important;
+      opacity: 1 !important;
+      z-index: 20;
+    }
+
+    .academic-folio-stage {
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      height: 100%;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 0.85rem;
+      padding: 0.9rem 1.25rem;
+    }
+
+    @media (min-width: 1024px) {
+      .academic-folio-stage {
+        padding: 1rem 1.5rem;
+        gap: 0.85rem;
+        overflow: hidden;
+      }
+    }
+
+    .template01-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.15rem;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+    }
+
+    @media (min-width: 1024px) {
+      .template01-container {
+        grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+        align-items: stretch;
+      }
+    }
+
+    .fluid-micro { font-size: var(--text-micro); }
+    .fluid-meta  { font-size: var(--text-meta); }
+    .fluid-body  { font-size: var(--text-body); }
+    .fluid-lead  { font-size: var(--text-lead); }
+    .fluid-h4    { font-size: var(--text-h4); }
+    .fluid-h3    { font-size: var(--text-h3); }
+
+    .toc-row-card {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      border-radius: 9px;
+      padding: 0.8rem 1.05rem;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .toc-row-card:hover {
+      border-color: #0072b2;
+      box-shadow: 0 4px 12px rgba(0, 114, 178, 0.08);
+      transform: translateX(3px);
+    }
+
+    .book-nav-btn {
+      font-family: var(--font-accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .book-nav-btn:hover:not(:disabled) {
+      background: #0072b2;
+      color: #ffffff;
+      border-color: #0072b2;
+    }
+
+    .book-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .page-pill-btn {
+      padding: 0.25rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #94a3b8;
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: var(--font-accent);
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .page-pill-btn:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #f8fafc;
+    }
+
+    .page-pill-btn.active {
+      background: #0072b2;
+      color: #ffffff;
+      border-color: #0072b2;
+    }
+
+    .saas-card {
+      background: linear-gradient(180deg, rgba(19, 27, 46, 0.96) 0%, rgba(13, 19, 34, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 1rem;
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.65), 0 0 1px 1px rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .badge-oi-blue {
+      background: rgba(0, 114, 178, 0.16);
+      color: #70c4ff;
+      border: 1px solid rgba(0, 114, 178, 0.4);
+    }
+    .badge-oi-cyan {
+      background: rgba(86, 180, 233, 0.16);
+      color: #9bd7fb;
+      border: 1px solid rgba(86, 180, 233, 0.4);
+    }
+    .badge-oi-vermilion {
+      background: rgba(213, 94, 0, 0.16);
+      color: #ff9955;
+      border: 1px solid rgba(213, 94, 0, 0.4);
+    }
+    .badge-oi-amber {
+      background: rgba(230, 159, 0, 0.16);
+      color: #f6be50;
+      border: 1px solid rgba(230, 159, 0, 0.4);
+    }
+    .badge-oi-green {
+      background: rgba(0, 158, 115, 0.16);
+      color: #5ce0b5;
+      border: 1px solid rgba(0, 158, 115, 0.4);
+    }
+
+    .map-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 0.45rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      color: #f1f5f9;
+      font-family: var(--font-accent);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .map-action-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .map-action-btn.active {
+      background: var(--oi-blue);
+      border-color: var(--oi-blue);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 114, 178, 0.35);
+    }
+
+    .map-viewport {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 380px;
+      background: #080d1a;
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      touch-action: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .map-viewport:active {
+      cursor: grabbing;
+    }
+
+    .map-viewport.is-expanded {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      max-height: 100vh !important;
+      z-index: 9999 !important;
+      border-radius: 0 !important;
+    }
+
+    .map-toolbar {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      z-index: 25;
+    }
+
+    .map-tool-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 0.45rem;
+      background: rgba(13, 20, 36, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .map-tool-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+
+    .map-legend-dock {
+      position: absolute;
+      bottom: 0.75rem;
+      left: 0.75rem;
+      background: rgba(10, 16, 30, 0.94);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 0.65rem;
+      padding: 0.5rem 0.85rem;
+      backdrop-filter: blur(12px);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    #world-svg-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: center center;
+      transition: transform 0.08s linear;
+    }
+
+    .flow-line-underlay {
+      fill: none;
+      stroke: #050811;
+      stroke-width: 6.8;
+      stroke-linecap: round;
+      opacity: 0.92;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .flow-line {
+      fill: none;
+      stroke-width: 4.2;
+      stroke-linecap: round;
+      stroke-dasharray: 8, 8;
+      animation: dashFlow 1.8s linear infinite;
+      opacity: 0.95;
+      filter: drop-shadow(0 0 6px rgba(86, 180, 233, 0.35));
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    @keyframes dashFlow {
+      to {
+        stroke-dashoffset: -32;
+      }
+    }
+
+    .flow-line.dimmed, .flow-line-underlay.dimmed {
+      opacity: 0.08;
+      animation: none;
+    }
+
+    .hotspot-pin {
+      cursor: pointer;
+      outline: none;
+      transform-box: fill-box;
+      transform-origin: center;
+      transition: all 0.25s ease;
+      pointer-events: all;
+    }
+
+    .pin-hit-area {
+      fill: transparent;
+      cursor: pointer;
+      pointer-events: all;
+    }
+
+    .pin-pulse {
+      animation: pulseRings 2.2s infinite ease-out;
+      transform-box: fill-box;
+      transform-origin: center;
+      pointer-events: none;
+    }
+
+    @keyframes pulseRings {
+      0% { transform: scale(0.8); opacity: 0.9; }
+      50% { transform: scale(1.6); opacity: 0.25; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+
+    .pin-core {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
+      pointer-events: none;
+    }
+
+    .hotspot-pin:hover .pin-core,
+    .hotspot-pin:focus-visible .pin-core {
+      transform: scale(1.3);
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+
+    .pin-label-box {
+      font-family: var(--font-accent);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-anchor: middle;
+      fill: #ffffff;
+      cursor: pointer;
+      pointer-events: all;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 0 8px rgba(0,0,0,0.8);
+    }
+
+    .sources-drawer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+      border-top: 1px solid transparent;
+      background: #080d1a;
+    }
+
+    .sources-drawer.open {
+      max-height: 800px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 15, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .case-modal {
+      background: #0d1527;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 1.125rem;
+      max-width: 760px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.85), 0 0 35px rgba(0, 114, 178, 0.2);
+    }
+
+    #toast-banner {
+      position: fixed;
+      bottom: 4rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(90px);
+      background: #0f172a;
+      border: 1px solid var(--oi-blue);
+      color: #ffffff;
+      padding: 0.5rem 1.125rem;
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-family: var(--font-accent);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      z-index: 120;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    #toast-banner.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Branded Academic Image Placeholder Container */
+    .smart-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 35%, #182848 0%, #0c1424 100%);
+      color: #94a3b8;
+      text-align: center;
+      padding: 1.5rem;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="book-binder" id="book-stage">
+    
+    <header class="running-header">
+      <div class="flex items-center gap-3">
+        <span class="inline-block px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono text-[11px] font-bold tracking-wider uppercase border border-sky-500/30">
+          Digital Monograph
+        </span>
+        <span id="header-page-title" class="text-xs font-semibold text-slate-200 hidden sm:inline-block">
+          Master Cover Plate // Cover
+        </span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-open-asset-drawer" onclick="triggerAssetFileInput()" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-sky-900/60 hover:bg-sky-700/80 text-sky-200 border border-sky-500/40 text-[11px] font-mono font-bold transition shadow-sm" title="Stage local image files for preview">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>📁 Stage Local Assets</span>
+        </button>
+        <input type="file" id="asset-file-input" multiple accept="image/*" class="hidden" onchange="handleLocalAssetFiles(this.files)" />
+
+        <span id="folio-counter" class="text-xs font-mono text-slate-400 font-semibold hidden lg:inline-block">
+          Page 1 of 12
+        </span>
+        <label for="template-select" class="text-[11px] text-slate-400 font-mono hidden md:inline-block">Jump to Section:</label>
+        <select id="template-select" onchange="showPageById(this.value)" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded px-2.5 py-1 font-mono cursor-pointer focus:outline-none focus:border-sky-500">
+          <optgroup label="Preliminary Folios">
+            <option value="page-t1" selected>Cover Plate</option>
+            <option value="page-t2">Table of Contents</option>
+            <option value="page-forward">Forward &bull; Dr Deborah Lau</option>
+            <option value="page-introduction">Introduction &bull; Hub Overview</option>
+          </optgroup>
+          <optgroup label="Monograph Chapters">
+            <option value="page-t3">Chapter 1: Intro to Plastics</option>
+            <option value="page-t4">Chapter 3: Fate of Plastics (Template 01: 30/70)</option>
+            <option value="page-t6">Chapter 2: Trade Corridors (Draft)</option>
+            <option value="page-t7">Chapter 4: Biopolymer Innovation</option>
+            <option value="page-t9">Chapter 5: Treaty & Policy Matrix</option>
+            <option value="page-t8">Chapter 6: Littoral Remediation</option>
+            <option value="page-t5">Chapter 7: Agronomic Soil Systems</option>
+            <option value="page-t10">Chapter 8: Circular Roadmap</option>
+          </optgroup>
+        </select>
+      </div>
+    </header>
+
+    <article class="book-page active" id="page-t1" data-title="Master Cover Plate // Cover" data-short="Cover">
+      <div id="cover-canvas" class="w-full h-full relative overflow-hidden flex flex-col justify-between bg-[#070b16]">
+        
+        <div class="absolute inset-0 w-full h-full z-0">
+          <!-- Branded Academic Atmospheric Base -->
+          <div class="smart-photo-placeholder z-0">
+            <div class="w-16 h-16 rounded-full bg-sky-900/40 border border-sky-400/30 flex items-center justify-center mb-3">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#70c4ff" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            </div>
+            <span class="font-mono text-xs font-bold text-sky-200 tracking-wider uppercase mb-1">Photographic Cover Asset</span>
+            <span class="font-serif italic text-sm text-slate-300">Ending Plastic Waste: Littoral Net Mending</span>
+          </div>
+
+          <img 
+            id="hero-cover-img"
+            src="coverpage.jpg"
+            data-smart-asset="coverpage.jpg"
+            alt="Ending Plastic Waste - Coastal littoral net mending"
+            class="absolute inset-0 w-full h-full object-cover object-[center_62%] z-10 select-none pointer-events-none transition-opacity duration-300"
+            style="filter: brightness(1.12) contrast(1.02) saturate(1.04);"
+          />
+          <div class="absolute inset-0 z-20 pointer-events-none" style="backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,0.4) 65%, black 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,0.4) 65%, black 100%);"></div>
+          <div class="absolute inset-0 z-20 pointer-events-none" style="background: linear-gradient(to right, transparent 0%, transparent 42%, rgba(247,245,240,0.22) 68%, rgba(247,245,240,0.58) 100%);"></div>
+        </div>
+
+        <div class="relative z-30 w-full h-full flex flex-col justify-between p-4 sm:p-7 md:p-10 lg:p-14 xl:p-16 2xl:p-20 pointer-events-auto items-start">
+          
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 w-full mt-[0.4cm] sm:mt-[0.6cm] 2xl:mt-[0.8cm]">
+            <div class="inline-flex items-center gap-2 sm:gap-3 px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full bg-black/55 backdrop-blur-md border border-white/30 shadow-xl">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse hidden sm:inline-block"></span>
+              <span class="font-mono font-bold tracking-[0.16em] sm:tracking-[0.20em] text-white uppercase text-xs sm:text-sm md:text-[14px] 2xl:text-[16px] leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                RESEARCH MONOGRAPH SERIES &bull; VOLUME 1
+              </span>
+            </div>
+
+            <div class="inline-flex items-center gap-3 sm:gap-4 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-black/55 backdrop-blur-md border border-white/25 shadow-2xl">
+              <div class="flex items-center gap-3 sm:gap-4">
+                <div class="flex items-center pr-3 border-r border-white/30">
+                  <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#00a4e4] flex items-center justify-center text-white shadow-md p-0.5 shrink-0">
+                    <svg viewBox="0 0 40 40" class="w-full h-full fill-current">
+                      <circle cx="20" cy="20" r="19" fill="#00a4e4"/>
+                      <g fill="#ffffff">
+                        <rect x="13" y="9" width="2.4" height="10" rx="1.2"/>
+                        <rect x="17" y="7" width="2.4" height="12" rx="1.2"/>
+                        <rect x="21" y="8" width="2.4" height="13" rx="1.2"/>
+                        <rect x="25" y="11" width="2.4" height="9" rx="1.2"/>
+                        <circle cx="24" cy="22" r="1.4"/>
+                        <text x="20" y="32" font-family="Arial, sans-serif" font-weight="900" font-size="7.5" text-anchor="middle" letter-spacing="0.4">CSIRO</text>
+                      </g>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 whitespace-nowrap">
+                  <span class="font-sans font-black text-[#e40046] text-lg sm:text-xl leading-none tracking-tighter shrink-0 select-none">MU</span>
+                  <span class="font-sans font-bold text-[#e40046] text-xs sm:text-sm tracking-tight whitespace-nowrap select-none">Murdoch University</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 sm:mt-6 md:mt-8 2xl:mt-10 mb-auto max-w-2xl lg:max-w-3xl 2xl:max-w-4xl w-full text-left space-y-2.5 sm:space-y-3.5">
+            <h1 class="font-serif font-extrabold tracking-tight leading-[1.05] text-white whitespace-normal sm:whitespace-nowrap drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]" style="font-size: clamp(2.3rem, 4.6vw, 5.2rem);">
+              Ending Plastic Waste
+            </h1>
+            <div class="w-56 sm:w-64 lg:w-72 2xl:w-80 h-[3.5px] 2xl:h-[4.5px] rounded-full shadow-lg" style="background: linear-gradient(90deg, #d55e00 0%, #f0822b 75%, transparent 100%);"></div>
+            <p class="font-sans font-semibold tracking-wider text-white text-sm sm:text-base lg:text-lg 2xl:text-xl whitespace-nowrap pt-0.5" style="font-family: 'Space Grotesk', sans-serif; text-shadow: 0 2px 4px #000, 0 4px 14px rgba(0,0,0,0.95), 0 0 2px #000;">
+              Learning from the Past to Fix the Future
+            </p>
+          </div>
+
+          <div class="w-full flex items-end justify-between gap-4 pt-2 sm:pt-4">
+            <div class="max-w-2xl 2xl:max-w-3xl text-left">
+              <div class="inline-block bg-black/65 backdrop-blur-md border border-white/25 rounded-xl px-4 py-3 sm:px-5 sm:py-4 2xl:px-6 2xl:py-4.5 shadow-2xl">
+                <p class="font-mono text-[11px] sm:text-xs 2xl:text-sm font-bold tracking-[0.28em] text-sky-300 uppercase mb-1 sm:mb-1.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">AUTHORS</p>
+                <p class="font-sans text-sm sm:text-base md:text-lg 2xl:text-xl font-bold text-white tracking-wide whitespace-nowrap" style="font-family: 'Space Grotesk', sans-serif;">
+                  A.G. O'Donnell <span class="text-amber-400 font-normal mx-1">&bull;</span> D.V. Murphy <span class="text-amber-400 font-normal mx-1">&bull;</span> F.C. Hoyle
+                </p>
+                <p class="font-sans text-[11px] sm:text-xs 2xl:text-sm text-stone-200 mt-1 sm:mt-1.5 tracking-wide whitespace-nowrap">
+                  Bioplastics Innovation Hub &bull; Murdoch University
+                </p>
+              </div>
+            </div>
+
+            <button onclick="showPageById('page-t2')" class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-mono font-bold text-xs sm:text-sm shadow-xl flex items-center gap-2 cursor-pointer transition">
+              <span>Start Reading</span>
+              <span>&rarr;</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </article>
+
+    <article class="book-page" id="page-t2" data-title="Imprint & Table of Contents // Template 2" data-short="TOC">
+      <div class="academic-folio-stage p-4 sm:p-6 lg:p-8 xl:p-10">
+
+        <div class="w-full bg-white border border-stone-300 rounded-xl p-2 sm:p-2.5 shadow-sm flex items-center justify-between gap-3 shrink-0">
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-2.5 py-1 rounded bg-[#003650] text-white fluid-micro font-mono font-bold uppercase tracking-wider">
+              PRELIMINARY PAGES
+            </span>
+            <span class="fluid-meta font-mono text-stone-500 font-bold hidden sm:inline-block">
+              Volume 1 &bull; 2027
+            </span>
+          </div>
+
+          <div class="flex items-center gap-1.5 overflow-x-auto py-0.5 fluid-micro font-mono">
+            <button onclick="showPageById('page-forward')" class="px-2.5 py-1 rounded bg-sky-100 text-sky-900 border border-sky-300 transition font-bold whitespace-nowrap">Forward</button>
+            <button onclick="showPageById('page-introduction')" class="px-2.5 py-1 rounded bg-sky-100 text-sky-900 border border-sky-300 transition font-bold whitespace-nowrap">Introduction</button>
+            <button onclick="showPageById('page-t3')" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">Chapter 1</button>
+            <button onclick="showPageById('page-t4')" class="px-2.5 py-1 rounded bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 transition font-bold whitespace-nowrap">Chapter 3 (Template 01)</button>
+            <button onclick="showPageById('page-t6')" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">Chapter 2</button>
+            <button onclick="showPageById('page-t7')" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">Chapter 4</button>
+            <button onclick="showPageById('page-t9')" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">Chapter 5</button>
+            <button onclick="showPageById('page-t8')" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">Chapter 6</button>
+            <button onclick="showPageById('page-t5')" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">Chapter 7</button>
+            <button onclick="showPageById('page-t10')" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-sky-100 text-stone-700 hover:text-sky-900 border border-stone-200 transition font-semibold whitespace-nowrap">Chapter 8</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+          
+          <div class="lg:col-span-5 flex flex-col justify-between">
+            <div class="bg-white rounded-xl border border-stone-300 p-5 sm:p-6 lg:p-7 shadow-md flex flex-col justify-between h-full space-y-4 sm:space-y-5">
+              
+              <div class="flex justify-between items-center border-b border-stone-200 pb-2.5">
+                <span class="font-mono font-bold fluid-micro uppercase tracking-wider text-stone-400">
+                  Publication Imprint
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-600 font-mono fluid-micro font-bold border border-stone-200">
+                  Open Access &bull; CC BY-NC 4.0
+                </span>
+              </div>
+
+              <div class="space-y-3.5 font-sans fluid-meta text-stone-700 leading-relaxed">
+                <div>
+                  <p class="font-mono font-bold fluid-micro text-stone-400 uppercase tracking-wider mb-0.5">Series Title</p>
+                  <p class="font-semibold text-stone-900 fluid-body">Bioplastics Innovation Hub Monograph Series</p>
+                </div>
+
+                <div>
+                  <p class="font-mono font-bold fluid-micro text-stone-400 uppercase tracking-wider mb-0.5">Volume &amp; Edition</p>
+                  <p class="font-semibold text-stone-900">Volume 1 &bull; (2027) Digital Edition</p>
+                </div>
+
+                <div>
+                  <p class="font-mono font-bold fluid-micro text-stone-400 uppercase tracking-wider mb-0.5">Publisher &amp; Hub Location</p>
+                  <p class="font-semibold text-stone-900">Murdoch University &bull; CSIRO Joint Publication</p>
+                  <p class="text-stone-500 fluid-meta">Perth, Western Australia</p>
+                </div>
+
+                <div>
+                  <p class="font-mono font-bold fluid-micro text-stone-400 uppercase tracking-wider mb-0.5">Standard Identifiers</p>
+                  <p class="font-mono fluid-meta text-stone-800">ISBN: 978-0-9942485-8-9 (Digital Monograph)</p>
+                  <p class="font-mono fluid-meta text-stone-800">DOI: 10.1016/bioplastics.2027.01.004</p>
+                </div>
+              </div>
+
+              <div class="p-3.5 sm:p-4 bg-stone-50 rounded-lg border border-stone-200 space-y-1.5">
+                <p class="font-mono fluid-micro font-bold text-stone-500 uppercase tracking-widest">
+                  Suggested Citation
+                </p>
+                <p class="font-serif italic fluid-meta text-stone-800 leading-normal">
+                  O'Donnell, A.G., Murphy, D.V., &amp; Hoyle, F.C. (2027). <em>Ending Plastic Waste: Learning from the Past to Fix the Future</em>. Bioplastics Innovation Hub &bull; Murdoch University / CSIRO Publishing.
+                </p>
+              </div>
+
+              <p class="fluid-micro text-stone-500 leading-normal border-t border-stone-200 pt-3">
+                <strong>Open Access Terms:</strong> Distributed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).
+              </p>
+
+              <div class="pt-3 border-t border-stone-200 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full bg-[#00a4e4] flex items-center justify-center p-0.5 shadow-sm shrink-0">
+                    <svg viewBox="0 0 40 40" class="w-full h-full fill-current">
+                      <circle cx="20" cy="20" r="19" fill="#00a4e4"/>
+                      <g fill="#ffffff">
+                        <rect x="13" y="9" width="2.4" height="10" rx="1.2"/>
+                        <rect x="17" y="7" width="2.4" height="12" rx="1.2"/>
+                        <rect x="21" y="8" width="2.4" height="13" rx="1.2"/>
+                        <rect x="25" y="11" width="2.4" height="9" rx="1.2"/>
+                        <circle cx="24" cy="22" r="1.4"/>
+                        <text x="20" y="32" font-family="Arial, sans-serif" font-weight="900" font-size="7.5" text-anchor="middle" letter-spacing="0.4">CSIRO</text>
+                      </g>
+                    </svg>
+                  </div>
+                  <span class="font-mono fluid-meta font-bold text-stone-700">CSIRO</span>
+                </div>
+
+                <div class="flex items-center gap-1.5">
+                  <span class="font-sans font-black text-[#e40046] text-lg sm:text-xl leading-none">MU</span>
+                  <span class="font-sans font-bold text-[#e40046] fluid-meta tracking-tight">Murdoch University</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 flex flex-col justify-start gap-5 lg:gap-6">
+            <div class="bg-white rounded-xl border border-stone-300 p-4 sm:p-5 lg:p-6 shadow-sm space-y-3 sm:space-y-4">
+              <div class="flex justify-between items-center border-b border-stone-200 pb-2.5">
+                <span class="font-mono font-bold fluid-meta uppercase tracking-wider text-stone-800 flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#0072b2]"></span>
+                  Table of Contents &bull; Chapters 1&ndash;8
+                </span>
+                <span class="fluid-micro font-mono text-stone-500 hidden sm:inline-block">
+                  Click card to navigate
+                </span>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                <div class="toc-row-card" onclick="showPageById('page-t3')">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">1</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Chapter 1: Introduction to Plastics</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">Historical tonnage &amp; ecotoxicology</p>
+                      </div>
+                    </div>
+                    <span class="font-mono font-bold text-sky-700 fluid-meta">P. 05</span>
+                  </div>
+                </div>
+
+                <div class="toc-row-card" style="border-color: #0072b2; background: #f0f9ff;" onclick="showPageById('page-t4')">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-600 text-white font-mono font-bold flex items-center justify-center fluid-meta shrink-0">3</span>
+                      <div>
+                        <h4 class="font-bold text-sky-950 fluid-h4 leading-tight">Chapter 3: Fate of Plastics</h4>
+                        <p class="fluid-micro text-sky-700 mt-0.5 font-medium">Template 01 (30/70 split &bull; Text &amp; Map)</p>
+                      </div>
+                    </div>
+                    <span class="font-mono font-bold text-sky-700 fluid-meta">P. 06</span>
+                  </div>
+                </div>
+
+                <div class="toc-row-card" onclick="showPageById('page-t6')">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-stone-100 text-stone-700 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">2</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Chapter 2: Trade Corridors</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">Maritime shipping routes &amp; hubs</p>
+                      </div>
+                    </div>
+                    <span class="font-mono font-bold text-stone-500 fluid-meta">P. 07</span>
+                  </div>
+                </div>
+
+                <div class="toc-row-card" onclick="showPageById('page-t7')">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">4</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Chapter 4: Biopolymer Innovation</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">Bio-derived PHA &amp; starch feeds</p>
+                      </div>
+                    </div>
+                    <span class="font-mono font-bold text-sky-700 fluid-meta">P. 08</span>
+                  </div>
+                </div>
+
+                <div class="toc-row-card" onclick="showPageById('page-t9')">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">5</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Chapter 5: Treaty &amp; Policy Matrix</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">UN INC-5 treaty &amp; EPR mandates</p>
+                      </div>
+                    </div>
+                    <span class="font-mono font-bold text-sky-700 fluid-meta">P. 09</span>
+                  </div>
+                </div>
+
+                <div class="toc-row-card" onclick="showPageById('page-t8')">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">6</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Chapter 6: Littoral Remediation</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">Ghost gear traps &amp; sediment core</p>
+                      </div>
+                    </div>
+                    <span class="font-mono font-bold text-sky-700 fluid-meta">P. 10</span>
+                  </div>
+                </div>
+
+                <div class="toc-row-card" onclick="showPageById('page-t5')">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">7</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Chapter 7: Agronomic Soil Systems</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">Biodegradable mulches &amp; microbiomes</p>
+                      </div>
+                    </div>
+                    <span class="font-mono font-bold text-sky-700 fluid-meta">P. 11</span>
+                  </div>
+                </div>
+
+                <div class="toc-row-card" onclick="showPageById('page-t10')">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded bg-sky-100 text-sky-900 font-mono font-bold flex items-center justify-center fluid-meta shrink-0">8</span>
+                      <div>
+                        <h4 class="font-bold text-stone-900 fluid-h4 leading-tight">Chapter 8: Circular Roadmap</h4>
+                        <p class="fluid-micro text-stone-500 mt-0.5">Industrial scale-up &amp; retail shifts</p>
+                      </div>
+                    </div>
+                    <span class="font-mono font-bold text-sky-700 fluid-meta">P. 12</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="border-l-[4px] border-[#d55e00] pl-5 sm:pl-7 py-1.5 space-y-3 font-sans">
+              <p class="fluid-body text-stone-800 leading-relaxed font-normal">
+                Global plastic production now exceeds <strong class="text-stone-950 font-bold">430 million tonnes annually</strong>, overwhelming municipal infrastructure and driving systemic environmental persistence. Ending this crisis demands material redesign and closed-loop circular economies.
+              </p>
+              <p class="fluid-body text-stone-800 leading-relaxed font-normal">
+                The <strong class="text-stone-950 font-bold">Asia-Pacific region</strong> stands at the frontline of this global challenge. Tracking the lifecycle from fossil extraction to littoral fragmentation, this monograph synthesizes innovations from the <a href="https://www.murdoch.edu.au/research/ffi/centres/bioplastics-innovation-hub" target="_blank" rel="noopener noreferrer" class="text-[#0072b2] hover:text-[#003650] font-semibold underline decoration-sky-300 transition">Bioplastics Innovation Hub</a> with pragmatic policy frameworks.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </article>
+
+    <article class="book-page" id="page-forward" data-title="Forward // Template 11" data-short="Forward">
+      <div class="academic-folio-stage">
+
+        <div class="w-full bg-white border border-stone-300 rounded-xl p-2 sm:p-2.5 shadow-sm flex items-center justify-between gap-3 shrink-0">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded bg-[#003650] text-white fluid-micro font-mono font-bold uppercase tracking-wider">
+              PRELIMINARY PAGES
+            </span>
+            <span class="fluid-meta font-mono text-stone-500 font-bold">
+              Forward &bull; Template 11
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="showPageById('page-t2')" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-stone-200 text-stone-700 font-mono fluid-micro font-bold transition">&larr; Table of Contents</button>
+            <button onclick="showPageById('page-introduction')" class="px-2.5 py-1 rounded bg-sky-600 hover:bg-sky-500 text-white font-mono fluid-micro font-bold transition">Introduction &rarr;</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 flex-1 min-h-0 items-stretch">
+          
+          <div class="lg:col-span-5 flex flex-col gap-3 sm:gap-4 h-full min-h-0">
+            <div class="rounded-2xl bg-stone-900 border border-stone-300 shadow-md relative overflow-hidden flex flex-col justify-end group min-h-0" style="flex: 3;">
+              <!-- Atmospheric Fallback for Dr Deborah Lau -->
+              <div class="smart-photo-placeholder z-0">
+                <div class="w-14 h-14 rounded-full bg-sky-800/50 border border-sky-400/30 flex items-center justify-center mb-2">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#70c4ff" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <span class="font-serif font-bold text-sm text-white">Dr Deborah Lau</span>
+                <span class="font-mono text-[10px] text-sky-200">Ending Plastic Waste Mission &bull; CSIRO</span>
+              </div>
+
+              <img 
+                id="img-forward-lau"
+                src="Deb-Lau-headshot-750x675.jpg"
+                data-smart-asset="Deb-Lau-headshot-750x675.jpg"
+                alt="Dr Deborah Lau - Ending Plastic Waste Mission Lead, CSIRO"
+                class="absolute inset-0 w-full h-full object-cover object-[center_18%] z-10 select-none transition-opacity duration-300"
+              />
+
+              <div class="absolute inset-0 z-20 pointer-events-none bg-gradient-to-t from-[#001824]/95 via-[#001824]/40 to-transparent" style="top: 60%;"></div>
+
+              <div class="relative z-30 p-4 sm:p-5 text-white space-y-1">
+                <span class="inline-block px-2.5 py-0.5 rounded bg-[#0072b2]/85 text-sky-100 font-mono text-[10px] font-bold uppercase tracking-widest border border-sky-300/30">
+                  Forward By
+                </span>
+                <h3 class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight">
+                  Dr Deborah Lau
+                </h3>
+                <p class="font-mono text-xs text-sky-200 tracking-wide">
+                  Ending Plastic Waste Mission &bull; CSIRO
+                </p>
+              </div>
+            </div>
+
+            <div class="rounded-xl bg-white border-l-[4px] border-[#0072b2] border-t border-r border-b border-stone-200 p-3.5 sm:p-4 shadow-sm flex flex-col justify-between min-h-0" style="flex: 1;">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-[11px] font-bold uppercase tracking-widest text-[#0072b2] flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+                  Quote
+                </span>
+                <span class="text-[11px] font-mono font-bold text-sky-700">[Capacity: ~50&ndash;75 words]</span>
+              </div>
+              <blockquote class="font-serif italic text-stone-800 fluid-body leading-snug my-auto">
+                "Ending plastic waste is not merely an engineering puzzle—it is a planetary imperative that demands systemic alignment between advanced science, commercial scale, and international treaty mandates."
+              </blockquote>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 flex flex-col h-full min-h-0">
+            <div class="bg-white rounded-2xl border border-stone-300 p-5 sm:p-7 lg:p-8 shadow-md flex flex-col justify-between h-full min-h-0">
+              <div class="border-b border-stone-200 pb-3 flex items-center justify-between shrink-0">
+                <h1 class="font-serif text-3xl sm:text-4xl font-extrabold text-[#003650] tracking-tight">
+                  Forward
+                </h1>
+                <span class="text-[11px] font-mono font-bold text-sky-700 bg-sky-50 px-2 py-1 rounded border border-sky-200">[Author Target: 400&ndash;500 words]</span>
+              </div>
+
+              <div class="flex-1 space-y-3.5 font-sans text-stone-700 fluid-body leading-relaxed pt-3 overflow-y-auto pr-2">
+                <p>
+                  Plastic pollution has emerged as one of the defining ecological challenges of the Anthropocene. Since the mid-twentieth century, synthetic polymers have fundamentally reshaped modern global commerce, offering unprecedented durability, lightweight logistics, and public hygiene benefits. Yet this remarkable durability—the very quality that propelled synthetic polymers into ubiquity—has created a generational crisis of persistence across oceanic, terrestrial, and atmospheric systems worldwide.
+                </p>
+                <p>
+                  At CSIRO’s Ending Plastic Waste Mission, our primary objective is to catalyze systematic transformation across the entire plastic value chain. We recognize that incremental waste collection alone cannot keep pace with the 430 million tonnes of petrochemical resin entering the global economy each year. What is required is an uncompromising scientific convergence spanning polymer synthesis, scalable bioprocessing, and robust regulatory architectures.
+                </p>
+                <p>
+                  Through collaborative partnerships between national research agencies, industrial fabricators, and pioneering university research nodes like Murdoch University’s Bioplastics Innovation Hub, Australia is uniquely positioned to lead this regional transition. By leveraging abundant agricultural feedstocks and advanced microbial fermentation systems, we can engineer high-performance materials that provide all the functional integrity of fossil polymers while safeguarding natural cycles.
+                </p>
+                <p>
+                  This monograph serves as both an empirical diagnostic of systemic points of failure and an authoritative roadmap for commercial implementation. By examining material balances from primary synthesis to littoral fragmentation, the authors delineate the precise technical and policy levers required to close material loops permanently.
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500 font-mono shrink-0 mt-2">
+                <span>Forward &bull; Bioplastics Innovation Hub Monograph Series</span>
+                <button onclick="showPageById('page-introduction')" class="text-[#0072b2] hover:text-[#003650] font-bold flex items-center gap-1 transition">
+                  Continue to Introduction &rarr;
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </article>
+
+    <article class="book-page" id="page-introduction" data-title="Introduction // Template 11" data-short="Intro">
+      <div class="academic-folio-stage">
+
+        <div class="w-full bg-white border border-stone-300 rounded-xl p-2 sm:p-2.5 shadow-sm flex items-center justify-between gap-3 shrink-0">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded bg-[#003650] text-white fluid-micro font-mono font-bold uppercase tracking-wider">
+              PRELIMINARY PAGES
+            </span>
+            <span class="fluid-meta font-mono text-stone-500 font-bold">
+              Introduction &bull; Template 11
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="showPageById('page-forward')" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-stone-200 text-stone-700 font-mono fluid-micro font-bold transition">&larr; Forward</button>
+            <button onclick="showPageById('page-t3')" class="px-2.5 py-1 rounded bg-sky-600 hover:bg-sky-500 text-white font-mono fluid-micro font-bold transition">Chapter 1 &rarr;</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 flex-1 min-h-0 items-stretch">
+          
+          <div class="lg:col-span-5 flex flex-col gap-3 sm:gap-4 h-full min-h-0">
+            <div class="rounded-2xl bg-stone-900 border border-stone-300 shadow-md relative overflow-hidden flex flex-col justify-end group min-h-0" style="flex: 3;">
+              <!-- Atmospheric Fallback for Prof Daniel Murphy -->
+              <div class="smart-photo-placeholder z-0">
+                <div class="w-14 h-14 rounded-full bg-amber-900/50 border border-amber-400/30 flex items-center justify-center mb-2">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f6be50" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <span class="font-serif font-bold text-sm text-white">Prof Daniel Murphy</span>
+                <span class="font-mono text-[10px] text-amber-200">Director &bull; Bioplastics Innovation Hub</span>
+              </div>
+
+              <img 
+                id="img-intro-murphy"
+                src="DanMurphy-headshot.png"
+                data-smart-asset="DanMurphy-headshot.png"
+                alt="Professor Daniel Murphy - Director, Bioplastics Innovation Hub"
+                class="absolute inset-0 w-full h-full object-cover object-[center_18%] z-10 select-none transition-opacity duration-300"
+              />
+
+              <div class="absolute inset-0 z-20 pointer-events-none bg-gradient-to-t from-[#001824]/95 via-[#001824]/40 to-transparent" style="top: 60%;"></div>
+
+              <div class="relative z-30 p-4 sm:p-5 text-white space-y-1">
+                <span class="inline-block px-2.5 py-0.5 rounded bg-[#d55e00]/85 text-amber-100 font-mono text-[10px] font-bold uppercase tracking-widest border border-amber-300/30">
+                  Introduction By
+                </span>
+                <h3 class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight">
+                  Prof Daniel Murphy
+                </h3>
+                <p class="font-mono text-xs text-amber-200 tracking-wide">
+                  Director &bull; Bioplastics Innovation Hub &bull; Murdoch University
+                </p>
+              </div>
+            </div>
+
+            <div class="rounded-xl bg-white border-l-[4px] border-[#d55e00] border-t border-r border-b border-stone-200 p-3.5 sm:p-4 shadow-sm flex flex-col justify-between min-h-0" style="flex: 1;">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-[11px] font-bold uppercase tracking-widest text-[#d55e00] flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+                  Quote
+                </span>
+                <span class="text-[11px] font-mono font-bold text-amber-700">[Capacity: ~50&ndash;75 words]</span>
+              </div>
+              <blockquote class="font-serif italic text-stone-800 fluid-body leading-snug my-auto">
+                "Fixing the plastic crisis requires biologically coherent polymers designed from genesis to completely integrate into natural geochemical and soil cycles without toxic legacy."
+              </blockquote>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 flex flex-col h-full min-h-0">
+            <div class="bg-white rounded-2xl border border-stone-300 p-5 sm:p-7 lg:p-8 shadow-md flex flex-col justify-between h-full min-h-0">
+              <div class="border-b border-stone-200 pb-3 flex items-center justify-between shrink-0">
+                <h1 class="font-serif text-3xl sm:text-4xl font-extrabold text-[#003650] tracking-tight">
+                  Introduction
+                </h1>
+                <span class="text-[11px] font-mono font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded border border-amber-200">[Author Target: 400&ndash;500 words]</span>
+              </div>
+
+              <div class="flex-1 space-y-3.5 font-sans text-stone-700 fluid-body leading-relaxed pt-3 overflow-y-auto pr-2">
+                <p>
+                  The Bioplastics Innovation Hub was founded through a strategic partnership between Murdoch University and CSIRO to address the fundamental structural flaw of modern polymer economics: designing ephemeral, single-use consumer products from everlasting fossil feedstocks.
+                </p>
+                <p>
+                  As global plastic production surpasses 430 million tonnes annually, the consequences of this thermodynamic mismatch have become impossible to ignore. Less than ten percent of all post-consumer plastic waste ever undergoes successful mechanical recycling. The remaining ninety percent either accumulates in domestic landfills, undergoes open incineration, or fragments into persistent micro- and nanoplastics that infiltrate estuarine food webs and terrestrial microbiomes.
+                </p>
+                <p>
+                  The mission of our Hub is to dismantle this linear dependency by pioneering bio-derived, biodegradable polymer platforms that deliver equivalent mechanical performance during their functional lifespan, but mineralize benignly once introduced into soil or marine environments.
+                </p>
+                <p>
+                  Across the eight chapters of this monograph, our contributors provide a rigorous synthesis of empirical data, material lifecycle balances, and closed-loop transition roadmaps. Beginning with the historical rise of synthetic polymers and transboundary trade logistics, the monograph examines recycling limits, novel biopolymers, international treaty mandates, and agronomic soil assimilation.
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500 font-mono shrink-0 mt-2">
+                <span>Introduction &bull; Bioplastics Innovation Hub Monograph Series</span>
+                <button onclick="showPageById('page-t3')" class="px-4 py-1.5 rounded-lg bg-[#003650] hover:bg-[#0072b2] text-white font-mono text-xs font-bold shadow transition flex items-center gap-1.5">
+                  <span>Chapter 1</span>
+                  <span>&rarr;</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </article>
+
+    <article class="book-page" id="page-t3" data-title="Chapter 1: Intro to Plastics // Template 3" data-short="Ch 1">
+      <div class="max-w-6xl mx-auto p-6 sm:p-8 space-y-6">
+        <div class="w-full h-64 sm:h-80 rounded-2xl bg-stone-900 overflow-hidden relative border border-stone-300 shadow-md">
+          <!-- Atmospheric Fallback for Chapter 1 Banner -->
+          <div class="smart-photo-placeholder z-0">
+            <span class="font-mono text-xs font-bold text-sky-200 tracking-wider uppercase mb-1">Plate 1.1 Banner</span>
+            <span class="font-serif italic text-sm text-slate-300">Littoral Netting Fragmentation</span>
+          </div>
+
+          <img 
+            src="coverpage.jpg" 
+            data-smart-asset="coverpage.jpg" 
+            alt="Landscape banner" 
+            class="w-full h-full object-cover z-10 relative select-none" 
+          />
+          <div class="absolute bottom-3 left-3 bg-black/75 text-white px-3.5 py-1.5 rounded-lg text-xs font-mono backdrop-blur-sm border border-white/20 z-20">
+            Plate 1.1: Littoral netting fragmentation along coastal sediment wracklines.
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#d55e00]">CHAPTER 1 // INTRODUCTION</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#003650] font-serif">Chapter 1: Introduction to Plastics</h2>
+          <p class="text-stone-700 fluid-body leading-relaxed max-w-3xl">
+            Fossil fuel-derived plastics persist in water, air, and soil and represent an ongoing hazard to the environment and human health. This opening chapter establishes the thermodynamic baseline of commercial petrochemical polymers and maps their historical expansion since 1950.
+          </p>
+        </div>
+
+        <div class="pt-4 border-t border-stone-200 flex items-center gap-3">
+          <button onclick="showPageById('page-introduction')" class="px-4 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-mono font-bold border border-stone-300 transition">&larr; Introduction</button>
+          <button onclick="showPageById('page-t4')" class="px-4 py-2 rounded-lg bg-sky-700 hover:bg-sky-600 text-white text-xs font-mono font-bold transition">Chapter 3 &rarr;</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="book-page" id="page-t4" data-title="Chapter 3: Fate of Plastics // Template 01 (30/70 Split)" data-short="Ch 3">
+      <div class="academic-folio-stage">
+        
+        <!-- Folio Header Navigation Ribbon -->
+        <div class="w-full bg-white border border-stone-300 rounded-xl p-2 sm:p-2.5 shadow-sm flex items-center justify-between gap-3 shrink-0">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded bg-[#003650] text-white fluid-micro font-mono font-bold uppercase tracking-wider">
+              TEMPLATE 01 // TWO-COLUMN SPREAD
+            </span>
+            <span class="fluid-meta font-mono text-stone-500 font-bold hidden sm:inline-block">
+              Chapter 3: Fate of Plastics in the Environment
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-900 font-mono text-[11px] font-bold border border-sky-300 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-sky-600"></span>
+              30% Text / 70% Widget Split
+            </span>
+            <button onclick="showPageById('page-t3')" class="px-2.5 py-1 rounded bg-stone-100 hover:bg-stone-200 text-stone-700 font-mono fluid-micro font-bold transition">&larr; Ch 1</button>
+            <button onclick="showPageById('page-t6')" class="px-2.5 py-1 rounded bg-sky-600 hover:bg-sky-500 text-white font-mono fluid-micro font-bold transition">Ch 2 &rarr;</button>
+          </div>
+        </div>
+
+        <!-- 30% TEXT / 70% WIDGET SPREAD -->
+        <div class="template01-container flex-1 min-h-0">
+          
+          <!-- 30% COLUMN (LEFT): SCHOLARLY NARRATIVE -->
+          <section class="bg-white rounded-2xl border border-stone-300 p-4 sm:p-5 lg:p-5 shadow-md flex flex-col justify-between h-full min-h-0 overflow-hidden" aria-label="Chapter 3 Explanatory Text">
+            
+            <div class="border-b border-stone-200 pb-2.5 shrink-0">
+              <span class="font-mono text-[11px] font-bold text-[#d55e00] uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                <span class="w-2 h-2 rounded-full bg-[#d55e00]"></span>
+                Chapter 3 &bull; Section 3.1
+              </span>
+              <h1 class="font-serif text-lg sm:text-xl lg:text-[1.35rem] font-extrabold text-[#003650] tracking-tight leading-tight">
+                Transboundary Corridors
+              </h1>
+              <p class="font-sans text-xs text-stone-500 mt-0.5">
+                The Geopolitics of Global Polymer Displacement
+              </p>
+            </div>
+
+            <div class="flex-1 overflow-y-auto pr-1.5 pt-2.5 space-y-3 font-sans text-stone-700 text-xs sm:text-[12.5px] leading-relaxed">
+              
+              <div class="p-2.5 rounded-lg bg-sky-50 border-l-[3px] border-[#0072b2] border-t border-r border-b border-sky-200">
+                <p class="text-[11px] text-sky-950 font-medium leading-snug">
+                  <strong class="font-bold text-[#003650]">Diagnostic:</strong> China's 2018 <em>National Sword</em> policy abruptly halted ~7.3M MT/yr of scrap imports, fracturing trade across secondary Southeast Asian ports facing acute infrastructure deficits.
+                </p>
+              </div>
+
+              <div>
+                <h3 class="font-serif text-xs sm:text-sm font-bold text-[#003650] mb-0.5">
+                  1. Polymer Arbitrage (HS 3915)
+                </h3>
+                <p>
+                  Global trade in plastic scrap operates under Harmonized System Code <strong>HS 3915</strong>. For decades, G20 municipalities sorted high-value PET/HDPE bottles domestically while compressing mixed films and contaminated polymers into maritime containers bound for Asian recycling nodes.
+                </p>
+              </div>
+
+              <div class="grid grid-cols-2 gap-1.5 my-1 font-mono">
+                <div class="p-1.5 rounded bg-stone-50 border border-stone-200">
+                  <span class="text-[9px] text-stone-500 uppercase block font-bold">G20 Outbound</span>
+                  <span class="text-xs font-bold text-[#0072b2]">4.85M MT/yr</span>
+                </div>
+                <div class="p-1.5 rounded bg-stone-50 border border-stone-200">
+                  <span class="text-[9px] text-stone-500 uppercase block font-bold">Mislabeling</span>
+                  <span class="text-xs font-bold text-[#d55e00]">66.4% Deficit</span>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="font-serif text-xs sm:text-sm font-bold text-[#003650] mb-0.5">
+                  2. Recipient Infrastructure Deficit
+                </h3>
+                <p>
+                  Following the 2018 shift, volumes surged into Malaysia, Vietnam, Thailand, and Indonesia. Lacking hazardous emissions scrubbers or tertiary effluent treatment, unpermitted facilities discharged toxic microplastic washings directly into littoral estuaries.
+                </p>
+              </div>
+
+              <div>
+                <h3 class="font-serif text-xs sm:text-sm font-bold text-[#003650] mb-0.5">
+                  3. Basel Amendments &amp; Loopholes
+                </h3>
+                <p>
+                  The 2019 Basel Convention amendments mandated Prior Informed Consent (PIC). However, secondary networks continue to exploit classifications like Refuse-Derived Fuel (RDF) and paper-bale exemptions.
+                </p>
+              </div>
+
+            </div>
+
+            <div class="pt-2 border-t border-stone-200 flex items-center justify-between text-[10px] text-stone-500 font-mono shrink-0 mt-2">
+              <span>Section 3.1 &bull; 30% Width</span>
+              <span class="text-sky-700 font-bold">Interact with map &rarr;</span>
+            </div>
+
+          </section>
+
+          <!-- 70% COLUMN (RIGHT): EQUAL EARTH MAP WIDGET -->
+          <section class="saas-card flex flex-col justify-between h-full min-h-0 overflow-hidden shadow-lg border border-slate-700/60" aria-label="Equal Earth Transboundary Map Widget">
+            
+            <div class="p-3 border-b border-white/10 bg-slate-900/85 flex items-center justify-between flex-wrap gap-2 shrink-0">
+              <div class="flex items-center gap-2">
+                <span class="badge-oi-blue text-[11px] py-0.5 px-2 font-mono">
+                  Equal Earth Projection &bull; Transboundary Corridors
+                </span>
+                <span class="text-xs text-slate-400 font-mono hidden xl:inline-block">Click pin to inspect case dossier</span>
+              </div>
+
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <button id="btn-toggle-sources" class="map-action-btn text-[11px] py-1 px-2.5" aria-label="Toggle Data Sources">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                  <span>Data Sources</span>
+                </button>
+
+                <div class="flex items-center gap-1" id="map-filter-cluster">
+                  <button class="map-action-btn active text-[11px] py-1 px-2" data-filter="all">All</button>
+                  <button class="map-action-btn text-[11px] py-1 px-2" data-filter="us">USA</button>
+                  <button class="map-action-btn text-[11px] py-1 px-2" data-filter="eu">EU</button>
+                  <button class="map-action-btn text-[11px] py-1 px-2" data-filter="jp">JPN</button>
+                  <button class="map-action-btn text-[11px] py-1 px-2" data-filter="au">AUS</button>
+                  <button class="map-action-btn text-[11px] py-1 px-2" data-filter="cn">CHN</button>
+                </div>
+              </div>
+            </div>
+
+            <section id="sources-drawer" class="sources-drawer" aria-label="Data Sources and Methodology">
+              <div style="padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+                  <div>
+                    <h3 style="font-size: 0.95rem; font-weight: 700; color: #ffffff; font-family: var(--font-title);">Accounting Methodologies &amp; Regulatory Registries</h3>
+                    <p style="font-size: 0.75rem; color: #94a3b8;">Primary customs tariffs (HS 3915), Basel Action Network (BAN), and OECD baseline field data.</p>
+                  </div>
+                  <button id="btn-close-sources" class="map-action-btn" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">Close</button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem;">
+                  <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.5rem; padding: 0.65rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.2rem;">
+                      <span style="font-size: 0.75rem; font-weight: 700; color: var(--oi-sky); font-family: var(--font-accent);">1. UN Comtrade</span>
+                      <span class="badge-oi-cyan" style="font-size: 0.6rem; padding: 0.1rem 0.4rem; border-radius: 9999px;">HS 3915</span>
+                    </div>
+                    <p style="font-size: 0.7rem; color: #cbd5e1; line-height: 1.4;">Bilateral mass throughput (MT) for PE (3915.10), PS (3915.20), PVC (3915.30), and other scrap polymers.</p>
+                  </div>
+
+                  <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.5rem; padding: 0.65rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.2rem;">
+                      <span style="font-size: 0.75rem; font-weight: 700; color: var(--oi-green); font-family: var(--font-accent);">2. Basel Action Network</span>
+                      <span class="badge-oi-green" style="font-size: 0.6rem; padding: 0.1rem 0.4rem; border-radius: 9999px;">GPS Audits</span>
+                    </div>
+                    <p style="font-size: 0.7rem; color: #cbd5e1; line-height: 1.4;">GPS beacon tracker studies monitoring compliance with the 2019 Basel Amendments (Entries Y48, A3250).</p>
+                  </div>
+
+                  <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.5rem; padding: 0.65rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.2rem;">
+                      <span style="font-size: 0.75rem; font-weight: 700; color: var(--oi-amber); font-family: var(--font-accent);">3. China National Sword</span>
+                      <span class="badge-oi-amber" style="font-size: 0.6rem; padding: 0.1rem 0.4rem; border-radius: 9999px;">0.5% Threshold</span>
+                    </div>
+                    <p style="font-size: 0.7rem; color: #cbd5e1; line-height: 1.4;">2018 policy shift halting 7.3M MT/yr and transferring processing burdens into Southeast Asia.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 p-2.5 bg-slate-950/60 border-b border-white/10 shrink-0 font-mono text-xs">
+              <div class="p-2 rounded bg-slate-900/80 border border-white/10">
+                <span class="text-[10px] text-slate-400 block uppercase">G20 Export Flow</span>
+                <span class="text-base font-bold text-sky-400">4.85M <span class="text-[10px] text-slate-400 font-normal">MT/yr</span></span>
+              </div>
+              <div class="p-2 rounded bg-slate-900/80 border border-white/10">
+                <span class="text-[10px] text-slate-400 block uppercase">Recipient Deficit</span>
+                <span class="text-base font-bold text-[#ff9955]">66.4% <span class="text-[10px] text-slate-400 font-normal">mislabeled</span></span>
+              </div>
+              <div class="p-2 rounded bg-slate-900/80 border border-white/10">
+                <span class="text-[10px] text-slate-400 block uppercase">Coastal Leakage</span>
+                <span class="text-base font-bold text-amber-400">1.48M <span class="text-[10px] text-slate-400 font-normal">MT/yr</span></span>
+              </div>
+              <div class="p-2 rounded bg-slate-900/80 border border-white/10">
+                <span class="text-[10px] text-slate-400 block uppercase">Equal-Area Model</span>
+                <span class="text-sm font-bold text-[#5ce0b5]">Equal Earth 2018</span>
+              </div>
+            </div>
+
+            <div id="map-viewport" class="map-viewport flex-1 min-h-[360px]" role="region" aria-label="Equal Earth Vector Map">
+              
+              <div class="map-toolbar">
+                <button id="btn-expand-map" class="map-tool-btn" title="Toggle Fullscreen Theater View" aria-label="Fullscreen">
+                  <svg id="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </button>
+                <button id="btn-zoom-in" class="map-tool-btn" title="Zoom In (+)" aria-label="Zoom In">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+                <button id="btn-zoom-out" class="map-tool-btn" title="Zoom Out (-)" aria-label="Zoom Out">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line></svg>
+                </button>
+                <button id="btn-fit-map" class="map-tool-btn" title="Fit to View" aria-label="Fit View">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                </button>
+              </div>
+
+              <div class="map-legend-dock">
+                <div class="font-bold text-white font-mono text-[10px]">Flow Corridors</div>
+                <div class="flex items-center gap-1.5 text-slate-300"><span class="w-2.5 h-2.5 rounded-full bg-[#0072b2]"></span><span>G20 Exporters</span></div>
+                <div class="flex items-center gap-1.5 text-slate-300"><span class="w-2.5 h-2.5 rounded-full bg-[#d55e00]"></span><span>Global South Recipients</span></div>
+                <div class="flex items-center gap-1.5 text-slate-300"><span class="w-2.5 h-2.5 rounded-full bg-[#e69f00]"></span><span>China National Sword</span></div>
+                <div class="flex items-center gap-1.5 text-slate-300"><span style="width: 16px; height: 2px; border-top: 2px dashed #70c4ff;"></span><span>Shipping Vector</span></div>
+              </div>
+
+              <div id="world-svg-container">
+                <svg id="world-svg" viewBox="0 0 1050 540" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+                  
+                  <defs>
+                    <linearGradient id="grad-us-my" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#56b4e9" /><stop offset="100%" stop-color="#d55e00" />
+                    </linearGradient>
+                    <linearGradient id="grad-de-vn" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#0072b2" /><stop offset="100%" stop-color="#d55e00" />
+                    </linearGradient>
+                    <linearGradient id="grad-jp-id" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#009e73" /><stop offset="100%" stop-color="#d55e00" />
+                    </linearGradient>
+                    <linearGradient id="grad-au-th" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#56b4e9" /><stop offset="100%" stop-color="#d55e00" />
+                    </linearGradient>
+                    <linearGradient id="grad-cn-sword" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#e69f00" /><stop offset="100%" stop-color="#d55e00" />
+                    </linearGradient>
+                  </defs>
+
+                  <!-- Baseline Vector Cartographic Sphere (Renders Instantly) -->
+                  <rect width="1050" height="540" fill="#060c18" />
+                  <ellipse cx="525" cy="270" rx="510" ry="255" fill="#091428" stroke="#1d2d4c" stroke-width="1.5" />
+
+                  <!-- Photographic Satellite Raster Layer with Multi-Source Fallbacks -->
+                  <image 
+                    id="map-bg-image"
+                    href="WorldMap_EqualEarth.png" 
+                    xlink:href="WorldMap_EqualEarth.png"
+                    x="0" 
+                    y="0" 
+                    width="1050" 
+                    height="540" 
+                    preserveAspectRatio="xMidYMid meet" 
+                  />
+
+                  <!-- Vector Shipping Flow Paths -->
+                  <g id="flow-paths-group">
+                    <path class="flow-line-underlay" data-corridor="us" d="M 235,172 Q 500,370 796,240" />
+                    <path class="flow-line-underlay" data-corridor="eu" d="M 528,92 Q 675,120 825,200" />
+                    <path class="flow-line-underlay" data-corridor="jp" d="M 900,110 Q 890,205 840,300" />
+                    <path class="flow-line-underlay" data-corridor="au" d="M 888,380 Q 870,265 805,180" />
+                    <path class="flow-line-underlay" data-corridor="au" d="M 888,380 Q 860,330 796,240" />
+                    <path class="flow-line-underlay" data-corridor="cn" d="M 830,157 Q 832,175 805,180" />
+
+                    <path id="path-us-my" class="flow-line" data-corridor="us" stroke="url(#grad-us-my)" d="M 235,172 Q 500,370 796,240" />
+                    <path id="path-de-vn" class="flow-line" data-corridor="eu" stroke="url(#grad-de-vn)" d="M 528,92 Q 675,120 825,200" />
+                    <path id="path-jp-id" class="flow-line" data-corridor="jp" stroke="url(#grad-jp-id)" d="M 900,110 Q 890,205 840,300" />
+                    <path id="path-au-th" class="flow-line" data-corridor="au" stroke="url(#grad-au-th)" d="M 888,380 Q 870,265 805,180" />
+                    <path id="path-au-my" class="flow-line" data-corridor="au" stroke="url(#grad-au-th)" d="M 888,380 Q 860,330 796,240" />
+                    <path id="path-cn-divert" class="flow-line" data-corridor="cn" stroke="url(#grad-cn-sword)" d="M 830,157 Q 832,175 805,180" />
+                  </g>
+
+                  <!-- Calibrated Equal Earth Hotspots -->
+                  <g id="hotspots-group">
+                    <!-- USA (235, 172) -->
+                    <g class="hotspot-pin" id="pin-us" data-location="us" transform="translate(235, 172)" tabindex="0" role="button">
+                      <circle cx="0" cy="0" r="36" class="pin-hit-area" />
+                      <circle cx="0" cy="0" r="26" fill="none" stroke="#56b4e9" stroke-width="1.8" class="pin-pulse" />
+                      <circle cx="0" cy="0" r="14" fill="#0b172a" stroke="#56b4e9" stroke-width="2.8" class="pin-core" />
+                      <circle cx="0" cy="0" r="5.5" fill="#70c4ff" />
+                      <text x="0" y="-18" class="pin-label-box">USA</text>
+                    </g>
+
+                    <!-- Germany (528, 92) -->
+                    <g class="hotspot-pin" id="pin-de" data-location="de" transform="translate(528, 92)" tabindex="0" role="button">
+                      <circle cx="0" cy="0" r="36" class="pin-hit-area" />
+                      <circle cx="0" cy="0" r="26" fill="none" stroke="#0072b2" stroke-width="1.8" class="pin-pulse" />
+                      <circle cx="0" cy="0" r="14" fill="#0a152e" stroke="#0072b2" stroke-width="2.8" class="pin-core" />
+                      <circle cx="0" cy="0" r="5.5" fill="#56b4e9" />
+                      <text x="0" y="-18" class="pin-label-box">GERMANY</text>
+                    </g>
+
+                    <!-- Japan (900, 110) -->
+                    <g class="hotspot-pin" id="pin-jp" data-location="jp" transform="translate(900, 110)" tabindex="0" role="button">
+                      <circle cx="0" cy="0" r="36" class="pin-hit-area" />
+                      <circle cx="0" cy="0" r="26" fill="none" stroke="#009e73" stroke-width="1.8" class="pin-pulse" />
+                      <circle cx="0" cy="0" r="14" fill="#081e22" stroke="#009e73" stroke-width="2.8" class="pin-core" />
+                      <circle cx="0" cy="0" r="5.5" fill="#5ce0b5" />
+                      <text x="0" y="-18" class="pin-label-box">JAPAN</text>
+                    </g>
+
+                    <!-- Australia (888, 380) -->
+                    <g class="hotspot-pin" id="pin-au" data-location="au" transform="translate(888, 380)" tabindex="0" role="button">
+                      <circle cx="0" cy="0" r="36" class="pin-hit-area" />
+                      <circle cx="0" cy="0" r="26" fill="none" stroke="#56b4e9" stroke-width="1.8" class="pin-pulse" />
+                      <circle cx="0" cy="0" r="14" fill="#0c1d2e" stroke="#56b4e9" stroke-width="2.8" class="pin-core" />
+                      <circle cx="0" cy="0" r="5.5" fill="#70c4ff" />
+                      <text x="0" y="26" class="pin-label-box">AUSTRALIA</text>
+                    </g>
+
+                    <!-- China Sword (830, 157) -->
+                    <g class="hotspot-pin" id="pin-cn" data-location="cn" transform="translate(830, 157)" tabindex="0" role="button">
+                      <circle cx="0" cy="0" r="36" class="pin-hit-area" />
+                      <circle cx="0" cy="0" r="26" fill="none" stroke="#e69f00" stroke-width="1.8" class="pin-pulse" />
+                      <circle cx="0" cy="0" r="14" fill="#24190b" stroke="#e69f00" stroke-width="2.8" class="pin-core" />
+                      <circle cx="0" cy="0" r="5.5" fill="#f6be50" />
+                      <text x="0" y="-18" class="pin-label-box">CHINA</text>
+                    </g>
+
+                    <!-- Thailand (805, 180) -->
+                    <g class="hotspot-pin" id="pin-th" data-location="th" transform="translate(805, 180)" tabindex="0" role="button">
+                      <circle cx="0" cy="0" r="36" class="pin-hit-area" />
+                      <circle cx="0" cy="0" r="26" fill="none" stroke="#d55e00" stroke-width="1.8" class="pin-pulse" />
+                      <circle cx="0" cy="0" r="14" fill="#240c17" stroke="#d55e00" stroke-width="2.8" class="pin-core" />
+                      <circle cx="0" cy="0" r="5.5" fill="#ff9955" />
+                      <text x="-48" y="4" class="pin-label-box">THAILAND</text>
+                    </g>
+
+                    <!-- Malaysia (796, 240) -->
+                    <g class="hotspot-pin" id="pin-my" data-location="my" transform="translate(796, 240)" tabindex="0" role="button">
+                      <circle cx="0" cy="0" r="36" class="pin-hit-area" />
+                      <circle cx="0" cy="0" r="26" fill="none" stroke="#d55e00" stroke-width="1.8" class="pin-pulse" />
+                      <circle cx="0" cy="0" r="14" fill="#240c17" stroke="#d55e00" stroke-width="2.8" class="pin-core" />
+                      <circle cx="0" cy="0" r="5.5" fill="#ff9955" />
+                      <text x="45" y="4" class="pin-label-box">MALAYSIA</text>
+                    </g>
+
+                    <!-- Vietnam (825, 200) -->
+                    <g class="hotspot-pin" id="pin-vn" data-location="vn" transform="translate(825, 200)" tabindex="0" role="button">
+                      <circle cx="0" cy="0" r="36" class="pin-hit-area" />
+                      <circle cx="0" cy="0" r="26" fill="none" stroke="#d55e00" stroke-width="1.8" class="pin-pulse" />
+                      <circle cx="0" cy="0" r="14" fill="#240c17" stroke="#d55e00" stroke-width="2.8" class="pin-core" />
+                      <circle cx="0" cy="0" r="5.5" fill="#ff9955" />
+                      <text x="35" y="-12" class="pin-label-box">VIETNAM</text>
+                    </g>
+
+                    <!-- Indonesia (840, 300) -->
+                    <g class="hotspot-pin" id="pin-id" data-location="id" transform="translate(840, 300)" tabindex="0" role="button">
+                      <circle cx="0" cy="0" r="36" class="pin-hit-area" />
+                      <circle cx="0" cy="0" r="26" fill="none" stroke="#d55e00" stroke-width="1.8" class="pin-pulse" />
+                      <circle cx="0" cy="0" r="14" fill="#240c17" stroke="#d55e00" stroke-width="2.8" class="pin-core" />
+                      <circle cx="0" cy="0" r="5.5" fill="#ff9955" />
+                      <text x="0" y="26" class="pin-label-box">INDONESIA</text>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+
+            </div>
+
+            <!-- Bottom Mini-Corridor Cards -->
+            <div class="p-2.5 bg-slate-900/95 border-t border-white/10 shrink-0">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-[10px] font-mono font-bold text-slate-300 uppercase">
+                  Select Corridor to Inspect Field Data &amp; Policy
+                </span>
+                <button onclick="toggleMapExpansion()" class="text-[10px] font-mono text-sky-400 hover:text-sky-300 font-bold">
+                  [ ⛶ Fullscreen Theater ]
+                </button>
+              </div>
+              <div id="corridors-deck-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-h-32 overflow-y-auto pr-1"></div>
+            </div>
+
+          </section>
+
+        </div>
+
+      </div>
+    </article>
+
+    <!-- CHAPTER 2 -->
+    <article class="book-page" id="page-t6" data-title="Chapter 2: Trade Corridors // Template 6" data-short="Ch 2">
+      <div class="max-w-5xl mx-auto p-6 sm:p-8 space-y-6">
+        <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#d55e00]">CHAPTER 2 // GLOBAL LOGISTICS</span>
+        <h2 class="text-3xl font-bold font-serif text-[#003650]">Chapter 2: Trade Corridors</h2>
+        <p class="text-stone-700 fluid-body leading-relaxed max-w-3xl">
+          Global trade routes and customs classifications (HS 3915) governing the maritime distribution of post-consumer plastic waste.
+        </p>
+        <div class="pt-4 border-t border-stone-200 flex items-center gap-3">
+          <button onclick="showPageById('page-t4')" class="px-4 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-mono font-bold border border-stone-300 transition">&larr; Chapter 3 (Template 01)</button>
+          <button onclick="showPageById('page-t7')" class="px-4 py-2 rounded-lg bg-sky-700 hover:bg-sky-600 text-white text-xs font-mono font-bold transition">Chapter 4 &rarr;</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- CHAPTER 4 -->
+    <article class="book-page" id="page-t7" data-title="Chapter 4: Biopolymer Innovation // Template 7" data-short="Ch 4">
+      <div class="max-w-5xl mx-auto p-6 sm:p-8 space-y-6">
+        <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#009e73]">CHAPTER 4 // MATERIAL REDESIGN</span>
+        <h2 class="text-3xl font-bold font-serif text-[#003650]">Chapter 4: Biopolymer Innovation</h2>
+        <p class="text-stone-700 fluid-body leading-relaxed max-w-3xl">
+          Microbial PHA synthesis, starch-polyhydroxybutyrate blends, and marine-degradable bioresins developed at the Bioplastics Innovation Hub.
+        </p>
+        <div class="pt-4 border-t border-stone-200 flex items-center gap-3">
+          <button onclick="showPageById('page-t6')" class="px-4 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-mono font-bold border border-stone-300 transition">&larr; Chapter 2</button>
+          <button onclick="showPageById('page-t9')" class="px-4 py-2 rounded-lg bg-sky-700 hover:bg-sky-600 text-white text-xs font-mono font-bold transition">Chapter 5 &rarr;</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- CHAPTER 5 -->
+    <article class="book-page" id="page-t9" data-title="Chapter 5: Treaty & Policy Matrix // Template 9" data-short="Ch 5">
+      <div class="max-w-5xl mx-auto p-6 sm:p-8 space-y-6">
+        <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#0072b2]">CHAPTER 5 // GLOBAL GOVERNANCE</span>
+        <h2 class="text-3xl font-bold font-serif text-[#003650]">Chapter 5: Treaty &amp; Policy Matrix</h2>
+        <p class="text-stone-700 fluid-body leading-relaxed max-w-3xl">
+          UN INC-5 legally binding instruments, national EPR mandates, and customs tariff harmonisation across member states.
+        </p>
+        <div class="pt-4 border-t border-stone-200 flex items-center gap-3">
+          <button onclick="showPageById('page-t7')" class="px-4 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-mono font-bold border border-stone-300 transition">&larr; Chapter 4</button>
+          <button onclick="showPageById('page-t8')" class="px-4 py-2 rounded-lg bg-sky-700 hover:bg-sky-600 text-white text-xs font-mono font-bold transition">Chapter 6 &rarr;</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- CHAPTER 6 -->
+    <article class="book-page" id="page-t8" data-title="Chapter 6: Littoral Remediation // Template 8" data-short="Ch 6">
+      <div class="max-w-5xl mx-auto p-6 sm:p-8 space-y-6">
+        <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#cc79a7]">CHAPTER 6 // OCEAN RECOVERY</span>
+        <h2 class="text-3xl font-bold font-serif text-[#003650]">Chapter 6: Littoral Remediation</h2>
+        <p class="text-stone-700 fluid-body leading-relaxed max-w-3xl">
+          Ghost gear retrieval, microplastic sediment core analyses, and passive barrier systems in the Great Barrier Reef lagoon.
+        </p>
+        <div class="pt-4 border-t border-stone-200 flex items-center gap-3">
+          <button onclick="showPageById('page-t9')" class="px-4 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-mono font-bold border border-stone-300 transition">&larr; Chapter 5</button>
+          <button onclick="showPageById('page-t5')" class="px-4 py-2 rounded-lg bg-sky-700 hover:bg-sky-600 text-white text-xs font-mono font-bold transition">Chapter 7 &rarr;</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- CHAPTER 7 -->
+    <article class="book-page" id="page-t5" data-title="Chapter 7: Agronomic Soil Systems // Template 5" data-short="Ch 7">
+      <div class="max-w-5xl mx-auto p-6 sm:p-8 space-y-6">
+        <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#e69f00]">CHAPTER 7 // TERRESTRIAL HEALTH</span>
+        <h2 class="text-3xl font-bold font-serif text-[#003650]">Chapter 7: Agronomic Soil Systems</h2>
+        <p class="text-stone-700 fluid-body leading-relaxed max-w-3xl">
+          Soil microbiome assimilation of biodegradable mulch films and agricultural crop productivity metrics.
+        </p>
+        <div class="pt-4 border-t border-stone-200 flex items-center gap-3">
+          <button onclick="showPageById('page-t8')" class="px-4 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-mono font-bold border border-stone-300 transition">&larr; Chapter 6</button>
+          <button onclick="showPageById('page-t10')" class="px-4 py-2 rounded-lg bg-sky-700 hover:bg-sky-600 text-white text-xs font-mono font-bold transition">Chapter 8 &rarr;</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- CHAPTER 8 -->
+    <article class="book-page" id="page-t10" data-title="Chapter 8: Circular Roadmap // Template 10" data-short="Ch 8">
+      <div class="max-w-5xl mx-auto p-6 sm:p-8 space-y-6">
+        <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#009e73]">CHAPTER 8 // SYNTHESIS</span>
+        <h2 class="text-3xl font-bold font-serif text-[#003650]">Chapter 8: Circular Roadmap</h2>
+        <p class="text-stone-700 fluid-body leading-relaxed max-w-3xl">
+          Industrial bio-refinery scale-up, commercial supply chains, and consumer behavioral transformations toward 2040.
+        </p>
+        <div class="pt-4 border-t border-stone-200 flex items-center gap-3">
+          <button onclick="showPageById('page-t5')" class="px-4 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-mono font-bold border border-stone-300 transition">&larr; Chapter 7</button>
+          <button onclick="showPageById('page-t1')" class="px-4 py-2 rounded-lg bg-[#003650] hover:bg-sky-800 text-white text-xs font-mono font-bold transition">Return to Cover &rarr;</button>
+        </div>
+      </div>
+    </article>
+
+    <footer class="running-footer">
+      <div class="flex items-center gap-2">
+        <button id="nav-prev-btn" onclick="prevPage()" class="book-nav-btn" aria-label="Previous Folio">
+          &larr; <span class="hidden sm:inline">Previous</span>
+        </button>
+        <button id="nav-next-btn" onclick="nextPage()" class="book-nav-btn" aria-label="Next Folio">
+          <span class="hidden sm:inline">Next</span> &rarr;
+        </button>
+      </div>
+
+      <!-- Quick Folio Navigation Pills -->
+      <div class="flex items-center gap-1 overflow-x-auto py-1 max-w-[50vw] sm:max-w-none">
+        <button onclick="showPageById('page-t1')" class="page-pill-btn active" data-page="page-t1">Cover</button>
+        <button onclick="showPageById('page-t2')" class="page-pill-btn" data-page="page-t2">TOC</button>
+        <button onclick="showPageById('page-forward')" class="page-pill-btn" data-page="page-forward">Forward</button>
+        <button onclick="showPageById('page-introduction')" class="page-pill-btn" data-page="page-introduction">Intro</button>
+        <button onclick="showPageById('page-t3')" class="page-pill-btn" data-page="page-t3">Ch 1</button>
+        <button onclick="showPageById('page-t4')" class="page-pill-btn" data-page="page-t4">Ch 3</button>
+        <button onclick="showPageById('page-t6')" class="page-pill-btn" data-page="page-t6">Ch 2</button>
+        <button onclick="showPageById('page-t7')" class="page-pill-btn" data-page="page-t7">Ch 4</button>
+        <button onclick="showPageById('page-t9')" class="page-pill-btn" data-page="page-t9">Ch 5</button>
+        <button onclick="showPageById('page-t8')" class="page-pill-btn" data-page="page-t8">Ch 6</button>
+        <button onclick="showPageById('page-t5')" class="page-pill-btn" data-page="page-t5">Ch 7</button>
+        <button onclick="showPageById('page-t10')" class="page-pill-btn" data-page="page-t10">Ch 8</button>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-mono text-slate-400 hidden md:inline-block">Bioplastics Innovation Hub &bull; CSIRO</span>
+        <button onclick="window.print()" class="book-nav-btn text-[11px] py-1 px-2.5" title="Print Monograph Spread">
+          PDF Export
+        </button>
+      </div>
+    </footer>
+
+  </main>
+
+  <div id="case-modal-overlay" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-case-title">
+    <div class="case-modal">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+            <span id="modal-role-badge" class="badge-oi-blue text-xs font-mono px-2 py-0.5 rounded-full font-bold">Exporter Hub</span>
+            <span id="modal-region-tag" style="font-size: 0.75rem; color: #94a3b8; font-family: var(--font-accent);">LAT: 33.7° N, LON: 118.2° W</span>
+          </div>
+          <h2 id="modal-case-title" style="font-size: 1.35rem; font-weight: 700; color: #ffffff; font-family: var(--font-title);">United States &rarr; Southeast Asian Corridors</h2>
+        </div>
+        <button id="modal-close-btn" class="map-action-btn" style="padding: 0.35rem 0.6rem;" aria-label="Close Case Study">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; background: rgba(0,0,0,0.35); padding: 1rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.1);">
+        <div>
+          <span style="font-size: 0.6875rem; color: #94a3b8; text-transform: uppercase; font-family: var(--font-accent);">Annual Flow Mass</span>
+          <div id="modal-metric-tonnage" style="font-size: 1.25rem; font-weight: 700; color: var(--oi-sky); font-family: var(--font-accent);">1,150,000 MT</div>
+        </div>
+        <div>
+          <span style="font-size: 0.6875rem; color: #94a3b8; text-transform: uppercase; font-family: var(--font-accent);">Infrastructure Deficit</span>
+          <div id="modal-metric-deficit" style="font-size: 1.25rem; font-weight: 700; color: var(--oi-vermilion); font-family: var(--font-accent);">58% Unsorted/Open Dump</div>
+        </div>
+        <div>
+          <span style="font-size: 0.6875rem; color: #94a3b8; text-transform: uppercase; font-family: var(--font-accent);">Primary Contaminant</span>
+          <div id="modal-metric-contaminant" style="font-size: 0.9375rem; font-weight: 600; color: #ffffff;">Mixed Film Plastics &amp; PVC</div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #cbd5e1; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-accent);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--oi-green)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          Field Investigation &amp; Ecological Impact Analysis
+        </h3>
+        <p id="modal-case-notes" style="font-size: 0.875rem; color: #cbd5e1; line-height: 1.6; background: rgba(255,255,255,0.02); padding: 0.875rem; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">
+          Following China’s 2018 National Sword policy, waste brokerage networks rerouted high-volume shipments to Selangor and Penang. Unlicensed rural melting plants release dioxins into agricultural waterways, contaminating prawn aquaculture and coastal estuarine mangrove habitats.
+        </p>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.25rem;">
+        <button id="btn-export-dossier" class="map-action-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Copy Case Summary</span>
+        </button>
+        <button id="btn-dismiss-modal" class="map-action-btn" style="background: var(--oi-blue); border-color: var(--oi-blue); color: #ffffff;">
+          <span>Close Dossier</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-banner" role="status" aria-live="polite">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>
+    <span id="toast-msg">Notification</span>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // --- 1. PAGE NAVIGATION ENGINE ---
+      const pages = Array.from(document.querySelectorAll('.book-page'));
+      let currentPageIndex = 0;
+
+      function updatePageUI(index) {
+        if (index < 0 || index >= pages.length) return;
+        currentPageIndex = index;
+        const targetPage = pages[currentPageIndex];
+
+        pages.forEach((p, idx) => {
+          p.classList.toggle('active', idx === currentPageIndex);
+        });
+
+        const titleText = targetPage.dataset.title || `Folio ${currentPageIndex + 1}`;
+        const headerTitle = document.getElementById('header-page-title');
+        const folioCounter = document.getElementById('folio-counter');
+        const templateSelect = document.getElementById('template-select');
+
+        if (headerTitle) headerTitle.textContent = titleText;
+        if (folioCounter) folioCounter.textContent = `Page ${currentPageIndex + 1} of ${pages.length}`;
+        if (templateSelect) templateSelect.value = targetPage.id;
+
+        document.querySelectorAll('.page-pill-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.page === targetPage.id);
+        });
+
+        const prevBtn = document.getElementById('nav-prev-btn');
+        const nextBtn = document.getElementById('nav-next-btn');
+        if (prevBtn) prevBtn.disabled = currentPageIndex === 0;
+        if (nextBtn) nextBtn.disabled = currentPageIndex === pages.length - 1;
+
+        if (targetPage.id === 'page-t4') {
+          setTimeout(resetMapView, 100);
+        }
+      }
+
+      window.showPageById = function(pageId) {
+        const idx = pages.findIndex(p => p.id === pageId);
+        if (idx !== -1) updatePageUI(idx);
+      };
+
+      window.prevPage = function() {
+        if (currentPageIndex > 0) updatePageUI(currentPageIndex - 1);
+      };
+
+      window.nextPage = function() {
+        if (currentPageIndex < pages.length - 1) updatePageUI(currentPageIndex + 1);
+      };
+
+      // Keyboard Navigation
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.key === 'ArrowRight') window.nextPage();
+        if (e.key === 'ArrowLeft') window.prevPage();
+        if (e.key === 'Escape') {
+          const mapViewport = document.getElementById('map-viewport');
+          if (mapViewport && mapViewport.classList.contains('is-expanded')) {
+            toggleMapExpansion();
+          }
+          closeModal();
+        }
+      });
+
+      // --- 2. TRANSBOUNDARY DATA REPOSITORY ---
+      const CASE_STUDIES = [
+        {
+          id: 'us',
+          type: 'exporter',
+          originName: 'United States',
+          destinationName: 'Malaysia & Southeast Asia',
+          coordinates: '33.7° N, 118.2° W (Port of Long Beach)',
+          annualTonnage: '1,150,000 MT / yr',
+          infrastructureDeficit: '58% unmanaged or dumped in recipient zones',
+          primaryContaminant: 'Post-consumer mixed films, unwashed agricultural wrap',
+          ecologicalImpact: 'High-density riverine accumulation in the Klang & Selangor basins. Heavy chemical leachate contaminates mangrove fish hatcheries.',
+          badgeColor: 'badge-oi-cyan'
+        },
+        {
+          id: 'de',
+          type: 'exporter',
+          originName: 'Germany & EU Consortium',
+          destinationName: 'Vietnam (Hai Phong Corridor)',
+          coordinates: '53.5° N, 9.9° E (Port of Hamburg)',
+          annualTonnage: '745,000 MT / yr',
+          infrastructureDeficit: '62% burned in open craft kilns or unlined landfills',
+          primaryContaminant: 'Rigid PVC packaging, e-waste polymers with brominated flame retardants',
+          ecologicalImpact: 'Severe atmospheric dioxin releases in craft villages outside Hanoi, leading to heavy metal runoff into the Red River Delta.',
+          badgeColor: 'badge-oi-blue'
+        },
+        {
+          id: 'jp',
+          type: 'exporter',
+          originName: 'Japan',
+          destinationName: 'Indonesia (East Java / Brantas)',
+          coordinates: '35.4° N, 139.6° E (Port of Yokohama)',
+          annualTonnage: '620,000 MT / yr',
+          infrastructureDeficit: '71% burned as boiler fuel in tofu factories or discarded',
+          primaryContaminant: 'High-barrier composite snack pouches and multilayer laminates',
+          ecologicalImpact: 'Microplastics and hazardous ash clog the Brantas River, entering Surabaya’s municipal drinking water intake and coastal mangrove estuaries.',
+          badgeColor: 'badge-oi-green'
+        },
+        {
+          id: 'au',
+          type: 'exporter',
+          originName: 'Australia',
+          destinationName: 'Thailand & Malaysia',
+          coordinates: '37.8° S, 144.9° E (Port of Melbourne)',
+          annualTonnage: '185,000 MT / yr (Pre-ban: ~410,000 MT)',
+          infrastructureDeficit: '54% diverted to informal low-tech facilities in Chonburi',
+          primaryContaminant: 'Sorted municipal plastics, mixed paper with polymer linings',
+          ecologicalImpact: 'Despite Australia’s landmark 2020 Waste Export Ban, processed fuel pellets (RDF) and paper-bale exemptions continue to transfer polymer residues.',
+          badgeColor: 'badge-oi-cyan'
+        },
+        {
+          id: 'cn',
+          type: 'policy-hub',
+          originName: 'China (National Sword Policy)',
+          destinationName: 'Global Shock & Southeast Asian Redirection',
+          coordinates: '31.2° N, 121.5° E (Port of Shanghai)',
+          annualTonnage: 'Historical peak: 7,300,000 MT/yr (Post-2018: <150,000 MT)',
+          infrastructureDeficit: 'Shifted global processing deficits outward',
+          primaryContaminant: 'Low-grade municipal scrap and contaminated polymers',
+          ecologicalImpact: 'China’s strict 2018 0.5% purity threshold caused a 95% import drop, instantaneously redirecting millions of metric tons into Southeast Asian ports.',
+          badgeColor: 'badge-oi-amber'
+        },
+        {
+          id: 'th',
+          type: 'recipient',
+          originName: 'Thailand (Chonburi & Eastern Seaboard)',
+          destinationName: 'Inbound from USA, Australia, and EU',
+          coordinates: '13.1° N, 100.9° E (Port of Laem Chabang)',
+          annualTonnage: '530,000 MT Inbound Surge',
+          infrastructureDeficit: '68% unmonitored burning or illegal warehousing',
+          primaryContaminant: 'E-waste plastics, mixed PVC, agricultural film scrap',
+          ecologicalImpact: 'Illegal recycling plants in Chonburi discharge toxic effluent into the Bangpakong River basin and the Gulf of Thailand.',
+          badgeColor: 'badge-oi-vermilion'
+        },
+        {
+          id: 'my',
+          type: 'recipient',
+          originName: 'Malaysia (Import Hub)',
+          destinationName: 'Inbound from USA, UK, & Japan',
+          coordinates: '3.0° N, 101.4° E (Port Klang)',
+          annualTonnage: '830,000 MT Inbound',
+          infrastructureDeficit: 'Critical Processing Bottleneck (Overcapacity)',
+          primaryContaminant: 'Mixed household solid waste contaminated with food residues',
+          ecologicalImpact: 'Illegal dumping in rural oil palm plantations and open burning causing respiratory illnesses in suburban communities.',
+          badgeColor: 'badge-oi-vermilion'
+        },
+        {
+          id: 'vn',
+          type: 'recipient',
+          originName: 'Vietnam (Mekong & Hai Phong Hubs)',
+          destinationName: 'Inbound from EU & North America',
+          coordinates: '20.8° N, 106.6° E (Hai Phong)',
+          annualTonnage: '560,000 MT Inbound',
+          infrastructureDeficit: 'Deficient Sorting Infrastructure',
+          primaryContaminant: 'Low-grade agricultural film & industrial scrap',
+          ecologicalImpact: 'Unfiltered washing effluent discharges plastic particulate and surfactants directly into coastal aquaculture nurseries.',
+          badgeColor: 'badge-oi-vermilion'
+        },
+        {
+          id: 'id',
+          type: 'recipient',
+          originName: 'Indonesia (Brantas Delta Basin)',
+          destinationName: 'Inbound from East Asia & Oceania',
+          coordinates: '7.2° S, 112.7° E (Surabaya Basin)',
+          annualTonnage: '490,000 MT Inbound',
+          infrastructureDeficit: 'Zero Municipal Hazardous Gas Scrubbing',
+          primaryContaminant: 'Unrecyclable multi-material foils and plastic bags',
+          ecologicalImpact: 'The Brantas River discharges over 38,000 tons of plastic debris into the Java Sea annually, permeating local fisheries.',
+          badgeColor: 'badge-oi-vermilion'
+        }
+      ];
+
+      // --- 3. MAP PAN & ZOOM ENGINE ---
+      const mapViewport = document.getElementById('map-viewport');
+      const worldSvgContainer = document.getElementById('world-svg-container');
+      const btnZoomIn = document.getElementById('btn-zoom-in');
+      const btnZoomOut = document.getElementById('btn-zoom-out');
+      const btnFitMap = document.getElementById('btn-fit-map');
+      const btnExpandMap = document.getElementById('btn-expand-map');
+      const expandIcon = document.getElementById('expand-icon');
+      const mapFilterCluster = document.getElementById('map-filter-cluster');
+      const corridorsDeckContainer = document.getElementById('corridors-deck-container');
+      const btnToggleSources = document.getElementById('btn-toggle-sources');
+      const btnCloseSources = document.getElementById('btn-close-sources');
+      const sourcesDrawer = document.getElementById('sources-drawer');
+      const mapBgImage = document.getElementById('map-bg-image');
+
+      let zoomLevel = 1;
+      let panX = 0;
+      let panY = 0;
+      let isPanning = false;
+      let startX = 0;
+      let startY = 0;
+
+      function updateMapTransform() {
+        if (worldSvgContainer) {
+          worldSvgContainer.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
+        }
+      }
+
+      function zoom(factor) {
+        zoomLevel = Math.min(3.5, Math.max(0.85, zoomLevel * factor));
+        updateMapTransform();
+      }
+
+      function resetMapView() {
+        zoomLevel = 1;
+        panX = 0;
+        panY = 0;
+        updateMapTransform();
+        showToast("Map view centered");
+      }
+
+      window.toggleMapExpansion = function() {
+        if (!mapViewport) return;
+        const isExpanded = mapViewport.classList.toggle('is-expanded');
+        if (expandIcon) {
+          expandIcon.innerHTML = isExpanded 
+            ? '<path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7"/>' 
+            : '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>';
+        }
+        showToast(isExpanded ? "Theater Mode: Fullscreen" : "Standard View Restored");
+        setTimeout(resetMapView, 100);
+      };
+
+      if (btnZoomIn) btnZoomIn.addEventListener('click', () => zoom(1.2));
+      if (btnZoomOut) btnZoomOut.addEventListener('click', () => zoom(0.8));
+      if (btnFitMap) btnFitMap.addEventListener('click', resetMapView);
+      if (btnExpandMap) btnExpandMap.addEventListener('click', toggleMapExpansion);
+
+      if (mapViewport) {
+        mapViewport.addEventListener('mousedown', (e) => {
+          if (e.target.closest('.map-toolbar') || e.target.closest('.map-legend-dock')) return;
+          isPanning = true;
+          startX = e.clientX - panX;
+          startY = e.clientY - panY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isPanning) return;
+          panX = e.clientX - startX;
+          panY = e.clientY - startY;
+          updateMapTransform();
+        });
+
+        window.addEventListener('mouseup', () => {
+          isPanning = false;
+        });
+
+        mapViewport.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          zoom(e.deltaY < 0 ? 1.12 : 0.88);
+        }, { passive: false });
+      }
+
+      // --- 4. TOAST NOTIFICATIONS ---
+      const toastBanner = document.getElementById('toast-banner');
+      const toastMsg = document.getElementById('toast-msg');
+      let toastTimer;
+
+      function showToast(msg) {
+        if (!toastBanner || !toastMsg) return;
+        toastMsg.textContent = msg;
+        toastBanner.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toastBanner.classList.remove('show');
+        }, 2200);
+      }
+
+      // --- 5. CASE STUDY MODAL DOSSIER ---
+      const caseModalOverlay = document.getElementById('case-modal-overlay');
+      const modalCloseBtn = document.getElementById('modal-close-btn');
+      const btnDismissModal = document.getElementById('btn-dismiss-modal');
+      const modalRoleBadge = document.getElementById('modal-role-badge');
+      const modalRegionTag = document.getElementById('modal-region-tag');
+      const modalCaseTitle = document.getElementById('modal-case-title');
+      const modalMetricTonnage = document.getElementById('modal-metric-tonnage');
+      const modalMetricDeficit = document.getElementById('modal-metric-deficit');
+      const modalMetricContaminant = document.getElementById('modal-metric-contaminant');
+      const modalCaseNotes = document.getElementById('modal-case-notes');
+      const btnExportDossier = document.getElementById('btn-export-dossier');
+
+      function openCaseStudy(locationId) {
+        const data = CASE_STUDIES.find(c => c.id === locationId);
+        if (!data || !caseModalOverlay) return;
+
+        if (modalRoleBadge) {
+          modalRoleBadge.textContent = data.type === 'exporter' ? "G20 Exporter Hub" : data.type === 'policy-hub' ? "Policy Shockwave Epicenter" : "Global South Recipient";
+          modalRoleBadge.className = `text-xs font-mono px-2 py-0.5 rounded-full font-bold ${data.type === 'exporter' ? 'badge-oi-blue' : data.type === 'policy-hub' ? 'badge-oi-amber' : 'badge-oi-vermilion'}`;
+        }
+        if (modalRegionTag) modalRegionTag.textContent = data.coordinates;
+        if (modalCaseTitle) modalCaseTitle.textContent = `${data.originName} ${data.type === 'exporter' ? '→ ' + data.destinationName : data.type === 'policy-hub' ? '(Export Ban Epicenter)' : '(Inbound Receptor)'}`;
+        if (modalMetricTonnage) modalMetricTonnage.textContent = data.annualTonnage;
+        if (modalMetricDeficit) modalMetricDeficit.textContent = data.infrastructureDeficit;
+        if (modalMetricContaminant) modalMetricContaminant.textContent = data.primaryContaminant;
+        if (modalCaseNotes) modalCaseNotes.textContent = data.ecologicalImpact;
+
+        caseModalOverlay.classList.add('open');
+        showToast(`Dossier opened: ${data.originName}`);
+      }
+
+      function closeModal() {
+        if (caseModalOverlay) caseModalOverlay.classList.remove('open');
+      }
+
+      if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+      if (btnDismissModal) btnDismissModal.addEventListener('click', closeModal);
+      if (caseModalOverlay) {
+        caseModalOverlay.addEventListener('click', (e) => {
+          if (e.target === caseModalOverlay) closeModal();
+        });
+      }
+
+      if (btnExportDossier) {
+        btnExportDossier.addEventListener('click', () => {
+          const text = `${modalCaseTitle.textContent}\nTonnage: ${modalMetricTonnage.textContent}\nDeficit: ${modalMetricDeficit.textContent}\nNotes: ${modalCaseNotes.textContent}`;
+          const tempArea = document.createElement('textarea');
+          tempArea.value = text;
+          document.body.appendChild(tempArea);
+          tempArea.select();
+          try {
+            document.execCommand('copy');
+            showToast("Case summary copied to clipboard");
+          } catch(e) {
+            showToast("Unable to copy summary");
+          }
+          document.body.removeChild(tempArea);
+        });
+      }
+
+      // --- 6. FILTER CORRIDORS & MINI-DECK ---
+      function filterCorridors(filterKey) {
+        document.querySelectorAll('.flow-line, .flow-line-underlay').forEach(line => {
+          const corridor = line.dataset.corridor;
+          line.classList.toggle('dimmed', filterKey !== 'all' && corridor !== filterKey);
+        });
+
+        if (mapFilterCluster) {
+          mapFilterCluster.querySelectorAll('button').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === filterKey);
+          });
+        }
+
+        document.querySelectorAll('.corridor-card').forEach(card => {
+          card.classList.toggle('border-sky-400', filterKey !== 'all' && card.dataset.id === filterKey);
+        });
+
+        showToast(`Filter: ${filterKey.toUpperCase()}`);
+      }
+
+      if (mapFilterCluster) {
+        mapFilterCluster.querySelectorAll('button').forEach(btn => {
+          btn.addEventListener('click', () => filterCorridors(btn.dataset.filter));
+        });
+      }
+
+      function renderCorridorsMiniDeck() {
+        if (!corridorsDeckContainer) return;
+        corridorsDeckContainer.innerHTML = '';
+        CASE_STUDIES.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'corridor-card bg-slate-900/90 border border-white/10 hover:border-sky-400 rounded-lg p-2 flex flex-col justify-between cursor-pointer transition text-left';
+          card.dataset.id = item.id;
+          card.setAttribute('role', 'button');
+          card.setAttribute('tabindex', '0');
+
+          card.innerHTML = `
+            <div class="flex justify-between items-start gap-1">
+              <span class="${item.badgeColor} text-[9px] px-1.5 py-0.5 rounded font-mono font-bold">${item.type === 'exporter' ? 'Export Flow' : item.type === 'policy-hub' ? 'Policy Shift' : 'Recipient'}</span>
+              <span class="text-[10px] font-mono text-sky-400 font-bold">${item.annualTonnage.split(' ')[0]} MT</span>
+            </div>
+            <div class="mt-1">
+              <h4 class="text-xs font-bold text-white font-mono leading-tight">${item.originName}</h4>
+              <p class="text-[10px] text-slate-400 truncate">${item.destinationName}</p>
+            </div>
+            <div class="mt-1 pt-1 border-t border-white/10 flex justify-between items-center text-[10px]">
+              <span class="text-[#ff9955] font-mono">${item.infrastructureDeficit.substring(0, 15)}...</span>
+              <span class="text-sky-400 font-bold font-mono">Inspect &rarr;</span>
+            </div>
+          `;
+
+          card.addEventListener('click', () => openCaseStudy(item.id));
+          card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openCaseStudy(item.id);
+            }
+          });
+
+          corridorsDeckContainer.appendChild(card);
+        });
+      }
+
+      // Hotspot Pin Click Bindings
+      document.querySelectorAll('.hotspot-pin').forEach(pin => {
+        const locationId = pin.dataset.location;
+        pin.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openCaseStudy(locationId);
+        });
+      });
+
+      // Data Sources Drawer Toggle
+      if (btnToggleSources && sourcesDrawer) {
+        btnToggleSources.addEventListener('click', () => {
+          const isOpen = sourcesDrawer.classList.toggle('open');
+          btnToggleSources.classList.toggle('active', isOpen);
+        });
+      }
+
+      if (btnCloseSources && sourcesDrawer) {
+        btnCloseSources.addEventListener('click', () => {
+          sourcesDrawer.classList.remove('open');
+          if (btnToggleSources) btnToggleSources.classList.remove('active');
+        });
+      }
+
+      // --- 7. ROBUST MULTI-ENDPOINT SMART ASSET ENGINE ---
+      window.triggerAssetFileInput = function() {
+        const input = document.getElementById('asset-file-input');
+        if (input) input.click();
+      };
+
+      window.handleLocalAssetFiles = function(files) {
+        if (!files || files.length === 0) return;
+        let stagedCount = 0;
+        Array.from(files).forEach(file => {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const dataUrl = e.target.result;
+            sessionStorage.setItem(`asset_${file.name}`, dataUrl);
+            sessionStorage.setItem(`asset_${file.name.toLowerCase()}`, dataUrl);
+            applyStagedAsset(file.name, dataUrl);
+            stagedCount++;
+            if (stagedCount === files.length) {
+              showToast(`Staged ${stagedCount} local image asset(s)`);
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+      };
+
+      function applyStagedAsset(name, dataUrl) {
+        const cleanTarget = name.toLowerCase();
+        document.querySelectorAll('img[data-smart-asset]').forEach(img => {
+          const target = (img.getAttribute('data-smart-asset') || '').toLowerCase();
+          if (target === cleanTarget || cleanTarget.includes(target.replace(/\.[^/.]+$/, ""))) {
+            img.src = dataUrl;
+          }
+        });
+        if (mapBgImage && (cleanTarget.includes('equalearth') || cleanTarget.includes('worldmap'))) {
+          mapBgImage.setAttribute('href', dataUrl);
+          mapBgImage.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', dataUrl);
+        }
+      }
+
+      function initSmartAssets() {
+        // 1. Check Session Storage for already-staged assets
+        document.querySelectorAll('img[data-smart-asset]').forEach(img => {
+          const baseName = img.getAttribute('data-smart-asset');
+          if (!baseName) return;
+          const cached = sessionStorage.getItem(`asset_${baseName}`) || sessionStorage.getItem(`asset_${baseName.toLowerCase()}`);
+          if (cached) {
+            img.src = cached;
+            return;
+          }
+
+          // Build multi-branch GitHub CDN, raw content, and local candidate paths
+          const cleanName = baseName.replace(/\.[^/.]+$/, "");
+          const candidates = [
+            baseName,
+            `assets/${baseName}`,
+            `assets/images/${baseName}`,
+            `images/${baseName}`,
+            `${cleanName}.jpg`,
+            `${cleanName}.png`,
+            `${cleanName}.jpeg`,
+            // Live GitHub Pages CDN
+            `https://odonnellag15-creator.github.io/Plastics-ebook-assets/${baseName}`,
+            `https://odonnellag15-creator.github.io/Plastics-ebook-assets/assets/${baseName}`,
+            `https://odonnellag15-creator.github.io/Plastics-ebook-assets/assets/images/${baseName}`,
+            // Direct Raw GitHub Content (bypasses GitHub Pages build delay)
+            `https://raw.githubusercontent.com/odonnellag15-creator/Plastics-ebook-assets/main/${baseName}`,
+            `https://raw.githubusercontent.com/odonnellag15-creator/Plastics-ebook-assets/main/assets/${baseName}`,
+            `https://raw.githubusercontent.com/odonnellag15-creator/Plastics-ebook-assets/main/assets/images/${baseName}`,
+            `https://raw.githubusercontent.com/odonnellag15-creator/Plastics-ebook-assets/master/${baseName}`,
+            `https://raw.githubusercontent.com/odonnellag15-creator/Plastics-ebook-assets/master/assets/${baseName}`
+          ];
+
+          let cIdx = 0;
+          function testNextImage() {
+            if (cIdx >= candidates.length) return;
+            const currentCandidate = candidates[cIdx++];
+            const tester = new Image();
+            tester.onload = function() {
+              img.src = currentCandidate;
+            };
+            tester.onerror = testNextImage;
+            tester.src = currentCandidate;
+          }
+          testNextImage();
+        });
+
+        // 2. Map Background Smart Resolver
+        if (mapBgImage) {
+          const cachedMap = sessionStorage.getItem('asset_WorldMap_EqualEarth.png') || 
+                            sessionStorage.getItem('asset_worldmap_equalearth.png') ||
+                            sessionStorage.getItem('custom_equal_earth_map');
+          if (cachedMap) {
+            mapBgImage.setAttribute('href', cachedMap);
+            mapBgImage.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', cachedMap);
+            return;
+          }
+
+          const mapCandidates = [
+            'WorldMap_EqualEarth.png',
+            'assets/WorldMap_EqualEarth.png',
+            'assets/images/WorldMap_EqualEarth.png',
+            'images/WorldMap_EqualEarth.png',
+            'https://odonnellag15-creator.github.io/Plastics-ebook-assets/WorldMap_EqualEarth.png',
+            'https://odonnellag15-creator.github.io/Plastics-ebook-assets/assets/WorldMap_EqualEarth.png',
+            'https://raw.githubusercontent.com/odonnellag15-creator/Plastics-ebook-assets/main/WorldMap_EqualEarth.png',
+            'https://raw.githubusercontent.com/odonnellag15-creator/Plastics-ebook-assets/main/assets/WorldMap_EqualEarth.png',
+            'https://raw.githubusercontent.com/odonnellag15-creator/Plastics-ebook-assets/main/assets/images/WorldMap_EqualEarth.png',
+            // Public high-resolution Equal Earth satellite projection (guaranteed worldwide mirror)
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Equal_Earth_projection_SW.jpg/1280px-Equal_Earth_projection_SW.jpg'
+          ];
+
+          let mIdx = 0;
+          function tryNextMap() {
+            if (mIdx >= mapCandidates.length) return;
+            const testPath = mapCandidates[mIdx++];
+            const probe = new Image();
+            probe.onload = function() {
+              mapBgImage.setAttribute('href', testPath);
+              mapBgImage.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', testPath);
+            };
+            probe.onerror = tryNextMap;
+            probe.src = testPath;
+          }
+          tryNextMap();
+        }
+      }
+
+      // --- 8. RUNTIME INITIALIZATION ---
+      initSmartAssets();
+      renderCorridorsMiniDeck();
+      // Initialize on Master Cover Plate (Page 1)
+      updatePageUI(0);
+
+    })();
+  </script>
+</body>
+</html>
